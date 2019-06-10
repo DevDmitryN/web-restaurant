@@ -8,13 +8,23 @@ import java.util.Properties;
 
 public class OrderDao {
     Properties properties;
+    String url;
+    String username;
+    String password;
     public OrderDao(Properties properties){
         this.properties = properties;
+        url = properties.getProperty("url");
+        username = properties.getProperty("username");;
+        password = properties.getProperty("password");
     }
+
+    public OrderDao(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
+
     public void insert(Order order){
-        String url = properties.getProperty("url");
-        String username = properties.getProperty("username");
-        String password = properties.getProperty("password");
         try(Connection connection = DriverManager.getConnection(url,username,password);
                 Statement statement = connection.createStatement();){
             String sql = "INSERT INTO restaurantdb.orders (totalPrice,status,table_id)" +
@@ -28,6 +38,8 @@ public class OrderDao {
                         id + "," + d.getId() + ")";
                 statement.executeUpdate(sql);
             }
+            sql = "update restaurantdb.tables set is_free=false where id=" + order.getTable().getId();
+            statement.executeUpdate(sql);
         }catch (SQLException e){
             e.printStackTrace();
         }

@@ -16,10 +16,11 @@ import java.util.List;
 
 public class OrderServlet extends HttpServlet {
     ServiceSystem serviceSystem = new ServiceSystem();
-    List<RestaurantTable> tables = serviceSystem.getTables();
-    List<Dish> dishes = serviceSystem.getDishes();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<RestaurantTable> tables = serviceSystem.getTables();
+        List<Dish> dishes = serviceSystem.getDishes();
         req.setAttribute("tables",tables);
         req.setAttribute("dishes",dishes);
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("sendOrder.jsp");
@@ -28,13 +29,20 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<RestaurantTable> tables = serviceSystem.getTables();
+        List<Dish> dishes = serviceSystem.getDishes();
         int tableId = Integer.valueOf(req.getParameter("table"));
         List<Dish> orderedDishes = new ArrayList<Dish>();
-        dishes.forEach( d -> {
-            if(d.getName().equals(req.getParameter(d.getName()))){
+        for(Dish d : dishes){
+            String id = req.getParameter(Integer.toString(d.getId()));
+            if(id == null){
+                continue;
+            }
+            System.out.println(d.getId() + ";"+ id);
+            if (d.getId() == Integer.valueOf(id) ) {
                 orderedDishes.add(d);
             }
-        });
+        }
         RestaurantTable orderedTable = null;
         for (RestaurantTable table : tables) {
             if(table.getId() == tableId){

@@ -22,7 +22,7 @@
         <p>Меню:</p>
         <p>
             <c:forEach var="dish" items="${dishes}">
-                <input type="checkbox" name=${dish.name} value=${dish.name}> ${dish.name} Цена: ${dish.price}<br>
+                <input type="checkbox" name=${dish.id} value=${dish.id}> ${dish.name} Цена: ${dish.price}<br>
             </c:forEach>
         </p>
         <p>Выберите столик:</p>

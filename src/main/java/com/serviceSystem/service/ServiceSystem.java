@@ -26,18 +26,22 @@ public class ServiceSystem {
     private DishDao dishDao;
     private RestaurantTableDao tableDao;
 
+    private String url = "jdbc:postgresql://localhost:5432/postgres";
+    private String username = "postgres";
+    private String password = "root";
+
     public ServiceSystem(){
         init();
     }
 
     private void init(){
-        try(FileInputStream fis = new FileInputStream(PATH_TO_PROPERTIES)){
-            properties.load(fis);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+//        try(FileInputStream fis = new FileInputStream(PATH_TO_PROPERTIES)){
+//            properties.load(fis);
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
         System.out.println(properties.toString());
-        orderDao = new OrderDao(properties);
+        orderDao = new OrderDao(url,username,password);
         dishDao = new DishDao();
         tableDao = new RestaurantTableDao();
         initDishes();
