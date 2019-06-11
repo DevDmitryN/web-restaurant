@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServlet extends HttpServlet {
-    ServiceSystem serviceSystem = new ServiceSystem();
+    ServiceSystem serviceSystem = ServiceSystem.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,7 +38,6 @@ public class OrderServlet extends HttpServlet {
             if(id == null){
                 continue;
             }
-            System.out.println(d.getId() + ";"+ id);
             if (d.getId() == Integer.valueOf(id) ) {
                 orderedDishes.add(d);
             }

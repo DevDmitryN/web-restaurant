@@ -14,8 +14,10 @@
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
         <!-- Echo the SQL to stdout -->
         <property name="show_sql">true</property>
-        <mapping class="com.serviceSystemClient.entity.Dish"/>
-        <mapping class="com.serviceSystemClient.entity.RestaurantTable"/>
-
+        <mapping class="com.serviceSystem.entity.Dish"/>
+        <mapping class="com.serviceSystem.entity.RestaurantTable"/>
+        <mapping class="com.serviceSystem.entity.User"/>
+        <mapping class="com.serviceSystem.entity.Client"/>
+        <mapping class="com.serviceSystem.entity.Worker"/>
     </session-factory>
 </hibernate-configuration>

@@ -2,10 +2,16 @@ package com.serviceSystem.entity;
 
 import com.serviceSystem.entity.enums.Roles;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name="workers",schema = "restaurantdb")
 public class Worker {
+    @Column
+    @Enumerated(EnumType.STRING)
     private Roles role;
+    @OneToMany
     private List<Order> orders;
 
     public Worker(){

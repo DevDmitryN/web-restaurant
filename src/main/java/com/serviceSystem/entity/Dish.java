@@ -37,7 +37,7 @@ public class Dish implements Serializable {
     }
 
     public String getName() {
-        return name.trim();
+        return name;
     }
 
     public void setName(String name) {

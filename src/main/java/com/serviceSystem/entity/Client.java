@@ -1,6 +1,13 @@
 package com.serviceSystem.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "clients", schema = "restaurantdb")
 public class Client extends User {
+    @Column(name = "card_number")
     private String cardNumber;
 
     public Client(){

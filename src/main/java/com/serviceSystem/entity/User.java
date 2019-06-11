@@ -1,11 +1,21 @@
 package com.serviceSystem.entity;
 
+import javax.persistence.*;
+
+@MappedSuperclass
 public abstract class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
     private String name;
+    @Column
     private String surname;
+    @Column
     private String password;
+    @Column
     private String email;
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     public User(){
