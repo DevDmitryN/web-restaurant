@@ -19,5 +19,6 @@
         <mapping class="com.serviceSystem.entity.User"/>
         <mapping class="com.serviceSystem.entity.Client"/>
         <mapping class="com.serviceSystem.entity.Worker"/>
+        <mapping class="com.serviceSystem.entity.Order"/>
     </session-factory>
 </hibernate-configuration>

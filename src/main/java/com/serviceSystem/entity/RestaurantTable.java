@@ -14,6 +14,8 @@ public class RestaurantTable implements Serializable{
     private int capacity;
     @Column(name = "is_free")
     private boolean freeStatus = true;
+    @OneToOne(mappedBy = "table")
+    private Order order;
 
     public RestaurantTable(){}
 
@@ -46,6 +48,13 @@ public class RestaurantTable implements Serializable{
         this.freeStatus = freeStatus;
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
     @Override
     public String toString() {

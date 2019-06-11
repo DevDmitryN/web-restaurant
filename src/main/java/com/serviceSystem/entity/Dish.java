@@ -3,6 +3,8 @@ package com.serviceSystem.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="dishes",schema = "restaurantdb")
@@ -16,6 +18,8 @@ public class Dish implements Serializable {
     private BigDecimal price;
     @Column
     private String description;
+    @ManyToMany(mappedBy = "dishes")
+    List<Order> orders = new ArrayList<Order>();
 
     public Dish(){}
 
@@ -58,6 +62,14 @@ public class Dish implements Serializable {
 
     public void setDescription(String description) {
         this.description = description.trim();
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

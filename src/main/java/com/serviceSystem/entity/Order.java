@@ -2,15 +2,31 @@ package com.serviceSystem.entity;
 
 import com.serviceSystem.entity.enums.Status;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Entity
+@Table(name = "orders",schema = "restaurantdb")
 public class Order {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column
     private BigDecimal totalPrice = new BigDecimal(0);
+    @Enumerated(EnumType.STRING)
     private Status status;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "table_id", referencedColumnName = "id")
     private RestaurantTable table;
+    @ManyToMany
+    @JoinTable(
+            name = "order_dish",
+            schema = "restaurantdb",
+            joinColumns = {@JoinColumn(name = "order_id")},
+            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
+    )
     private List<Dish> dishes;
 //    private User client;
 //    private User worker;
