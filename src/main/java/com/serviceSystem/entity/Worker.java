@@ -7,25 +7,22 @@ import java.util.List;
 
 @Entity
 @Table(name="workers",schema = "restaurantdb")
-public class Worker {
+public class Worker extends User{
     @Column
     @Enumerated(EnumType.STRING)
     private Roles role;
-    @OneToMany
+    @OneToMany(mappedBy = "worker")
     private List<Order> orders;
 
     public Worker(){
 
     }
-
-    public Worker(Roles role, List<Order> orders) {
-        this.role = role;
-        this.orders = orders;
-    }
-
-    public Worker(Roles role) {
+    public Worker(String name, String surname, String password, String email, String phoneNumber,Roles role){
+        super(name, surname, password, email, phoneNumber);
         this.role = role;
     }
+
+
 
     public Roles getRole() {
         return role;

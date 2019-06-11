@@ -3,6 +3,7 @@ package com.serviceSystem.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="tables",schema = "restaurantdb")
@@ -14,8 +15,8 @@ public class RestaurantTable implements Serializable{
     private int capacity;
     @Column(name = "is_free")
     private boolean freeStatus = true;
-    @OneToOne(mappedBy = "table")
-    private Order order;
+    @OneToMany(mappedBy = "table")
+    private List<Order> order;
 
     public RestaurantTable(){}
 
@@ -48,11 +49,11 @@ public class RestaurantTable implements Serializable{
         this.freeStatus = freeStatus;
     }
 
-    public Order getOrder() {
+    public List<Order> getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(List<Order> order) {
         this.order = order;
     }
 

@@ -17,8 +17,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "table_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "table_id")
     private RestaurantTable table;
     @ManyToMany
     @JoinTable(
@@ -28,23 +28,32 @@ public class Order {
             inverseJoinColumns = {@JoinColumn(name = "dish_id")}
     )
     private List<Dish> dishes;
-//    private User client;
-//    private User worker;
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+    @ManyToOne
+    @JoinColumn(name = "worker_id")
+    private Worker worker;
 
     public Order(){
 
     }
+    public Order(RestaurantTable table, List<Dish> dishes,Client client,Worker worker){
+        init(null,table,dishes,client,worker);
+    }
     public Order(RestaurantTable table, List<Dish> dishes) {
-        init(null,table,dishes);
+        init(null,table,dishes,null,null);
     }
     public Order(Status status, RestaurantTable table, List<Dish> dishes) {
-        init(status,table,dishes);
+        init(status,table,dishes,null,null);
     }
-    public void init(Status status, RestaurantTable table,List<Dish> dishes){
+    public void init(Status status, RestaurantTable table,List<Dish> dishes,Client client,Worker worker){
         this.status = status != null ? status : Status.NOT_TAKEN;;
         this.table = table;
         this.dishes = dishes;
         dishes.forEach( a -> totalPrice = totalPrice.add(a.getPrice()) );
+        this.client = client;
+        this.worker = worker;
     }
     public long getId() {
         return id;
@@ -80,6 +89,22 @@ public class Order {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Worker getWorker() {
+        return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
     @Override

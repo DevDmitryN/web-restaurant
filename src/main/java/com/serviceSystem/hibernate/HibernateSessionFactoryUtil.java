@@ -1,10 +1,7 @@
 package com.serviceSystem.hibernate;
 
 
-import com.serviceSystem.entity.Client;
-import com.serviceSystem.entity.Dish;
-import com.serviceSystem.entity.Order;
-import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -22,7 +19,7 @@ public class HibernateSessionFactoryUtil {
                 configuration.addAnnotatedClass(RestaurantTable.class);
                 configuration.addAnnotatedClass(Order.class);
                 configuration.addAnnotatedClass(Client.class);
-//                configuration.addAnnotatedClass(Worker.class);
+                configuration.addAnnotatedClass(Worker.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
 

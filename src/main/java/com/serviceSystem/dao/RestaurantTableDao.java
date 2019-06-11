@@ -34,4 +34,13 @@ public class RestaurantTableDao {
         session.close();
         return tables;
     }
+    public void updateFreeStatus(int id,boolean status){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        RestaurantTable table = session.get(RestaurantTable.class,id);
+        table.setFreeStatus(status);
+        session.update(table);
+        transaction.commit();
+        session.close();
+    }
 }

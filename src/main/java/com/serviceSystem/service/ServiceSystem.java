@@ -1,13 +1,7 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.dao.ClientDao;
-import com.serviceSystem.dao.DishDao;
-import com.serviceSystem.dao.OrderDaoJDBC;
-import com.serviceSystem.dao.RestaurantTableDao;
-import com.serviceSystem.entity.Client;
-import com.serviceSystem.entity.Dish;
-import com.serviceSystem.entity.Order;
-import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.dao.*;
+import com.serviceSystem.entity.*;
 import com.serviceSystem.entity.enums.Status;
 
 import java.util.ArrayList;
@@ -24,6 +18,7 @@ public class ServiceSystem {
     private DishDao dishDao;
     private RestaurantTableDao tableDao;
     private ClientDao clientDao;
+    private WorkerDao workerDao;
 
     private String url = "jdbc:postgresql://localhost:5432/postgres";
     private String username = "postgres";
@@ -55,6 +50,7 @@ public class ServiceSystem {
         dishDao = new DishDao();
         tableDao = new RestaurantTableDao();
         clientDao = new ClientDao();
+        workerDao = new WorkerDao();
         initDishes();
         initTables();
     }
@@ -93,6 +89,9 @@ public class ServiceSystem {
         orders.add(order);
     }
     public void addClient(Client client){
-        clientDao.insert(client);
+        clientDao.add(client);
+    }
+    public void addWorker(Worker worker){
+        workerDao.add(worker);
     }
 }
