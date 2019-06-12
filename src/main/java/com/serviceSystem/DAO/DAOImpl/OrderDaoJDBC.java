@@ -1,12 +1,14 @@
-package com.serviceSystem.dao;
+package com.serviceSystem.DAO.DAOImpl;
 
+import com.serviceSystem.DAO.DAOInterface.IOrderDAO;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.Order;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
-public class OrderDaoJDBC {
+public class OrderDaoJDBC implements IOrderDAO {
     Properties properties;
     String url;
     String username;
@@ -23,8 +25,8 @@ public class OrderDaoJDBC {
         this.username = username;
         this.password = password;
     }
-
-    public void insert(Order order){
+    @Override
+    public void save(Order order){
         try(Connection connection = DriverManager.getConnection(url,username,password);
                 Statement statement = connection.createStatement();){
             String sql = "INSERT INTO restaurantdb.orders (totalPrice,status,table_id)" +
@@ -45,4 +47,18 @@ public class OrderDaoJDBC {
         }
     }
 
+    @Override
+    public void update(Order entity) {
+
+    }
+
+    @Override
+    public List<Order> getAll() {
+        return null;
+    }
+
+    @Override
+    public Order getById(long id) {
+        return null;
+    }
 }

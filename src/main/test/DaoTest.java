@@ -1,7 +1,7 @@
-import com.serviceSystem.dao.ClientDao;
-import com.serviceSystem.dao.OrderDao;
-import com.serviceSystem.dao.RestaurantTableDao;
-import com.serviceSystem.dao.WorkerDao;
+import com.serviceSystem.DAO.DAOImpl.ClientDAO;
+import com.serviceSystem.DAO.DAOImpl.OrderDAO;
+import com.serviceSystem.DAO.DAOImpl.RestaurantTableDAO;
+import com.serviceSystem.DAO.DAOImpl.WorkerDAO;
 import com.serviceSystem.entity.*;
 import com.serviceSystem.entity.enums.Roles;
 import com.serviceSystem.service.ServiceSystem;
@@ -37,15 +37,15 @@ public class DaoTest {
         orderedDishes.add(dishes.get(0));
         orderedDishes.add(dishes.get(1));
 
-        Client client = new ClientDao().getClientById(2);
+        Client client = new ClientDAO().getById(2);
 
         Order order = new Order(table,orderedDishes,client,null);
-        OrderDao orderDao = new OrderDao();
-        orderDao.insert(order);
+        OrderDAO orderDao = new OrderDAO();
+        orderDao.save(order);
     }
     @Test
     public void getClientOrderList(){
-        Client client = new ClientDao().getClientById(1);
+        Client client = new ClientDAO().getById(1);
         //client has empty list of orders
         for (Order order : client.getOrders()) {
             System.out.println(order);
@@ -73,15 +73,15 @@ public class DaoTest {
         orderedDishes.add(dishes.get(0));
         orderedDishes.add(dishes.get(1));
 
-        Client client = new ClientDao().getClientById(2);
-        Worker worker = new WorkerDao().getWorkerById(1);
+        Client client = new ClientDAO().getById(2);
+        Worker worker = new WorkerDAO().getById(1);
         Order order = new Order(table,orderedDishes,client,worker);
 
-        new OrderDao().insert(order);
+        new OrderDAO().save(order);
     }
     @Test
     public void updateTableStatus(){
-        RestaurantTableDao restaurantTableDao = new RestaurantTableDao();
+        RestaurantTableDAO restaurantTableDao = new RestaurantTableDAO();
         restaurantTableDao.updateFreeStatus(1,true);
     }
 }

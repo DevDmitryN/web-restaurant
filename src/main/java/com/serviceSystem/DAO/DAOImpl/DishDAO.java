@@ -1,6 +1,8 @@
-package com.serviceSystem.dao;
+package com.serviceSystem.DAO.DAOImpl;
 
-import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.DAO.DAOInterface.IBaseDAO;
+import com.serviceSystem.DAO.DAOInterface.IDishDAO;
+import com.serviceSystem.entity.Dish;
 import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -8,39 +10,50 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class RestaurantTableDao {
-
-    public void insert(RestaurantTable table) {
+public class DishDAO implements IDishDAO {
+    @Override
+    public void save(Dish dish) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.save(table);
+        session.save(dish);
         tx1.commit();
         session.close();
     }
-    public RestaurantTable getRestaurantTableById(int id){
+    @Override
+    public List<Dish> getAll(){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        RestaurantTable table = session.get(RestaurantTable.class,id);
+        Query query = session.createQuery("FROM com.serviceSystem.entity.Dish");
+        List<Dish> dishes = (List<Dish>) query.list();
         transaction.commit();
         session.close();
-        return table;
+        return dishes;
     }
-    public List<RestaurantTable> getRestaurantTables(){
+    @Override
+    public Dish getById(long id){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("FROM RestaurantTable");
-        List<RestaurantTable> tables = (List<RestaurantTable>) query.list();
+        Dish dish = session.get(Dish.class,id);
         transaction.commit();
         session.close();
-        return tables;
+        return dish;
     }
-    public void updateFreeStatus(int id,boolean status){
+    @Override
+    public void update(Dish updatedDish){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        RestaurantTable table = session.get(RestaurantTable.class,id);
-        table.setFreeStatus(status);
-        session.update(table);
+        session.update(updatedDish);
         transaction.commit();
         session.close();
     }
+    @Override
+    public void delete(Dish dish){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(dish);
+        transaction.commit();
+        session.close();
+    }
+
+
 }
