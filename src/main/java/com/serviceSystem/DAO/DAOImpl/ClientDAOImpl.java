@@ -1,6 +1,6 @@
 package com.serviceSystem.DAO.DAOImpl;
 
-import com.serviceSystem.DAO.DAOInterface.IClientDAO;
+import com.serviceSystem.DAO.DAOInterface.ClientDAO;
 import com.serviceSystem.entity.Client;
 import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
@@ -9,7 +9,7 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class ClientDAO implements IClientDAO {
+public class ClientDAOImpl implements ClientDAO {
     @Override
     public void save(Client client){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();

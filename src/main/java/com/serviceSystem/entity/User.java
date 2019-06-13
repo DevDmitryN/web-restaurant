@@ -29,6 +29,10 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

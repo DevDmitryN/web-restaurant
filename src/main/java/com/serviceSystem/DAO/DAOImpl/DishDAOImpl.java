@@ -1,7 +1,7 @@
 package com.serviceSystem.DAO.DAOImpl;
 
-import com.serviceSystem.DAO.DAOInterface.IWorkerDAO;
-import com.serviceSystem.entity.Worker;
+import com.serviceSystem.DAO.DAOInterface.DishDAO;
+import com.serviceSystem.entity.Dish;
 import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -9,49 +9,50 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class WorkerDAO implements IWorkerDAO {
+public class DishDAOImpl implements DishDAO {
     @Override
-    public void save(Worker worker){
+    public void save(Dish dish) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(dish);
+        tx1.commit();
+        session.close();
+    }
+    @Override
+    public List<Dish> getAll(){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(worker);
+        Query query = session.createQuery("FROM com.serviceSystem.entity.Dish");
+        List<Dish> dishes = (List<Dish>) query.list();
+        transaction.commit();
+        session.close();
+        return dishes;
+    }
+    @Override
+    public Dish getById(long id){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Dish dish = session.get(Dish.class,id);
+        transaction.commit();
+        session.close();
+        return dish;
+    }
+    @Override
+    public void update(Dish updatedDish){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(updatedDish);
         transaction.commit();
         session.close();
     }
     @Override
-    public Worker getById(long id){
+    public void delete(Dish dish){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        Worker worker = session.get(Worker.class,id);
+        session.delete(dish);
         transaction.commit();
         session.close();
-        return worker;
     }
 
-    @Override
-    public void delete(Worker worker) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.delete(worker);
-        transaction.commit();
-        session.close();
-    }
 
-    @Override
-    public void update(Worker worker) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(worker);
-        transaction.commit();
-        session.close();
-    }
-
-    @Override
-    public List<Worker> getAll() {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("FROM com.serviceSystem.entity.Worker");
-        List<Worker> workers = query.list();
-        session.close();
-        return workers;
-    }
 }

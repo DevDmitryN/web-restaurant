@@ -14,15 +14,11 @@ public class ServiceSystem {
     private List<Dish> dishes;
     private List<Order> orders = new ArrayList<Order>();
 //    private Properties properties = new Properties();
-    private OrderDaoJDBC orderDaoJDBC;
-    private DishDAO dishDao;
-    private RestaurantTableDAO tableDao;
-    private ClientDAO clientDao;
-    private WorkerDAO workerDao;
-
-    private String url = "jdbc:postgresql://localhost:5432/postgres";
-    private String username = "postgres";
-    private String password = "root";
+    private OrderDaoJDBCImpl orderDaoJDBCImpl;
+    private DishDAOImpl dishDaoImpl;
+    private RestaurantTableDAOImpl tableDao;
+    private ClientDAOImpl clientDaoImpl;
+    private WorkerDAOImpl workerDaoImpl;
 
     private static ServiceSystem instance;
 
@@ -46,19 +42,19 @@ public class ServiceSystem {
 //        }catch (IOException e){
 //            e.printStackTrace();
 //        }
-        orderDaoJDBC = new OrderDaoJDBC(url,username,password);
-        dishDao = new DishDAO();
-        tableDao = new RestaurantTableDAO();
-        clientDao = new ClientDAO();
-        workerDao = new WorkerDAO();
+//        orderDaoJDBCImpl = new OrderDaoJDBCImpl(url,username,password);
+        dishDaoImpl = new DishDAOImpl();
+        tableDao = new RestaurantTableDAOImpl();
+        clientDaoImpl = new ClientDAOImpl();
+        workerDaoImpl = new WorkerDAOImpl();
         initDishes();
         initTables();
     }
     private void initDishes(){
-        dishes = dishDao.getAll();
+        dishes = dishDaoImpl.getAll();
     }
     public void addDish(Dish dish){
-        dishDao.save(dish);
+        dishDaoImpl.save(dish);
     }
     private void initTables(){
         tables = tableDao.getAll();
@@ -85,13 +81,13 @@ public class ServiceSystem {
         //updating order in the db
     }
     public void takeOrder(Order order){
-        orderDaoJDBC.save(order);
+        orderDaoJDBCImpl.save(order);
         orders.add(order);
     }
     public void addClient(Client client){
-        clientDao.save(client);
+        clientDaoImpl.save(client);
     }
     public void addWorker(Worker worker){
-        workerDao.save(worker);
+        workerDaoImpl.save(worker);
     }
 }

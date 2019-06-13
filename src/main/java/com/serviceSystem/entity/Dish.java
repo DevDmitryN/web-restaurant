@@ -34,8 +34,13 @@ public class Dish implements Serializable {
     private void init(String name, double price, String description){
         this.name = name.trim();
         this.price = new BigDecimal(price);
-        this.description = description.trim();
+        this.description = description;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
@@ -61,7 +66,7 @@ public class Dish implements Serializable {
     }
 
     public void setDescription(String description) {
-        this.description = description.trim();
+        this.description = description;
     }
 
     public List<Order> getOrders() {

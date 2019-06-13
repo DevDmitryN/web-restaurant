@@ -1,5 +1,5 @@
 package com.serviceSystem.entity.enums;
 
-public enum Roles {
+public enum Role {
     WAITER,ADMIN
 }

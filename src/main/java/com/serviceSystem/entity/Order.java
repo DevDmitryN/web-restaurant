@@ -51,10 +51,15 @@ public class Order {
         this.status = status != null ? status : Status.NOT_TAKEN;;
         this.table = table;
         this.dishes = dishes;
-        dishes.forEach( a -> totalPrice = totalPrice.add(a.getPrice()) );
+        countTotalPrice();
         this.client = client;
         this.worker = worker;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
@@ -63,9 +68,9 @@ public class Order {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = new BigDecimal(totalPrice);
-    }
+//    public void setTotalPrice(double totalPrice) {
+//        this.totalPrice = new BigDecimal(totalPrice);
+//    }
 
     public Status getStatus() {
         return status;
@@ -73,6 +78,9 @@ public class Order {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+    public void setStatus(String status) {
+        this.status = Status.valueOf(status);
     }
 
     public RestaurantTable getTable() {
@@ -89,6 +97,7 @@ public class Order {
 
     public void setDishes(List<Dish> dishes) {
         this.dishes = dishes;
+        countTotalPrice();
     }
 
     public Client getClient() {
@@ -106,7 +115,9 @@ public class Order {
     public void setWorker(Worker worker) {
         this.worker = worker;
     }
-
+    private void countTotalPrice(){
+        dishes.forEach( a -> totalPrice = totalPrice.add(a.getPrice()) );
+    }
     @Override
     public String toString() {
         return "Order{" +

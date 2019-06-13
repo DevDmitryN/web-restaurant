@@ -1,7 +1,6 @@
 package com.serviceSystem.DAO.DAOImpl;
 
-import com.serviceSystem.DAO.DAOInterface.IOrderDAO;
-import com.serviceSystem.entity.Order;
+import com.serviceSystem.DAO.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
@@ -10,47 +9,49 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class OrderDAO implements IOrderDAO {
+public class WorkerDAOImpl implements WorkerDAO {
     @Override
-    public void save(Order order){
+    public void save(Worker worker){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(order);
+        session.save(worker);
+        transaction.commit();
+        session.close();
+    }
+    @Override
+    public Worker getById(long id){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        Worker worker = session.get(Worker.class,id);
+        transaction.commit();
+        session.close();
+        return worker;
+    }
+
+    @Override
+    public void delete(Worker worker) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(worker);
         transaction.commit();
         session.close();
     }
 
-//    public void delete(Order order) {
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction transaction = session.beginTransaction();
-//        session.delete(order);
-//        transaction.commit();
-//        session.close();
-//    }
-
     @Override
-    public void update(Order order) {
+    public void update(Worker worker) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        session.update(order);
+        session.update(worker);
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Order> getAll() {
+    public List<Worker> getAll() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("FROM com.serviceSystem.entity.Order");
-        List<Order> orders= (List<Order>) query.list();
+        Query query = session.createQuery("FROM com.serviceSystem.entity.Worker");
+        List<Worker> workers = query.list();
         session.close();
-        return orders;
-    }
-
-    @Override
-    public Order getById(long id) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Order order = session.get(Order.class,id);
-        session.close();
-        return order;
+        return workers;
     }
 }

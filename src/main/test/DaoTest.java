@@ -1,14 +1,16 @@
-import com.serviceSystem.DAO.DAOImpl.ClientDAO;
-import com.serviceSystem.DAO.DAOImpl.OrderDAO;
-import com.serviceSystem.DAO.DAOImpl.RestaurantTableDAO;
-import com.serviceSystem.DAO.DAOImpl.WorkerDAO;
+import com.serviceSystem.DAO.DAOImpl.*;
+import com.serviceSystem.DAO.connectionPool.HikariCP;
 import com.serviceSystem.entity.*;
-import com.serviceSystem.entity.enums.Roles;
+import com.serviceSystem.entity.enums.Role;
 import com.serviceSystem.service.ServiceSystem;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class DaoTest {
     @Test
@@ -30,22 +32,21 @@ public class DaoTest {
     @Test
     public void addOrderWithClient(){
         ServiceSystem serviceSystem = ServiceSystem.getInstance();
-
         RestaurantTable table = serviceSystem.getTables().get(1);
         List<Dish> dishes = serviceSystem.getDishes();
         List<Dish> orderedDishes = new ArrayList<>();
         orderedDishes.add(dishes.get(0));
         orderedDishes.add(dishes.get(1));
 
-        Client client = new ClientDAO().getById(2);
+        Client client = new ClientDAOImpl().getById(2);
 
         Order order = new Order(table,orderedDishes,client,null);
-        OrderDAO orderDao = new OrderDAO();
+        OrderDAOImpl orderDao = new OrderDAOImpl();
         orderDao.save(order);
     }
     @Test
     public void getClientOrderList(){
-        Client client = new ClientDAO().getById(1);
+        Client client = new ClientDAOImpl().getById(1);
         //client has empty list of orders
         for (Order order : client.getOrders()) {
             System.out.println(order);
@@ -60,7 +61,7 @@ public class DaoTest {
         String email = "putin@email.com";
         String phoneNumber = "+375413412";
         String cardNumber = "0000-wefaf-12sfd";
-        Worker worker = new Worker(name,surname,password,email,phoneNumber, Roles.ADMIN);
+        Worker worker = new Worker(name,surname,password,email,phoneNumber, Role.ADMIN);
         serviceSystem.addWorker(worker);
     }
     @Test
@@ -73,15 +74,21 @@ public class DaoTest {
         orderedDishes.add(dishes.get(0));
         orderedDishes.add(dishes.get(1));
 
-        Client client = new ClientDAO().getById(2);
-        Worker worker = new WorkerDAO().getById(1);
+        Client client = new ClientDAOImpl().getById(2);
+        Worker worker = new WorkerDAOImpl().getById(1);
         Order order = new Order(table,orderedDishes,client,worker);
 
-        new OrderDAO().save(order);
+        new OrderDAOImpl().save(order);
     }
     @Test
     public void updateTableStatus(){
-        RestaurantTableDAO restaurantTableDao = new RestaurantTableDAO();
-        restaurantTableDao.updateFreeStatus(1,true);
+        RestaurantTableDAOImpl restaurantTableDaoImpl = new RestaurantTableDAOImpl();
+        restaurantTableDaoImpl.updateFreeStatus(1,true);
+    }
+    @Test
+    public void hikariCPTest(){
+        OrderDaoJDBCImpl orderDaoJDBC = new OrderDaoJDBCImpl();
+        List<Order> orders = orderDaoJDBC.getAll();
+        orders.forEach( a -> System.out.println("id: " + a.getId() + ",total price = " + a.getTotalPrice()));
     }
 }
