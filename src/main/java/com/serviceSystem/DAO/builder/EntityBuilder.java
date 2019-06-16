@@ -4,6 +4,8 @@ import com.serviceSystem.entity.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.serviceSystem.DAO.builder.ColumnNames.*;
 
@@ -52,5 +54,12 @@ public class EntityBuilder {
         dish.setPrice(resultSet.getDouble(DISH_PRICE));
         dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
         return dish;
+    }
+    public static List<Dish> buildDishes(ResultSet resultSet)throws SQLException{
+        List<Dish> dishes = new ArrayList<Dish>();
+        while (resultSet.next()) {
+            dishes.add(buildDish(resultSet));
+        }
+        return dishes;
     }
 }

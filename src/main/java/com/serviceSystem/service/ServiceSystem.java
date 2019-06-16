@@ -1,6 +1,8 @@
 package com.serviceSystem.service;
 
 import com.serviceSystem.DAO.DAOImpl.*;
+import com.serviceSystem.DAO.DAOInterface.DishDAO;
+import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.*;
 import com.serviceSystem.entity.enums.Status;
 
@@ -14,8 +16,8 @@ public class ServiceSystem {
     private List<Dish> dishes;
     private List<Order> orders = new ArrayList<Order>();
 //    private Properties properties = new Properties();
-    private OrderDaoJDBCImpl orderDaoJDBCImpl;
-    private DishDAOImpl dishDaoImpl;
+    private OrderDAO orderDao;
+    private DishDAO dishDaoImpl;
     private RestaurantTableDAOImpl tableDao;
     private ClientDAOImpl clientDaoImpl;
     private WorkerDAOImpl workerDaoImpl;
@@ -42,7 +44,7 @@ public class ServiceSystem {
 //        }catch (IOException e){
 //            e.printStackTrace();
 //        }
-//        orderDaoJDBCImpl = new OrderDaoJDBCImpl(url,username,password);
+        orderDao = new OrderDaoJDBCImpl();
         dishDaoImpl = new DishDAOImpl();
         tableDao = new RestaurantTableDAOImpl();
         clientDaoImpl = new ClientDAOImpl();
@@ -81,7 +83,7 @@ public class ServiceSystem {
         //updating order in the db
     }
     public void takeOrder(Order order){
-        orderDaoJDBCImpl.save(order);
+        orderDao.save(order);
         orders.add(order);
     }
     public void addClient(Client client){

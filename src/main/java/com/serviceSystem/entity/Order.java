@@ -12,7 +12,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+
     private BigDecimal totalPrice = new BigDecimal(0);
     @Enumerated(EnumType.STRING)
     private Status status;

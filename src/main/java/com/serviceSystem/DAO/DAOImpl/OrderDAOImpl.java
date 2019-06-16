@@ -52,4 +52,14 @@ public class OrderDAOImpl implements OrderDAO {
         session.close();
         return order;
     }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
+    public List<Order> getOrdersByTable(int tableId) {
+        return null;
+    }
 }

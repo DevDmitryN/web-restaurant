@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServlet extends HttpServlet {
-    ServiceSystem serviceSystem = ServiceSystem.getInstance();
+    private ServiceSystem serviceSystem = ServiceSystem.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

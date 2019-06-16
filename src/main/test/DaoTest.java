@@ -1,4 +1,5 @@
 import com.serviceSystem.DAO.DAOImpl.*;
+import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.DAO.connectionPool.HikariCP;
 import com.serviceSystem.entity.*;
 import com.serviceSystem.entity.enums.Role;
@@ -66,19 +67,20 @@ public class DaoTest {
     }
     @Test
     public void addOrderWithClientAndWorker(){
+        OrderDAO orderDAO = new OrderDaoJDBCImpl();
         ServiceSystem serviceSystem = ServiceSystem.getInstance();
-
         RestaurantTable table = serviceSystem.getTables().get(1);
         List<Dish> dishes = serviceSystem.getDishes();
         List<Dish> orderedDishes = new ArrayList<>();
-        orderedDishes.add(dishes.get(0));
-        orderedDishes.add(dishes.get(1));
+        orderedDishes.add(dishes.get(2));
+        orderedDishes.add(dishes.get(3));
+        orderedDishes.add(dishes.get(5));
 
         Client client = new ClientDAOImpl().getById(2);
         Worker worker = new WorkerDAOImpl().getById(1);
         Order order = new Order(table,orderedDishes,client,worker);
 
-        new OrderDAOImpl().save(order);
+        orderDAO.save(order);
     }
     @Test
     public void updateTableStatus(){
@@ -90,5 +92,18 @@ public class DaoTest {
         OrderDaoJDBCImpl orderDaoJDBC = new OrderDaoJDBCImpl();
         List<Order> orders = orderDaoJDBC.getAll();
         orders.forEach( a -> System.out.println("id: " + a.getId() + ",total price = " + a.getTotalPrice()));
+    }
+    @Test
+    public void getOrderById(){
+        OrderDAO orderDAO = new OrderDaoJDBCImpl();
+        Order order = orderDAO.getById(40);
+        System.out.println(order.getId());
+        order.getDishes().forEach(d -> System.out.println(d));
+    }
+    @Test
+    public void getOrdersByTableId(){
+        OrderDAO orderDAO = new OrderDaoJDBCImpl();
+        List<Order> orders = orderDAO.getOrdersByTable(2);
+        orders.get(0).getDishes().forEach( o -> System.out.println(o));
     }
 }
