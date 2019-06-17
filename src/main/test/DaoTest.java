@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,29 +31,7 @@ public class DaoTest {
         Client client = new Client(name,surname,password,email,phoneNumber,cardNumber);
         serviceSystem.addClient(client);
     }
-    @Test
-    public void addOrderWithClient(){
-        ServiceSystem serviceSystem = ServiceSystem.getInstance();
-        RestaurantTable table = serviceSystem.getTables().get(1);
-        List<Dish> dishes = serviceSystem.getDishes();
-        List<Dish> orderedDishes = new ArrayList<>();
-        orderedDishes.add(dishes.get(0));
-        orderedDishes.add(dishes.get(1));
 
-        Client client = new ClientDAOImpl().getById(2);
-
-        Order order = new Order(table,orderedDishes,client,null);
-        OrderDAOImpl orderDao = new OrderDAOImpl();
-        orderDao.save(order);
-    }
-    @Test
-    public void getClientOrderList(){
-        Client client = new ClientDAOImpl().getById(1);
-        //client has empty list of orders
-        for (Order order : client.getOrders()) {
-            System.out.println(order);
-        }
-    }
     @Test
     public void addWorker(){
         ServiceSystem serviceSystem = ServiceSystem.getInstance();
@@ -66,7 +45,7 @@ public class DaoTest {
         serviceSystem.addWorker(worker);
     }
     @Test
-    public void addOrderWithClientAndWorker(){
+    public void addOrder(){
         OrderDAO orderDAO = new OrderDaoJDBCImpl();
         ServiceSystem serviceSystem = ServiceSystem.getInstance();
         RestaurantTable table = serviceSystem.getTables().get(1);
@@ -79,7 +58,8 @@ public class DaoTest {
         Client client = new ClientDAOImpl().getById(2);
         Worker worker = new WorkerDAOImpl().getById(1);
         Order order = new Order(table,orderedDishes,client,worker);
-
+        LocalDateTime localDateTime = LocalDateTime.parse("2019-06-17T14:00:00");
+        order.setBookingTime(localDateTime);
         orderDAO.save(order);
     }
     @Test
@@ -87,12 +67,7 @@ public class DaoTest {
         RestaurantTableDAOImpl restaurantTableDaoImpl = new RestaurantTableDAOImpl();
         restaurantTableDaoImpl.updateFreeStatus(1,true);
     }
-    @Test
-    public void hikariCPTest(){
-        OrderDaoJDBCImpl orderDaoJDBC = new OrderDaoJDBCImpl();
-        List<Order> orders = orderDaoJDBC.getAll();
-        orders.forEach( a -> System.out.println("id: " + a.getId() + ",total price = " + a.getTotalPrice()));
-    }
+
     @Test
     public void getOrderById(){
         OrderDAO orderDAO = new OrderDaoJDBCImpl();
@@ -105,5 +80,11 @@ public class DaoTest {
         OrderDAO orderDAO = new OrderDaoJDBCImpl();
         List<Order> orders = orderDAO.getOrdersByTable(2);
         orders.get(0).getDishes().forEach( o -> System.out.println(o));
+    }
+    @Test
+    public void getAllOrders(){
+        OrderDAO orderDAO = new OrderDaoJDBCImpl();
+        List<Order> orders = orderDAO.getAll();
+        orders.forEach( o -> System.out.println(o.getId() + " creation time: " + o.getCreationTime()));
     }
 }

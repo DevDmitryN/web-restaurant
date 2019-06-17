@@ -4,6 +4,7 @@ import com.serviceSystem.entity.enums.Status;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -34,6 +35,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "worker_id")
     private Worker worker;
+    private LocalDateTime creationTime = LocalDateTime.now();
+    private LocalDateTime bookingTime;
 
     public Order(){
 
@@ -118,6 +121,23 @@ public class Order {
     private void countTotalPrice(){
         dishes.forEach( a -> totalPrice = totalPrice.add(a.getPrice()) );
     }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public LocalDateTime getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(LocalDateTime bookingTime) {
+        this.bookingTime = bookingTime;
+    }
+
     @Override
     public String toString() {
         return "Order{" +

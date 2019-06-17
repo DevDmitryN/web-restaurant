@@ -3,6 +3,9 @@ package com.serviceSystem.DAO.builder;
 public class ColumnNames {
     public static final String ORDER_ID = "id";
     public static final String ORDER_STATUS = "status";
+    public static final String CREATION_TIME = "creation_time";
+    public static final String BOOKING_TIME = "booking_time";
+
 
     public static final String TABLE_ID = "t_id";
     public static final String TABLE_CAPACITY = "t_capacity";

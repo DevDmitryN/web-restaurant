@@ -18,6 +18,8 @@ public class EntityBuilder {
         order.setTable(buildTable(resultSet));
         order.setClient(buildClient(resultSet));
         order.setWorker(buildWorker(resultSet));
+        order.setCreationTime(resultSet.getTimestamp(CREATION_TIME).toLocalDateTime());
+        order.setBookingTime(resultSet.getTimestamp(BOOKING_TIME).toLocalDateTime());
         return order;
     }
     public static Client buildClient(ResultSet resultSet) throws SQLException {
