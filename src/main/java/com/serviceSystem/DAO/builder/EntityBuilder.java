@@ -34,6 +34,9 @@ public class EntityBuilder {
     }
     public static Worker buildWorker(ResultSet resultSet)throws SQLException{
         Worker worker = new Worker();
+        if(resultSet.getString(WORKER_NAME)==null){
+            return worker;
+        }
         worker.setId(resultSet.getLong(WORKER_ID));
         worker.setName(resultSet.getString(WORKER_NAME));
         worker.setSurname(resultSet.getString(WORKER_SURNAME));

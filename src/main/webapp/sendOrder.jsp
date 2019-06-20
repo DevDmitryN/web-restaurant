@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page isELIgnored="false"%>
+<%@ page isELIgnored="false" %>
 <%@ page import="com.serviceSystem.entity.Dish" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.serviceSystem.entity.RestaurantTable" %>
@@ -14,28 +14,34 @@
 <html>
 <head>
     <title>Page for sending order</title>
+    <%@include file="veiw/header.html"%>
 </head>
 <body>
 <div>
+    <%@include file="veiw/menu-nav-bar.jsp"%>
     <h1>Заполнение заказа</h1>
     <form method="post">
         <p>Меню:</p>
-        <p>
-            <c:forEach var="dish" items="${dishes}">
-                <input type="checkbox" name=${dish.id} value=${dish.id}> ${dish.name} Цена: ${dish.price}<br>
-            </c:forEach>
-        </p>
+
+        <c:forEach var="dish" items="${dishes}">
+            <p>
+                    <%--<input type="checkbox" name=${dish.id} value=${dish.id}>--%>
+                <input type="number" min="0" value="0" style=" width: 50px;" name=<c:out
+                        value="dish_${dish.id}"/>> ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}<br>
+            </p>
+        </c:forEach>
+
         <p>Выберите столик:</p>
         <p>
-            <select name="table">
+            <select required name="table">
                 <c:forEach var="table" items="${tables}">
-                    <c:if test="${table.freeStatus == true}">
-                        <option value=${table.id}>Мест: ${table.capacity}</option>
-                    </c:if>
+                    <option value=${table.id}>id: ${table.id} Мест: ${table.capacity}
+                        Свободен: ${table.freeStatus}</option>
                 </c:forEach>
             </select>
         </p>
-        <input type="submit" value="Отправить">
+        <p>Укажите время заказа: <input type="time" name="bookingTime" style="width: 100px; text-align: center;"></p>
+        <input required type="submit" value="Отправить">
     </form>
 </div>
 

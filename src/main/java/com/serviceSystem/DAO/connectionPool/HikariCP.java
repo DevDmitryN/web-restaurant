@@ -17,14 +17,13 @@ public class HikariCP {
     private static HikariDataSource dataSource;
 
     static {
+
         config.setJdbcUrl(URL);
         config.setUsername(USERNAME);
         config.setPassword(PASSWORD);
-
-//        config.addDataSourceProperty("cachePrepStmts", "true");
-//        config.addDataSourceProperty("prepStmtCacheSize", "250");
-//        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.setDriverClassName("org.postgresql.Driver");
         dataSource = new HikariDataSource(config);
+        System.out.println(dataSource);
     }
 
     public static Connection getConnection() throws SQLException {

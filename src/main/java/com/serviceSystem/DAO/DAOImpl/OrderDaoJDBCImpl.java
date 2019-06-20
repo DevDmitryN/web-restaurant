@@ -22,12 +22,12 @@ public class OrderDaoJDBCImpl implements OrderDAO {
             "from restaurantdb.orders as o " +
             "join restaurantdb.\"tables\" as t on o.table_id = t.id " +
             "join restaurantdb.clients as c on o.client_id = c.id " +
-            "join restaurantdb.workers as w on o.worker_id = w.id";
+            "left join restaurantdb.workers as w on o.worker_id = w.id";
     private final String DISHES_FROM_ORDER = "select d.id,name,price,description from restaurantdb.order_dish as od\n" +
             "join restaurantdb.dishes as d on od.dish_id=d.id\n" +
             "where od.order_id=?";
     private final String ORDER_BY_ID = SELECT_ALL + " where o.id=?";
-    private final String INSERT_INTO_ORDERS = "INSERT INTO restaurantdb.orders (table_id,client_id,worker_id,creation_time,booking_time) VALUES (?,?,?,?,?) RETURNING id";
+    private final String INSERT_INTO_ORDERS = "INSERT INTO restaurantdb.orders (table_id,client_id,creation_time,booking_time) VALUES (?,?,?,?) RETURNING id";
     private final String INSERT_INTO_ORDER_DISH = "INSERT INTO restaurantdb.order_dish (order_id, dish_id) VALUES (?,?)";
     private final String DELETE_FROM_ORDER_DISH = "delete from restaurantdb.order_dish where order_id=?";
     private final String DELETE_FROM_ORDERS = "delete from restaurantdb.orders where id=?";
@@ -40,9 +40,9 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 PreparedStatement statement = connection.prepareStatement(INSERT_INTO_ORDERS);
                 statement.setInt(1, order.getTable().getId());
                 statement.setLong(2, order.getClient().getId());
-                statement.setLong(3, order.getWorker().getId());
-                statement.setTimestamp(4,Timestamp.valueOf(order.getCreationTime()));
-                statement.setTimestamp(5,Timestamp.valueOf(order.getBookingTime()));
+//                statement.setLong(3, order.getWorker().getId());
+                statement.setTimestamp(3,Timestamp.valueOf(order.getCreationTime()));
+                statement.setTimestamp(4,Timestamp.valueOf(order.getBookingTime()));
                 ResultSet resultSet = statement.executeQuery();
                 long id = resultSet.next() ? resultSet.getLong(1) : -1;
                 statement = connection.prepareStatement(INSERT_INTO_ORDER_DISH);
@@ -81,7 +81,6 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     public List<Order> getAll() {
         List<Order> orders = new ArrayList<Order>();
         try (Connection connection = HikariCP.getConnection()) {
-            connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
             ResultSet resultSetOrders = statement.executeQuery(SELECT_ALL);
             ResultSet resultSetDishes;
@@ -93,7 +92,6 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 order.setDishes(EntityBuilder.buildDishes(resultSetDishes));
                 orders.add(order);
             }
-            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }

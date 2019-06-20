@@ -5,6 +5,7 @@ import com.serviceSystem.entity.enums.Status;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -137,7 +138,12 @@ public class Order {
     public void setBookingTime(LocalDateTime bookingTime) {
         this.bookingTime = bookingTime;
     }
-
+    public String getFormatedCreationTime(){
+        return creationTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+    public String getFormatedBookingTime(){
+        return bookingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
     @Override
     public String toString() {
         return "Order{" +
