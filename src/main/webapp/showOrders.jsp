@@ -13,7 +13,6 @@
 <head>
     <title>All orders</title>
     <%@include file="veiw/header.html" %>
-    <link rel="stylesheet" href="veiw/style.css">
 </head>
 <body>
 <%
@@ -50,17 +49,35 @@
                     <th scope="col">работник</th>
                     <th scope="col">создан</th>
                     <th scope="col">заказанное время</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 <tr/>
                 </thead>
                 <tbody>
                 <c:forEach var="order" items="${orders}">
                     <tr>
                         <th scope="row">${order.id}</th>
-                        <td>${order.table.id}</td>
-                        <td>${order.client.id}</td>
-                        <td>${order.worker.id}</td>
-                        <td>${order.getFormatedCreationTime()}</td>
-                        <td>${order.getFormatedBookingTime()}</td>
+                        <td>${order.table}</td>
+                        <td>${order.client}</td>
+                        <td>${order.worker}</td>
+                        <td>${order.creationTime}</td>
+                        <td>${order.bookingTime}</td>
+                        <td>
+                            <form action="/showDishesOfOrder" method="get">
+                                <button type="submit" name="id" value="${order.id}" class="btn btn-success">Список блюд</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/deleteOrder" method="post">
+                                <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/updateOrder" method="get">
+                                <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
+                            </form>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>

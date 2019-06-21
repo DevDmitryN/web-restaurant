@@ -32,4 +32,13 @@ public class OrderService {
     public void save(Order order){
         orderDAO.save(order);
     }
+    public void delete(long id){
+        orderDAO.delete(id);
+    }
+    public Order getOrderById(long id){
+        return orderDAO.getById(id);
+    }
+    public void update(Order order){
+        orderDAO.update(order);
+    }
 }

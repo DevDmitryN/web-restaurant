@@ -1,5 +1,6 @@
 package com.serviceSystem.servlet;
 
+import com.serviceSystem.DTO.OrderDTO;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.RestaurantTable;
@@ -19,12 +20,16 @@ public class ShowOrdersServlet extends HttpServlet {
     TableService tableService = TableService.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Order> orders;
+        List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String tableId = req.getParameter("tableId");
         if(tableId == null || tableId.equals("all")){
-           orders  = orderService.getAll();
+            for (Order order : orderService.getAll()) {
+                orders.add(new OrderDTO(order));
+            }
         }else{
-            orders = orderService.getOrdersByTableId(Integer.parseInt(tableId));
+            for (Order order : orderService.getOrdersByTableId(Integer.parseInt(tableId))) {
+                orders.add(new OrderDTO(order));
+            }
         }
 //        orders.forEach( o -> System.out.println(o));
         List<RestaurantTable> tables = tableService.getAll();

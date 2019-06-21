@@ -58,10 +58,6 @@ public class OrderServlet extends HttpServlet {
             }
         }
         String bookingTime = req.getParameter("bookingTime");
-        orderedDishes.forEach( d -> System.out.println(d));
-        System.out.println(orderedTable);
-        System.out.println(bookingTime);
-
         Client client = new Client();
         client.setId(1);
         LocalDateTime bookingDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));

@@ -1,3 +1,7 @@
 /target
 /.idea
 web-service-system.iml
+/src/main/webapp/veiw/allOrders.html
+/src/main/webapp/veiw/index.html
+/src/main/webapp/veiw/LogIn.html
+/src/main/webapp/veiw/sending-order.html

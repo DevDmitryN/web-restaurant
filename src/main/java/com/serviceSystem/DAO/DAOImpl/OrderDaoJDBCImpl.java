@@ -32,6 +32,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     private final String DELETE_FROM_ORDER_DISH = "delete from restaurantdb.order_dish where order_id=?";
     private final String DELETE_FROM_ORDERS = "delete from restaurantdb.orders where id=?";
     private final String ORDERS_BY_TABLEID = SELECT_ALL + " where o.table_id=?";
+    private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ?, booking_time = ? where id = ?";
     @Override
     public void save(Order order) {
         try (Connection connection = HikariCP.getConnection();) {
@@ -66,7 +67,12 @@ public class OrderDaoJDBCImpl implements OrderDAO {
         try (Connection connection = HikariCP.getConnection()) {
             try{
                 connection.setAutoCommit(false);
-
+                PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER);
+                statement.setInt(1,order.getTable().getId());
+                statement.setLong(2,order.getWorker().getId());
+                statement.setTimestamp(3,Timestamp.valueOf(order.getBookingTime()));
+                statement.setLong(4,order.getId());
+                statement.executeUpdate();
                 connection.commit();
             }catch (SQLException e){
                 connection.rollback();

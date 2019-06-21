@@ -5,7 +5,7 @@
 <web-app>
 
   <display-name>Archetype Created Web Application</display-name>
-
+<!--Servlet for creating order-->
   <servlet>
     <servlet-name>OrderServlet</servlet-name>
     <servlet-class>com.serviceSystem.servlet.OrderServlet</servlet-class>
@@ -14,6 +14,7 @@
     <servlet-name>OrderServlet</servlet-name>
     <url-pattern>/sendOrder</url-pattern>
   </servlet-mapping>
+<!--Servlet for showing all orders and finding order by table-->
   <servlet>
     <servlet-name>ShowOrdersServlet</servlet-name>
     <servlet-class>com.serviceSystem.servlet.ShowOrdersServlet</servlet-class>
@@ -22,5 +23,31 @@
     <servlet-name>ShowOrdersServlet</servlet-name>
     <url-pattern>/showOrders</url-pattern>
   </servlet-mapping>
-
+<!--Servlet for deleting order-->
+  <servlet>
+    <servlet-name>DeleteServlet</servlet-name>
+    <servlet-class>com.serviceSystem.servlet.DeleteOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteServlet</servlet-name>
+    <url-pattern>/deleteOrder</url-pattern>
+  </servlet-mapping>
+<!--Servlet for showing dishes of order-->
+  <servlet>
+    <servlet-name>ShowDishesOfOrderServlet</servlet-name>
+    <servlet-class>com.serviceSystem.servlet.ShowDishesOfOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShowDishesOfOrderServlet</servlet-name>
+    <url-pattern>/showDishesOfOrder</url-pattern>
+  </servlet-mapping>
+<!--Servlet for updating order-->
+  <servlet>
+    <servlet-name>UpdateOrderServlet</servlet-name>
+    <servlet-class>com.serviceSystem.servlet.UpdateOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UpdateOrderServlet</servlet-name>
+    <url-pattern>/updateOrder</url-pattern>
+  </servlet-mapping>
 </web-app>
