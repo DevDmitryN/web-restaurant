@@ -89,4 +89,5 @@ public class DaoTest {
         List<Order> orders = orderDAO.getAll();
         orders.forEach( o -> System.out.println(o.getId() + " creation time: " + o.getWorker()));
     }
+
 }

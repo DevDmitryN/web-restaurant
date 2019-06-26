@@ -127,14 +127,11 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     @Override
     public void delete(long id){
         try(Connection connection = HikariCP.getConnection();
-            PreparedStatement statementForOrder = connection.prepareStatement(DELETE_FROM_ORDER_DISH);
-            PreparedStatement statementForDishes = connection.prepareStatement(DELETE_FROM_ORDERS);){
+            PreparedStatement statementForOrder = connection.prepareStatement(DELETE_FROM_ORDERS);){
             try {
                 connection.setAutoCommit(false);
                 statementForOrder.setLong(1, id);
                 statementForOrder.executeUpdate();
-                statementForDishes.setLong(1, id);
-                statementForDishes.executeUpdate();
                 connection.commit();
             }catch (SQLException e){
                 connection.rollback();
