@@ -17,7 +17,7 @@ public class TableService {
         }
         return instance;
     }
-    TableService(){
+    private TableService(){
         tableDAO = new RestaurantTableDAOImpl();
     }
     public List<RestaurantTable> getAll(){

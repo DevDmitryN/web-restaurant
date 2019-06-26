@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShowOrdersServlet extends HttpServlet {
-    OrderService orderService = OrderService.getInstance();
-    TableService tableService = TableService.getInstance();
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        OrderService orderService = OrderService.getInstance();
+        TableService tableService = TableService.getInstance();
         List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String tableId = req.getParameter("tableId");
         if(tableId == null || tableId.equals("all")){
@@ -31,7 +32,6 @@ public class ShowOrdersServlet extends HttpServlet {
                 orders.add(new OrderDTO(order));
             }
         }
-//        orders.forEach( o -> System.out.println(o));
         List<RestaurantTable> tables = tableService.getAll();
         req.setAttribute("orders",orders);
         req.setAttribute("tables",tables);
@@ -40,7 +40,6 @@ public class ShowOrdersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String tableId = req.getParameter("tableId");
         req.setAttribute("tableId",req.getParameter("tableId"));
         doGet(req,resp);
     }

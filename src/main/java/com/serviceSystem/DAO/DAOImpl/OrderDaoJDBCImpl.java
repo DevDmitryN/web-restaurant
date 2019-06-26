@@ -35,22 +35,22 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ?, booking_time = ? where id = ?";
     @Override
     public void save(Order order) {
-        try (Connection connection = HikariCP.getConnection();) {
+        try (Connection connection = HikariCP.getConnection();
+            PreparedStatement statementForOrder = connection.prepareStatement(INSERT_INTO_ORDERS);
+            PreparedStatement statementForDishes = connection.prepareStatement(INSERT_INTO_ORDER_DISH);) {
             try {
                 connection.setAutoCommit(false);
-                PreparedStatement statement = connection.prepareStatement(INSERT_INTO_ORDERS);
-                statement.setInt(1, order.getTable().getId());
-                statement.setLong(2, order.getClient().getId());
+                statementForOrder.setInt(1, order.getTable().getId());
+                statementForOrder.setLong(2, order.getClient().getId());
 //                statement.setLong(3, order.getWorker().getId());
-                statement.setTimestamp(3,Timestamp.valueOf(order.getCreationTime()));
-                statement.setTimestamp(4,Timestamp.valueOf(order.getBookingTime()));
-                ResultSet resultSet = statement.executeQuery();
-                long id = resultSet.next() ? resultSet.getLong(1) : -1;
-                statement = connection.prepareStatement(INSERT_INTO_ORDER_DISH);
+                statementForOrder.setTimestamp(3,Timestamp.valueOf(order.getCreationTime()));
+                statementForOrder.setTimestamp(4,Timestamp.valueOf(order.getBookingTime()));
+                ResultSet setOfId = statementForOrder.executeQuery();
+                long id = setOfId.next() ? setOfId.getLong(1) : -1;
                 for (Dish dish : order.getDishes()) {
-                    statement.setLong(1, id);
-                    statement.setInt(2, dish.getId());
-                    statement.executeUpdate();
+                    statementForDishes.setLong(1, id);
+                    statementForDishes.setInt(2, dish.getId());
+                    statementForDishes.executeUpdate();
                 }
                 connection.commit();
             }catch (SQLException e){
@@ -64,10 +64,10 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     @Override
     public void update(Order order) {
-        try (Connection connection = HikariCP.getConnection()) {
+        try (Connection connection = HikariCP.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER);) {
             try{
                 connection.setAutoCommit(false);
-                PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER);
                 statement.setInt(1,order.getTable().getId());
                 statement.setLong(2,order.getWorker().getId());
                 statement.setTimestamp(3,Timestamp.valueOf(order.getBookingTime()));
@@ -86,16 +86,16 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     @Override
     public List<Order> getAll() {
         List<Order> orders = new ArrayList<Order>();
-        try (Connection connection = HikariCP.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet resultSetOrders = statement.executeQuery(SELECT_ALL);
-            ResultSet resultSetDishes;
-            while (resultSetOrders.next()) {
-                PreparedStatement preparedStatement = connection.prepareStatement(DISHES_FROM_ORDER);
-                preparedStatement.setInt(1, resultSetOrders.getInt(1));
-                resultSetDishes = preparedStatement.executeQuery();
-                Order order = EntityBuilder.buildOrder(resultSetOrders);
-                order.setDishes(EntityBuilder.buildDishes(resultSetDishes));
+        try (Connection connection = HikariCP.getConnection();
+             Statement statement = connection.createStatement();
+             PreparedStatement preparedStatement = connection.prepareStatement(DISHES_FROM_ORDER);) {
+            ResultSet setOfOrders = statement.executeQuery(SELECT_ALL);
+            ResultSet setOfDishes;
+            while (setOfOrders.next()) {
+                preparedStatement.setInt(1, setOfOrders.getInt(1));
+                setOfDishes = preparedStatement.executeQuery();
+                Order order = EntityBuilder.buildOrder(setOfOrders);
+                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -107,16 +107,16 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     @Override
     public Order getById(long id) {
         Order order = null;
-        try (Connection connection = HikariCP.getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(ORDER_BY_ID);
-            preparedStatement.setLong(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                order = EntityBuilder.buildOrder(resultSet);
-                preparedStatement = connection.prepareStatement(DISHES_FROM_ORDER);
-                preparedStatement.setLong(1, id);
-                resultSet = preparedStatement.executeQuery();
-                order.setDishes(EntityBuilder.buildDishes(resultSet));
+        try (Connection connection = HikariCP.getConnection();
+             PreparedStatement statementForOrder = connection.prepareStatement(ORDER_BY_ID);
+             PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER);) {
+            statementForOrder.setLong(1, id);
+            ResultSet setOfOrders = statementForOrder.executeQuery();
+            if (setOfOrders.next()) {
+                order = EntityBuilder.buildOrder(setOfOrders);
+                statementForDishes.setLong(1, id);
+                ResultSet setOfDishes = statementForDishes.executeQuery();
+                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -126,15 +126,15 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     @Override
     public void delete(long id){
-        try(Connection connection = HikariCP.getConnection()){
+        try(Connection connection = HikariCP.getConnection();
+            PreparedStatement statementForOrder = connection.prepareStatement(DELETE_FROM_ORDER_DISH);
+            PreparedStatement statementForDishes = connection.prepareStatement(DELETE_FROM_ORDERS);){
             try {
                 connection.setAutoCommit(false);
-                PreparedStatement statement = connection.prepareStatement(DELETE_FROM_ORDER_DISH);
-                statement.setLong(1, id);
-                statement.executeUpdate();
-                statement = connection.prepareStatement(DELETE_FROM_ORDERS);
-                statement.setLong(1, id);
-                statement.executeUpdate();
+                statementForOrder.setLong(1, id);
+                statementForOrder.executeUpdate();
+                statementForDishes.setLong(1, id);
+                statementForDishes.executeUpdate();
                 connection.commit();
             }catch (SQLException e){
                 connection.rollback();
@@ -150,17 +150,18 @@ public class OrderDaoJDBCImpl implements OrderDAO {
         List<Order> orders = new ArrayList<Order>();
         Order order = null;
 
-        try(Connection connection = HikariCP.getConnection()){
-            PreparedStatement statement = connection.prepareStatement(ORDERS_BY_TABLEID);
-            statement.setInt(1,tableId);
-            ResultSet setWithOrders = statement.executeQuery();
-            ResultSet resultSetDishes = null;
-            while (setWithOrders.next()){
-                order = EntityBuilder.buildOrder(setWithOrders);
-                statement = connection.prepareStatement(DISHES_FROM_ORDER);
-                statement.setLong(1, order.getId());
-                resultSetDishes = statement.executeQuery();
-                order.setDishes(EntityBuilder.buildDishes(resultSetDishes));
+        try(Connection connection = HikariCP.getConnection();
+            PreparedStatement statementForOrders = connection.prepareStatement(ORDERS_BY_TABLEID);
+            PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER);){
+
+            statementForOrders.setInt(1,tableId);
+            ResultSet setOfOrders = statementForOrders.executeQuery();
+            ResultSet setOfDishes;
+            while (setOfOrders.next()){
+                order = EntityBuilder.buildOrder(setOfOrders);
+                statementForDishes.setLong(1, order.getId());
+                setOfDishes = statementForDishes.executeQuery();
+                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
                 orders.add(order);
             }
         }catch (SQLException e){

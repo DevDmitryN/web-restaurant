@@ -21,14 +21,13 @@ import java.util.List;
 
 public class UpdateOrderServlet extends HttpServlet {
     Order order;
-    OrderService orderService = OrderService.getInstance();
-    List<RestaurantTable> tables = TableService.getInstance().getAll();
-    List<Dish> dishes = DishService.getInstance().getAll();
-    List<Worker> workers = WorkerService.getInstance().getAll();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long orderId = Long.valueOf(req.getParameter("id"));
-        order = orderService.getOrderById(orderId);
+        List<RestaurantTable> tables = TableService.getInstance().getAll();
+        List<Dish> dishes = DishService.getInstance().getAll();
+        List<Worker> workers = WorkerService.getInstance().getAll();
+        order = OrderService.getInstance().getOrderById(orderId);
 
         req.setAttribute("order",order);
         req.setAttribute("tables",tables);
@@ -41,10 +40,11 @@ public class UpdateOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<RestaurantTable> tables = TableService.getInstance().getAll();
+        List<Worker> workers = WorkerService.getInstance().getAll();
         int tableId = Integer.valueOf(req.getParameter("tableId"));
         long workerId = Long.valueOf(req.getParameter("workerId"));
         String bookingTime = req.getParameter("bookingTime");
-        RestaurantTable table;
         for (RestaurantTable t : tables) {
             if(tableId == t.getId()){
                 order.setTable(t);
@@ -59,7 +59,7 @@ public class UpdateOrderServlet extends HttpServlet {
             LocalDateTime newBookingTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));
             order.setBookingTime(newBookingTime);
         }
-        orderService.update(order);
+        OrderService.getInstance().update(order);
         resp.sendRedirect("showOrders");
     }
 }

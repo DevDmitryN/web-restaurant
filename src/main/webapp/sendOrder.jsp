@@ -26,7 +26,7 @@
         <c:forEach var="dish" items="${dishes}">
             <p>
                     <%--<input type="checkbox" name=${dish.id} value=${dish.id}>--%>
-                <input type="number" min="0" value="0" style=" width: 50px;" name=<c:out
+                <input type="number" min="0" max="20" value="0" style=" width: 50px;" name=<c:out
                         value="dish_${dish.id}"/>> ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}<br>
             </p>
         </c:forEach>

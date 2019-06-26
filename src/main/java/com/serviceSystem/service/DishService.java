@@ -17,7 +17,7 @@ public class DishService {
         }
         return instance;
     }
-    DishService(){
+    private DishService(){
         dishDAO = new DishDAOImpl();
     }
     public List<Dish> getAll(){

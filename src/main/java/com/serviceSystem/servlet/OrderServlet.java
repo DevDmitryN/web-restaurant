@@ -23,13 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderServlet extends HttpServlet {
-//    private ServiceSystem serviceSystem = ServiceSystem.getInstance();
-    private DishService dishService = DishService.getInstance();
-    private TableService tableService = TableService.getInstance();
-    private OrderService orderService = OrderService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        DishService dishService = DishService.getInstance();
+        TableService tableService = TableService.getInstance();
         List<RestaurantTable> tables = tableService.getAll();
         List<Dish> dishes = dishService.getAll();
         req.setAttribute("tables",tables);
@@ -40,8 +38,8 @@ public class OrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<RestaurantTable> tables = tableService.getAll();
-        List<Dish> dishes = dishService.getAll();
+        List<RestaurantTable> tables = TableService.getInstance().getAll();
+        List<Dish> dishes = DishService.getInstance().getAll();
         int tableId = Integer.valueOf(req.getParameter("table"));
         List<Dish> orderedDishes = new ArrayList<Dish>();
         for(Dish dish : dishes){
@@ -64,7 +62,7 @@ public class OrderServlet extends HttpServlet {
         Order order = new Order(orderedTable,orderedDishes);
         order.setClient(client);
         order.setBookingTime(bookingDateTime);
-        orderService.save(order);
+        OrderService.getInstance().save(order);
         resp.sendRedirect("/");
     }
 }

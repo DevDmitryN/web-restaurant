@@ -17,7 +17,7 @@ public class WorkerService {
         }
         return instance;
     }
-    WorkerService(){
+    private WorkerService(){
         dishDAO = new WorkerDAOImpl();
     }
     public List<Worker> getAll(){
