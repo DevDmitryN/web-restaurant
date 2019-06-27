@@ -43,8 +43,8 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">столик</th>
+                    <th scope="col">Номер</th>
+                    <th scope="col">номер столика</th>
                     <th scope="col">клиент</th>
                     <th scope="col">работник</th>
                     <th scope="col">создан</th>
@@ -58,9 +58,9 @@
                 <c:forEach var="order" items="${orders}">
                     <tr>
                         <th scope="row">${order.id}</th>
-                        <td>${order.table}</td>
-                        <td>${order.client}</td>
-                        <td>${order.worker}</td>
+                        <td>${order.table.id}</td>
+                        <td>${order.client.email}</td>
+                        <td>${order.worker.name} ${order.worker.surname}</td>
                         <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>

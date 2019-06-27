@@ -4,6 +4,8 @@ import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.DAO.builder.EntityBuilder;
 import com.serviceSystem.DAO.connectionPool.HikariCP;
 import com.serviceSystem.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +15,8 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class OrderDaoJDBCImpl implements OrderDAO {
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final Logger logger = LoggerFactory.getLogger(OrderDaoJDBCImpl.class);
+
 
     private final String SELECT_ALL = "select o.id,o.status,o.creation_time,o.booking_time," +
             "t.id as t_id,t.capacity as t_capacity,t.is_free as t_is_free," +
@@ -29,7 +32,6 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     private final String ORDER_BY_ID = SELECT_ALL + " where o.id=?";
     private final String INSERT_INTO_ORDERS = "INSERT INTO restaurantdb.orders (table_id,client_id,creation_time,booking_time) VALUES (?,?,?,?) RETURNING id";
     private final String INSERT_INTO_ORDER_DISH = "INSERT INTO restaurantdb.order_dish (order_id, dish_id) VALUES (?,?)";
-    private final String DELETE_FROM_ORDER_DISH = "delete from restaurantdb.order_dish where order_id=?";
     private final String DELETE_FROM_ORDERS = "delete from restaurantdb.orders where id=?";
     private final String ORDERS_BY_TABLEID = SELECT_ALL + " where o.table_id=?";
     private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ?, booking_time = ? where id = ?";
@@ -37,12 +39,11 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     public void save(Order order) {
         try (Connection connection = HikariCP.getConnection();
             PreparedStatement statementForOrder = connection.prepareStatement(INSERT_INTO_ORDERS);
-            PreparedStatement statementForDishes = connection.prepareStatement(INSERT_INTO_ORDER_DISH);) {
+            PreparedStatement statementForDishes = connection.prepareStatement(INSERT_INTO_ORDER_DISH)) {
             try {
                 connection.setAutoCommit(false);
                 statementForOrder.setInt(1, order.getTable().getId());
                 statementForOrder.setLong(2, order.getClient().getId());
-//                statement.setLong(3, order.getWorker().getId());
                 statementForOrder.setTimestamp(3,Timestamp.valueOf(order.getCreationTime()));
                 statementForOrder.setTimestamp(4,Timestamp.valueOf(order.getBookingTime()));
                 ResultSet setOfId = statementForOrder.executeQuery();
@@ -85,6 +86,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     @Override
     public List<Order> getAll() {
+        logger.warn("start");
         List<Order> orders = new ArrayList<Order>();
         try (Connection connection = HikariCP.getConnection();
              Statement statement = connection.createStatement();
@@ -101,7 +103,9 @@ public class OrderDaoJDBCImpl implements OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        logger.info("finish");
         return orders;
+
     }
 
     @Override
@@ -145,12 +149,10 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     @Override
     public List<Order> getOrdersByTable(int tableId) {
         List<Order> orders = new ArrayList<Order>();
-        Order order = null;
-
+        Order order;
         try(Connection connection = HikariCP.getConnection();
             PreparedStatement statementForOrders = connection.prepareStatement(ORDERS_BY_TABLEID);
             PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER);){
-
             statementForOrders.setInt(1,tableId);
             ResultSet setOfOrders = statementForOrders.executeQuery();
             ResultSet setOfDishes;

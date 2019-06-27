@@ -1,72 +1,89 @@
 package com.serviceSystem.DTO;
 
-import com.serviceSystem.entity.Order;
+import com.serviceSystem.entity.Client;
+import com.serviceSystem.entity.Dish;
+import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.entity.Worker;
+import com.serviceSystem.entity.enums.Status;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class OrderDTO {
-    String id;
-    String table;
-    String client;
-    String worker;
-    String creationTime;
-    String bookingTime;
+    private Long id;
+    private Status status;
+    private RestaurantTable table;
+    private List<Dish> dishes;
+    private Client client;
+    private Worker worker;
+    private String creationTime;
+    private String bookingTime;
 
-    public OrderDTO(Order order){
-        setId(order.getId());
-        setClient(order.getClient().getId());
-        setWorker(order.getWorker().getId());
-        setTable(order.getTable().getId());
-        setCreationTime(order.getCreationTime());
-        setBookingTime(order.getBookingTime());
+    public OrderDTO(){
+
     }
 
-    public void setId(long id) {
-        this.id = String.valueOf(id);
-    }
-
-    public void setTable(int tableId) {
-        this.table = String.valueOf(tableId);
-    }
-
-    public void setClient(long clientId) {
-        this.client = String.valueOf(clientId);
-    }
-
-    public void setWorker(long workerId) {
-        this.worker = String.valueOf(workerId);
-    }
-
-    public void setCreationTime(LocalDateTime creationTime) {
-        this.creationTime = creationTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public void setBookingTime(LocalDateTime bookingTime) {
-        this.bookingTime = bookingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public String getTable() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public RestaurantTable getTable() {
         return table;
     }
 
-    public String getClient() {
+    public void setTable(RestaurantTable table) {
+        this.table = table;
+    }
+
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+
+    public void setDishes(List<Dish> dishes) {
+        this.dishes = dishes;
+    }
+
+    public Client getClient() {
         return client;
     }
 
-    public String getWorker() {
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Worker getWorker() {
         return worker;
+    }
+
+    public void setWorker(Worker worker) {
+        this.worker = worker;
     }
 
     public String getCreationTime() {
         return creationTime;
     }
 
+    public void setCreationTime(String creationTime) {
+        this.creationTime = creationTime;
+    }
+
     public String getBookingTime() {
         return bookingTime;
+    }
+
+    public void setBookingTime(String bookingTime) {
+        this.bookingTime = bookingTime;
     }
 }
