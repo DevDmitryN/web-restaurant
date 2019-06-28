@@ -12,18 +12,16 @@
 <html>
 <head>
     <title>All orders</title>
-    <%@include file="veiw/header.html" %>
+    <%@include file="/view/header.html" %>
 </head>
 <body>
-<%
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-%>
-<%@include file="veiw/menu-nav-bar.jsp" %>
+<%@include file="/view/menu-nav-bar.jsp" %>
 <div id="order_filter">
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-6">
                 <form method="post" class="form-inline">
+                    <input hidden name="command" value="show_orders"/>
                     <label for="table-selector" class="right-margin">Столики</label>
                     <select name="tableId" class="form-control right-margin" style="width: 100px" id="table-selector">
                             <option value="all">Все</option>
@@ -64,12 +62,14 @@
                         <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>
-                            <form action="/showDishesOfOrder" method="get">
+                            <form action="/frontController"  method="get">
+                                <input hidden name="command" value="show_dishes_of_order"/>
                                 <button type="submit" name="id" value="${order.id}" class="btn btn-success">Список блюд</button>
                             </form>
                         </td>
                         <td>
-                            <form action="/deleteOrder" method="post">
+                            <form action="/frontController" method="post">
+                                <input hidden name="command" value="delete_order"/>
                                 <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
@@ -86,15 +86,5 @@
     </div>
 </div>
 
-<%--    <h2>Заказы</h2>--%>
-<%--    <c:forEach var="order" items="${orders}">--%>
-<%--        <ul>--%>
-<%--            <li>id: ${order.id}, столик: ${order.table.id}--%>
-<%--                клиент: ${order.client.id}, работник: ${order.worker.id}--%>
-<%--                время поступления: ${order.creationTime}, на какое время: ${order.bookingTime}--%>
-<%--            </li>--%>
-<%--        </ul>--%>
-<%--        <hr/>--%>
-<%--    </c:forEach>--%>
 </body>
 </html>

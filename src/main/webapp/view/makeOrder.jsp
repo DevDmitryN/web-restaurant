@@ -14,11 +14,11 @@
 <html>
 <head>
     <title>Page for sending order</title>
-    <%@include file="veiw/header.html"%>
+    <%@include file="/view/header.html"%>
 </head>
 <body>
 <div>
-    <%@include file="veiw/menu-nav-bar.jsp"%>
+    <%@include file="/view/menu-nav-bar.jsp"%>
     <h1>Заполнение заказа</h1>
     <form method="post">
         <p>Меню:</p>

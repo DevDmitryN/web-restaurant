@@ -11,6 +11,7 @@
     <title>Page not found</title>
 </head>
 <body>
-    <h1>Sorry, page not found(</h1>
+    <h2>Sorry, page not found</h2>
+    <a href="/">В начало</a>
 </body>
 </html>

@@ -24,7 +24,7 @@
             <table class="table">
                 <thead class="thead-dark">
                 <tr>
-                    <th scope="col">id</th>
+                    <th scope="col">Номер</th>
                     <th scope="col">Название</th>
                     <th scope="col">Цена</th>
                     <th scope="col">Описание</th>

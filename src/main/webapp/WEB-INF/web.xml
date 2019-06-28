@@ -1,53 +1,40 @@
 <!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
 
-  <display-name>Archetype Created Web Application</display-name>
-<!--Servlet for creating order-->
-  <servlet>
-    <servlet-name>OrderServlet</servlet-name>
-    <servlet-class>com.serviceSystem.servlet.OrderServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>OrderServlet</servlet-name>
-    <url-pattern>/sendOrder</url-pattern>
-  </servlet-mapping>
-<!--Servlet for showing all orders and finding order by table-->
-  <servlet>
-    <servlet-name>ShowOrdersServlet</servlet-name>
-    <servlet-class>com.serviceSystem.servlet.ShowOrdersServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ShowOrdersServlet</servlet-name>
-    <url-pattern>/showOrders</url-pattern>
-  </servlet-mapping>
-<!--Servlet for deleting order-->
-  <servlet>
-    <servlet-name>DeleteServlet</servlet-name>
-    <servlet-class>com.serviceSystem.servlet.DeleteOrderServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DeleteServlet</servlet-name>
-    <url-pattern>/deleteOrder</url-pattern>
-  </servlet-mapping>
-<!--Servlet for showing dishes of order-->
-  <servlet>
-    <servlet-name>ShowDishesOfOrderServlet</servlet-name>
-    <servlet-class>com.serviceSystem.servlet.ShowDishesOfOrderServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ShowDishesOfOrderServlet</servlet-name>
-    <url-pattern>/showDishesOfOrder</url-pattern>
-  </servlet-mapping>
-<!--Servlet for updating order-->
-  <servlet>
-    <servlet-name>UpdateOrderServlet</servlet-name>
-    <servlet-class>com.serviceSystem.servlet.UpdateOrderServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>UpdateOrderServlet</servlet-name>
-    <url-pattern>/updateOrder</url-pattern>
-  </servlet-mapping>
+    <display-name>Archetype Created Web Application</display-name>
+    <!--Front Controller-->
+    <servlet>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <servlet-class>com.serviceSystem.web.FrontControllerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FrontControllerServlet</servlet-name>
+        <url-pattern>/frontController</url-pattern>
+    </servlet-mapping>
+    <!--Servlet for creating order-->
+    <servlet>
+        <servlet-name>MakeOrderServlet</servlet-name>
+        <servlet-class>com.serviceSystem.web.servlet.MakeOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MakeOrderServlet</servlet-name>
+        <url-pattern>/makeOrder</url-pattern>
+    </servlet-mapping>
+    <!--Servlet for updating order-->
+    <servlet>
+        <servlet-name>UpdateOrderServlet</servlet-name>
+        <servlet-class>com.serviceSystem.web.servlet.UpdateOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateOrderServlet</servlet-name>
+        <url-pattern>/updateOrder</url-pattern>
+    </servlet-mapping>
+    <!--for errors-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/view/Error404.jsp</location>
+    </error-page>
 </web-app>

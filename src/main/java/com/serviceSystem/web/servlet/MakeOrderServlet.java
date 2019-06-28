@@ -1,4 +1,4 @@
-package com.serviceSystem.servlet;
+package com.serviceSystem.web.servlet;
 
 import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.Dish;
@@ -6,12 +6,10 @@ import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.DishService;
 import com.serviceSystem.service.OrderService;
-import com.serviceSystem.service.ServiceSystem;
 import com.serviceSystem.service.TableService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +20,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderServlet extends HttpServlet {
+public class MakeOrderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,7 +30,7 @@ public class OrderServlet extends HttpServlet {
         List<Dish> dishes = dishService.getAll();
         req.setAttribute("tables",tables);
         req.setAttribute("dishes",dishes);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("sendOrder.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/view/makeOrder.jsp");
         requestDispatcher.forward(req, resp);
     }
 
@@ -63,6 +61,6 @@ public class OrderServlet extends HttpServlet {
         order.setClient(client);
         order.setBookingTime(bookingDateTime);
         OrderService.getInstance().save(order);
-        resp.sendRedirect("/");
+        resp.sendRedirect("/view/success.jsp");
     }
 }

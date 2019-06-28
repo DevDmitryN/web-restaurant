@@ -18,10 +18,10 @@
                 <a class="nav-link" href="index.jsp">Главная <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="sendOrder">Сделать заказ</a>
+                <a class="nav-link" href="makeOrder">Сделать заказ</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="showOrders">Посмотреть заказы</a>
+                <a class="nav-link" href="frontController?command=show_orders">Посмотреть заказы</a>
             </li>
         </ul>
     </div>

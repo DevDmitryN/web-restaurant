@@ -1,4 +1,4 @@
-package com.serviceSystem.servlet;
+package com.serviceSystem.web.servlet;
 
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.Order;
@@ -35,7 +35,7 @@ public class UpdateOrderServlet extends HttpServlet {
         req.setAttribute("workers",workers);
         resp.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
         resp.setHeader("Pragma", "no-cache");
-        req.getRequestDispatcher("veiw/updateOrder.jsp").forward(req,resp);
+        req.getRequestDispatcher("view/updateOrder.jsp").forward(req,resp);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class UpdateOrderServlet extends HttpServlet {
             order.setBookingTime(newBookingTime);
         }
         OrderService.getInstance().update(order);
-        resp.sendRedirect("showOrders");
+        resp.sendRedirect("/frontController?command=show_orders");
     }
 }
