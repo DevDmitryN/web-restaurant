@@ -7,7 +7,7 @@ import com.serviceSystem.entity.Worker;
 import java.util.List;
 
 public class WorkerService {
-    private WorkerDAO dishDAO;
+    private WorkerDAO workerDAO;
 
     private static WorkerService instance;
 
@@ -18,9 +18,12 @@ public class WorkerService {
         return instance;
     }
     private WorkerService(){
-        dishDAO = new WorkerDAOImpl();
+        workerDAO = new WorkerDAOImpl();
     }
     public List<Worker> getAll(){
-        return dishDAO.getAll();
+        return workerDAO.getAll();
+    }
+    public boolean isExist(String phoneNumber, String password){
+        return workerDAO.isExist(phoneNumber,password);
     }
 }

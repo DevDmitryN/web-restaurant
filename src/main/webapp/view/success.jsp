@@ -11,7 +11,7 @@
     <title>Success</title>
 </head>
 <body>
-    <h2>Order is made successfully</h2>
+    <h2>Заказ успешно отправлен</h2>
     <a href="/">На главную</a>
 </body>
 </html>

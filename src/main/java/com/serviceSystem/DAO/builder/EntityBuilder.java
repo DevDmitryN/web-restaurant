@@ -56,7 +56,7 @@ public class EntityBuilder {
         Dish dish = new Dish();
         dish.setId(resultSet.getInt(DISH_ID));
         dish.setName(resultSet.getString(DISH_NAME));
-        dish.setPrice(resultSet.getDouble(DISH_PRICE));
+        dish.setPrice(resultSet.getFloat(DISH_PRICE));
         dish.setDescription(resultSet.getString(DISH_DESCRIPTION));
         return dish;
     }

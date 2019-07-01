@@ -10,6 +10,8 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
+    String IS_EXIST = "from com.serviceSystem.entity.Client as c where c.phoneNumber like :phone and c.password like :password";
+
     @Override
     public void save(Client client){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -41,8 +43,17 @@ public class ClientDAOImpl implements ClientDAO {
         transaction.commit();
         session.close();
     }
-
-//    public void delete(Client client){
+    @Override
+    public boolean isExist(String phoneNumber, String password) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(IS_EXIST);
+        query.setParameter("phone",phoneNumber);
+        query.setParameter("password",password);
+        List<Client> client = query.list();
+        System.out.println(client.size());
+        return client.size() == 0 ? false : true;
+    }
+    //    public void delete(Client client){
 //        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 //        Transaction transaction = session.beginTransaction();
 //        session.delete(client);

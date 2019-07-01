@@ -27,7 +27,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
             "join restaurantdb.clients as c on o.client_id = c.id " +
             "left join restaurantdb.workers as w on o.worker_id = w.id";
     private final String DISHES_FROM_ORDER = "select d.id,name,price,description from restaurantdb.order_dish as od\n" +
-            "join restaurantdb.dishes as d on od.dish_id=d.id\n" +
+            "join restaurantdb.dishes as d on od.dish_id=d.id " +
             "where od.order_id=?";
     private final String ORDER_BY_ID = SELECT_ALL + " where o.id=?";
     private final String INSERT_INTO_ORDERS = "INSERT INTO restaurantdb.orders (table_id,client_id,creation_time,booking_time) VALUES (?,?,?,?) RETURNING id";

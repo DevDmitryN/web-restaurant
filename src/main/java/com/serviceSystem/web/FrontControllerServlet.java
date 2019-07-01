@@ -19,5 +19,6 @@ public class FrontControllerServlet extends HttpServlet {
         Action action = actionResolver.resolve(req);
         Command command = action.getCommand();
         command.execute(req,resp);
+
     }
 }

@@ -15,7 +15,7 @@ public class Dish implements Serializable {
     @Column
     private String name;
     @Column
-    private BigDecimal price;
+    private float price;
     @Column
     private String description;
     @ManyToMany(mappedBy = "dishes")
@@ -24,16 +24,16 @@ public class Dish implements Serializable {
     public Dish(){}
 
 
-    public Dish(String name, double price) {
+    public Dish(String name, float price) {
         init(name,price,null);
     }
 
-    public Dish(String name, double price, String description) {
+    public Dish(String name, float price, String description) {
         init(name,price,description);
     }
-    private void init(String name, double price, String description){
+    private void init(String name, float price, String description){
         this.name = name.trim();
-        this.price = new BigDecimal(price);
+        this.price = price;
         this.description = description;
     }
 
@@ -53,12 +53,12 @@ public class Dish implements Serializable {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = new BigDecimal(price);
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public String getDescription() {

@@ -15,7 +15,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private BigDecimal totalPrice = new BigDecimal(0);
+    private float totalPrice;
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -68,7 +68,7 @@ public class Order {
         return id;
     }
 
-    public BigDecimal getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
@@ -120,7 +120,7 @@ public class Order {
         this.worker = worker;
     }
     private void countTotalPrice(){
-        dishes.forEach( a -> totalPrice = totalPrice.add(a.getPrice()) );
+        dishes.forEach( a -> totalPrice += a.getPrice()  );
     }
 
     public LocalDateTime getCreationTime() {
