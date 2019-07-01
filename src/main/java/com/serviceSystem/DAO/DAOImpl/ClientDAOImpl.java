@@ -28,7 +28,7 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public List<Client> getAll(){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("FROM Client");
+        Query query = session.createQuery("FROM com.serviceSystem.entity.Client");
         List<Client> clients = (List<Client>) query.list();
         session.close();
         return clients;

@@ -37,6 +37,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ?, booking_time = ? where id = ?";
     @Override
     public void save(Order order) {
+        logger.info("save the order");
         try (Connection connection = HikariCP.getConnection();
             PreparedStatement statementForOrder = connection.prepareStatement(INSERT_INTO_ORDERS);
             PreparedStatement statementForDishes = connection.prepareStatement(INSERT_INTO_ORDER_DISH)) {
@@ -56,15 +57,18 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 connection.commit();
             }catch (SQLException e){
                 connection.rollback();
-                throw e;
+                logger.error("can't save the order");
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
+        }catch (SQLException e){
+            logger.error("can't rollback the transaction");
             e.printStackTrace();
         }
     }
 
     @Override
     public void update(Order order) {
+        logger.info("update the order");
         try (Connection connection = HikariCP.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER);) {
             try{
@@ -77,16 +81,18 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 connection.commit();
             }catch (SQLException e){
                 connection.rollback();
-                throw e;
+                logger.error("can't update the order");
+                e.printStackTrace();
             }
         }catch (SQLException e){
+            logger.error("can't rollback the transaction");
             e.printStackTrace();
         }
     }
 
     @Override
     public List<Order> getAll() {
-        logger.warn("start");
+        logger.info("getting all orders");
         List<Order> orders = new ArrayList<Order>();
         try (Connection connection = HikariCP.getConnection();
              Statement statement = connection.createStatement();
@@ -101,15 +107,16 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 orders.add(order);
             }
         } catch (SQLException e) {
+            logger.error("can't get all orders");
             e.printStackTrace();
         }
-        logger.info("finish");
         return orders;
 
     }
 
     @Override
     public Order getById(long id) {
+        logger.info("getting the order by id");
         Order order = null;
         try (Connection connection = HikariCP.getConnection();
              PreparedStatement statementForOrder = connection.prepareStatement(ORDER_BY_ID);
@@ -123,6 +130,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 order.setDishes(EntityBuilder.buildDishes(setOfDishes));
             }
         } catch (SQLException e) {
+            logger.error("can't get the order by id");
             e.printStackTrace();
         }
         return order;
@@ -130,6 +138,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     @Override
     public void delete(long id){
+        logger.info("deleting the order by id");
         try(Connection connection = HikariCP.getConnection();
             PreparedStatement statementForOrder = connection.prepareStatement(DELETE_FROM_ORDERS);){
             try {
@@ -142,12 +151,14 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 throw e;
             }
         }catch (SQLException e){
+            logger.error("can't delete the order");
             e.printStackTrace();
         }
     }
 
     @Override
     public List<Order> getOrdersByTable(int tableId) {
+        logger.info("getting orders by table");
         List<Order> orders = new ArrayList<Order>();
         Order order;
         try(Connection connection = HikariCP.getConnection();
@@ -164,6 +175,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 orders.add(order);
             }
         }catch (SQLException e){
+            logger.error("can't get orders by table");
             e.printStackTrace();
         }
         return orders;
