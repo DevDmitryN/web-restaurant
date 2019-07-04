@@ -10,14 +10,13 @@ import java.io.IOException;
 
 public class ShowDishesOfOrder extends Command {
     @Override
-    public Command execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long orderId = Long.valueOf(req.getParameter("id"));
         Order order = OrderService.getInstance().getOrderById(orderId);
         req.setAttribute("orderId",order.getId());
         req.setAttribute("dishes",order.getDishes());
         resp.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
         resp.setHeader("Pragma", "no-cache");
-        req.getRequestDispatcher("/view/showDishesOfOrder.jsp").forward(req,resp);
-        return null;
+        req.getRequestDispatcher("showDishesOfOrder.jsp").forward(req,resp);
     }
 }

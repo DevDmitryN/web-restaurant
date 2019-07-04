@@ -8,19 +8,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClientDAOTest {
     @Test
-    public void isClientExist(){
-        assertTrue(ClientService.getInstance().isExist("+375447784545","1234"));
+    public void isExistTrue(){
+        String email = "boris@britva.com";
+        String password = "1234";
+        assertTrue(ClientService.getInstance().isExist(email,password));
     }
     @Test
-    public void doesntClientExist(){
-        String phoneNumber = "+5446841321";
-        String password = "0000";
-        assertFalse(ClientService.getInstance().isExist(phoneNumber,password));
+    public void incorrectEmail(){
+        String email = "boris@ritva.com";
+        String password = "1234";
+        assertFalse(ClientService.getInstance().isExist(email,password));
     }
     @Test
     public void incorrectPassword(){
-        String phoneNumber = "+375447784545";
+        String phoneNumber = "boris@britva.com";
         String password = "0000";
         assertFalse(ClientService.getInstance().isExist(phoneNumber,password));
     }
+
 }

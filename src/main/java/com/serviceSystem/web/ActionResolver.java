@@ -16,7 +16,7 @@ public class ActionResolver {
         try{
             action = Action.valueOf(command.toUpperCase());
         }catch (Exception e){
-            logger.warn("bad request");
+            logger.warn("bad request, incorrect command - " + command);
             e.printStackTrace();
         }
         return action;

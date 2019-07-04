@@ -20,7 +20,10 @@ public class ClientService {
     private ClientService(){
         clientDAO = new ClientDAOImpl();
     }
-    public boolean isExist(String phoneNumber,String password){
-        return clientDAO.isExist(phoneNumber,password);
+    public boolean isExist(String email,String password){
+        return clientDAO.isExist(email,password);
+    }
+    public Client getByEmail(String email){
+        return clientDAO.getByEmail(email);
     }
 }

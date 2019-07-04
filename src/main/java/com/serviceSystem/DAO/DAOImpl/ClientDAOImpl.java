@@ -10,8 +10,8 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
-    String IS_EXIST = "from com.serviceSystem.entity.Client as c where c.phoneNumber like :phone and c.password like :password";
-
+    private final String IS_EXIST = "from com.serviceSystem.entity.Client c where c.email like :email and c.password like :password";
+    private final String GET_BY_EMAIL = "from com.serviceSystem.entity.Client c where c.email like :email";
     @Override
     public void save(Client client){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -44,20 +44,19 @@ public class ClientDAOImpl implements ClientDAO {
         session.close();
     }
     @Override
-    public boolean isExist(String phoneNumber, String password) {
+    public boolean isExist(String email, String password) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery(IS_EXIST);
-        query.setParameter("phone",phoneNumber);
+        query.setParameter("email",email);
         query.setParameter("password",password);
         List<Client> client = query.list();
-        System.out.println(client.size());
         return client.size() == 0 ? false : true;
     }
-    //    public void delete(Client client){
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction transaction = session.beginTransaction();
-//        session.delete(client);
-//        transaction.commit();
-//        session.close();
-//    }
+    @Override
+    public Client getByEmail(String email){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(GET_BY_EMAIL);
+        query.setParameter("email",email);
+        return (Client) query.list().get(0);
+    }
 }

@@ -10,8 +10,8 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class WorkerDAOImpl implements WorkerDAO {
-    String IS_EXIST = "from com.serviceSystem.entity.Worker as c where c.phoneNumber like :phone and c.password like :password";
-
+    private final String IS_EXIST = "from com.serviceSystem.entity.Worker w where w.email like :email and w.password like :password";
+    private final String GET_BY_EMAIL = "from com.serviceSystem.entity.Worker w where w.email like :email";
     @Override
     public void save(Worker worker){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -58,12 +58,20 @@ public class WorkerDAOImpl implements WorkerDAO {
     }
 
     @Override
-    public boolean isExist(String phoneNumber, String password) {
+    public boolean isExist(String email, String password) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery(IS_EXIST);
-        query.setParameter("phone",phoneNumber);
+        query.setParameter("email",email);
         query.setParameter("password",password);
         List<Worker> worker = query.list();
         return worker.size() == 0 ? false : true;
+    }
+
+    @Override
+    public Worker getByEmail(String email) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(GET_BY_EMAIL);
+        query.setParameter("email",email);
+        return  (Worker) query.list().get(0);
     }
 }

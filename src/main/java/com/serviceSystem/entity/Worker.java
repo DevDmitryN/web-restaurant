@@ -4,6 +4,7 @@ import com.serviceSystem.entity.enums.Role;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="workers",schema = "restaurantdb")
@@ -41,4 +42,5 @@ public class Worker extends User{
     public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
+
 }

@@ -16,7 +16,8 @@ import java.util.List;
 
 public class ShowOrders extends Command {
     @Override
-    public Command execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println(req.getRequestURL() + " " + req.getContextPath() + " " + req.getQueryString());
         ModelMapper modelMapper = new ModelMapper();
         OrderService orderService = OrderService.getInstance();
         TableService tableService = TableService.getInstance();
@@ -34,7 +35,6 @@ public class ShowOrders extends Command {
         List<RestaurantTable> tables = tableService.getAll();
         req.setAttribute("orders",orders);
         req.setAttribute("tables",tables);
-        req.getRequestDispatcher("/view/showOrders.jsp").forward(req,resp);
-        return null;
+        req.getRequestDispatcher("showOrders.jsp").forward(req,resp);
     }
 }

@@ -24,14 +24,19 @@ public class MakeOrderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DishService dishService = DishService.getInstance();
-        TableService tableService = TableService.getInstance();
-        List<RestaurantTable> tables = tableService.getAll();
-        List<Dish> dishes = dishService.getAll();
-        req.setAttribute("tables",tables);
-        req.setAttribute("dishes",dishes);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/view/makeOrder.jsp");
-        requestDispatcher.forward(req, resp);
+        String role = (String) req.getSession().getAttribute("role");
+        if(role.equals("worker")){
+            resp.sendRedirect("/");
+        }else{
+            DishService dishService = DishService.getInstance();
+            TableService tableService = TableService.getInstance();
+            List<RestaurantTable> tables = tableService.getAll();
+            List<Dish> dishes = dishService.getAll();
+            req.setAttribute("tables",tables);
+            req.setAttribute("dishes",dishes);
+            req.getRequestDispatcher("makeOrder.jsp").forward(req,resp);
+        }
+
     }
 
     @Override
@@ -54,13 +59,13 @@ public class MakeOrderServlet extends HttpServlet {
             }
         }
         String bookingTime = req.getParameter("bookingTime");
-        Client client = new Client();
-        client.setId(1);
+        Client client = (Client) req.getSession().getAttribute("user");
         LocalDateTime bookingDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));
         Order order = new Order(orderedTable,orderedDishes);
         order.setClient(client);
         order.setBookingTime(bookingDateTime);
         OrderService.getInstance().save(order);
-        resp.sendRedirect("/view/success.jsp");
+//        resp.sendRedirect("/view/success.jsp");
+        req.getRequestDispatcher("success.jsp").forward(req,resp);
     }
 }

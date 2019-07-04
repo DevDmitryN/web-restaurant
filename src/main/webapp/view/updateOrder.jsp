@@ -6,8 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page isELIgnored="false" %>
 <html>
 <head>
     <title>Update order ${order.id}</title>
@@ -21,7 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <form action="/updateOrder" method="post">
+                    <form action="updateOrder" method="post">
                         <label>id: ${order.id}</label>
                         <div class="form-group">
                             <label for="table">Столик</label>
@@ -62,7 +60,8 @@
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Принять</button>
                     </form>
-                    <form action="/showOrders">
+                    <form action="frontController">
+                        <input hidden name="command" value="show_orders">
                         <button type="submit" class="btn btn-outline-dark">Отмена</button>
                     </form>
                 </div>

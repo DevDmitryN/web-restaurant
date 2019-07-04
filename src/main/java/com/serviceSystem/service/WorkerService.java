@@ -23,7 +23,13 @@ public class WorkerService {
     public List<Worker> getAll(){
         return workerDAO.getAll();
     }
-    public boolean isExist(String phoneNumber, String password){
-        return workerDAO.isExist(phoneNumber,password);
+    public boolean isExist(String email, String password){
+        return workerDAO.isExist(email,password);
+    }
+    public Worker getByEmail(String email){
+        return workerDAO.getByEmail(email);
+    }
+    public Worker getById(long id){
+        return workerDAO.getById(id);
     }
 }

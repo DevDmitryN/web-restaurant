@@ -1,6 +1,7 @@
 package com.serviceSystem.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @MappedSuperclass
 public abstract class User {
@@ -87,5 +88,21 @@ public abstract class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                password.equals(user.password) &&
+                email.equals(user.email) &&
+                phoneNumber.equals(user.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, password, email, phoneNumber);
     }
 }

@@ -1,6 +1,5 @@
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page isELIgnored="false" %>
+
+
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -12,15 +11,15 @@
 <html>
 <head>
     <title>All orders</title>
-    <%@include file="/view/header.html" %>
+    <%@include file="header.html" %>
 </head>
 <body>
-<%@include file="/view/menu-nav-bar.jsp" %>
+<%@include file="menu-nav-bar.jsp" %>
 <div id="order_filter">
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-6">
-                <form method="post" class="form-inline">
+                <form action="frontController" method="get" class="form-inline">
                     <input hidden name="command" value="show_orders"/>
                     <label for="table-selector" class="right-margin">Столики</label>
                     <select name="tableId" class="form-control right-margin" style="width: 100px" id="table-selector">
@@ -62,19 +61,19 @@
                         <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>
-                            <form action="/frontController"  method="get">
+                            <form action="frontController"  method="get">
                                 <input hidden name="command" value="show_dishes_of_order"/>
                                 <button type="submit" name="id" value="${order.id}" class="btn btn-success">Список блюд</button>
                             </form>
                         </td>
                         <td>
-                            <form action="/frontController" method="post">
+                            <form action="frontController" method="post">
                                 <input hidden name="command" value="delete_order"/>
                                 <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Удалить</button>
                             </form>
                         </td>
                         <td>
-                            <form action="/updateOrder" method="get">
+                            <form action="updateOrder" method="get">
                                 <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
                             </form>
                         </td>

@@ -6,8 +6,9 @@ public enum Action {
     SHOW_ORDERS(new ShowOrders()),
     DELETE_ORDER(new DeleteOrder()),
     SHOW_DISHES_OF_ORDER(new ShowDishesOfOrder()),
-    ERROR(new ErrorCommand());
-
+    ERROR(new ErrorCommand()),
+    AUTHORIZATION(new Authorization()),
+    LOGOUT(new Logout());
     private Command command;
 
     Action(Command command){

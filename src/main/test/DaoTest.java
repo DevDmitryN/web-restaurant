@@ -15,7 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DaoTest {
 
-
+    @Test
+    public void test(){
+        String url = "/view/index.jsp";
+        System.out.println(url.replaceFirst("/view",""));
+    }
     @Test
     public void updateTableStatus(){
         RestaurantTableDAOImpl restaurantTableDaoImpl = new RestaurantTableDAOImpl();

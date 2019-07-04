@@ -17,11 +17,18 @@
             <li class="nav-item active">
                 <a class="nav-link" href="index.jsp">Главная <span class="sr-only">(current)</span></a>
             </li>
+            <c:if test="${role == 'client'}">
+                <li class="nav-item">
+                    <a class="nav-link" href="makeOrder">Сделать заказ</a>
+                </li>
+            </c:if>
+            <c:if test="${role == 'worker'}">
+                <li class="nav-item">
+                    <a class="nav-link" href="frontController?command=show_orders">Посмотреть заказы</a>
+                </li>
+            </c:if>
             <li class="nav-item">
-                <a class="nav-link" href="makeOrder">Сделать заказ</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="frontController?command=show_orders">Посмотреть заказы</a>
+                <a class="nav-link" href="frontController?command=logout">Выйти</a>
             </li>
         </ul>
     </div>

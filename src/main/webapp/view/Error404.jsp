@@ -12,6 +12,6 @@
 </head>
 <body>
     <h2>Sorry, page not found</h2>
-    <a href="/">В начало</a>
+    <a href="index.jsp">В начало</a>
 </body>
 </html>

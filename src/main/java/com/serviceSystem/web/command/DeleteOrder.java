@@ -10,12 +10,10 @@ import java.io.IOException;
 
 public class DeleteOrder extends Command {
     @Override
-    public Command execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderService orderService = OrderService.getInstance();
         long id = Long.valueOf(req.getParameter("id"));
         orderService.delete(id);
-        resp.sendRedirect("/frontController?command=show_orders");
-//        return Action.SHOW_ORDERS.getCommand();
-        return null;
+        resp.sendRedirect("frontController?command=show_orders");
     }
 }

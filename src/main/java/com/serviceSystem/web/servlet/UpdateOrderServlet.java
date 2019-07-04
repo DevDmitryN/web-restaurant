@@ -35,14 +35,15 @@ public class UpdateOrderServlet extends HttpServlet {
         req.setAttribute("workers",workers);
         resp.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
         resp.setHeader("Pragma", "no-cache");
-        req.getRequestDispatcher("view/updateOrder.jsp").forward(req,resp);
+        req.getRequestDispatcher("updateOrder.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<RestaurantTable> tables = TableService.getInstance().getAll();
         List<Worker> workers = WorkerService.getInstance().getAll();
-        int tableId = Integer.valueOf(req.getParameter("tableId"));
+        String strId = req.getParameter("tableId");
+        int tableId = Integer.valueOf(strId);
         long workerId = Long.valueOf(req.getParameter("workerId"));
         String bookingTime = req.getParameter("bookingTime");
         for (RestaurantTable t : tables) {
@@ -60,6 +61,6 @@ public class UpdateOrderServlet extends HttpServlet {
             order.setBookingTime(newBookingTime);
         }
         OrderService.getInstance().update(order);
-        resp.sendRedirect("/frontController?command=show_orders");
+        resp.sendRedirect("frontController?command=show_orders");
     }
 }
