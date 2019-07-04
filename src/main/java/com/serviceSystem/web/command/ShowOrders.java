@@ -17,20 +17,17 @@ import java.util.List;
 public class ShowOrders extends Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(req.getRequestURL() + " " + req.getContextPath() + " " + req.getQueryString());
-        ModelMapper modelMapper = new ModelMapper();
         OrderService orderService = OrderService.getInstance();
         TableService tableService = TableService.getInstance();
         List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String tableId = req.getParameter("tableId");
         if(tableId == null || tableId.equals("all")){
-            for (Order order : orderService.getAll()) {
-                orders.add(modelMapper.map(order,OrderDTO.class));
-            }
+            orders = OrderDTO.toListOfOrderDTO(orderService.getAll());
         }else{
-            for (Order order : orderService.getOrdersByTableId(Integer.parseInt(tableId))) {
-                orders.add(modelMapper.map(order,OrderDTO.class));
-            }
+            orders = OrderDTO.toListOfOrderDTO(orderService.getOrdersByTableId(Integer.parseInt(tableId)));
+//            for (Order order : orderService.getOrdersByTableId(Integer.parseInt(tableId))) {
+//                orders.add(modelMapper.map(order,OrderDTO.class));
+//            }
         }
         List<RestaurantTable> tables = tableService.getAll();
         req.setAttribute("orders",orders);

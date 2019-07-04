@@ -1,16 +1,10 @@
 import com.serviceSystem.DAO.DAOImpl.*;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.*;
-import com.serviceSystem.service.ClientService;
-import com.serviceSystem.service.OrderService;
 import org.junit.jupiter.api.Test;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DaoTest {
@@ -36,7 +30,7 @@ public class DaoTest {
     @Test
     public void getOrdersByTableId(){
         OrderDAO orderDAO = new OrderDaoJDBCImpl();
-        List<Order> orders = orderDAO.getOrdersByTable(2);
+        List<Order> orders = orderDAO.getByTable(2);
         orders.get(0).getDishes().forEach( o -> System.out.println(o));
     }
     @Test

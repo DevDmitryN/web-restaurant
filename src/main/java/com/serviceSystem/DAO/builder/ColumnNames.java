@@ -29,4 +29,5 @@ public class ColumnNames {
     public static final String DISH_NAME = "name";
     public static final String DISH_PRICE = "price";
     public static final String DISH_DESCRIPTION = "description";
+    public static final String DISH_AMOUNT = "amount";
 }

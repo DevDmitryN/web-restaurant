@@ -26,6 +26,7 @@
                     <th scope="col">Название</th>
                     <th scope="col">Цена</th>
                     <th scope="col">Описание</th>
+                    <th scope="col">Количество</th>
                 <tr/>
                 </thead>
                 <tbody>
@@ -35,6 +36,7 @@
                         <td>${dish.name}</td>
                         <td>${dish.price}</td>
                         <td>${dish.description}</td>
+                        <td>${dish.amount}</td>
                     </tr>
                 </c:forEach>
                 </tbody>

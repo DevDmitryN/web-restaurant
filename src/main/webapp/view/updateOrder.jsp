@@ -54,9 +54,26 @@
                             <label>${order.creationTime}</label>
                         </div>
                         <div class="form-group">
-                            <label for="bookingTime">Время бронирования:</label>
-                            <input id="bookingTime" type="time" name="bookingTime" style="width: 10em; text-align: center;">
-                            <small class="form-text text-muted">>Если не надо менять время, оставить без изменений</small>
+                            <label>Время бронирования:</label>
+                            <label>${order.bookingTime}</label>
+<%--                            <input id="bookingTime" type="time" name="bookingTime" style="width: 10em; text-align: center;">--%>
+<%--                            <small class="form-text text-muted">>Если не надо менять время, оставить без изменений</small>--%>
+                        </div>
+                        <div class="form-group">
+                            <label>Статус заказа:</label>
+                            <label>
+                                <c:choose>
+                                    <c:when test="${order.status == 'NOT_TAKEN'}">Не принят</c:when>
+                                    <c:when test="${order.status == 'BEING_PERFORMED'}">Выполняется</c:when>
+                                </c:choose>
+                            </label><br>
+                            <label for="status">Обновить статус</label>
+                            <select class="form-control form-selector" id="status" name="status">
+                                <option value="${order.status}">Оставить без изменений</option>
+                                <option value="NOT_TAKEN">Не принят</option>
+                                <option value="BEING_PERFORMED">Выполняется</option>
+                                <option value="COMPLETED">Выполнен</option>
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-outline-primary">Принять</button>
                     </form>

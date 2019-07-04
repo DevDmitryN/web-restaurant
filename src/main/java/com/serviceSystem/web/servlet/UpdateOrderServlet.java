@@ -1,13 +1,16 @@
 package com.serviceSystem.web.servlet;
 
+import com.serviceSystem.DTO.OrderDTO;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.entity.Worker;
+import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.service.DishService;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
 import com.serviceSystem.service.WorkerService;
+import org.modelmapper.ModelMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,17 +27,23 @@ public class UpdateOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long orderId = Long.valueOf(req.getParameter("id"));
+
         List<RestaurantTable> tables = TableService.getInstance().getAll();
         List<Dish> dishes = DishService.getInstance().getAll();
         List<Worker> workers = WorkerService.getInstance().getAll();
+
         order = OrderService.getInstance().getOrderById(orderId);
 
-        req.setAttribute("order",order);
+        ModelMapper modelMapper = new ModelMapper();
+        OrderDTO orderDTO = modelMapper.map(order,OrderDTO.class);
+
+        req.setAttribute("order",orderDTO);
         req.setAttribute("tables",tables);
         req.setAttribute("dishes",dishes);
         req.setAttribute("workers",workers);
         resp.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
         resp.setHeader("Pragma", "no-cache");
+
         req.getRequestDispatcher("updateOrder.jsp").forward(req,resp);
     }
 
@@ -56,10 +65,8 @@ public class UpdateOrderServlet extends HttpServlet {
                 order.setWorker(w);
             }
         }
-        if(!bookingTime.equals("")){
-            LocalDateTime newBookingTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));
-            order.setBookingTime(newBookingTime);
-        }
+        Status status = Status.valueOf(req.getParameter("status"));
+        order.setStatus(status);
         OrderService.getInstance().update(order);
         resp.sendRedirect("frontController?command=show_orders");
     }

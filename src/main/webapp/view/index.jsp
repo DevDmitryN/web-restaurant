@@ -14,6 +14,7 @@
 </head>
 <body>
     <%@include file="menu-nav-bar.jsp"%>
-
+    <h2>${user.name} ${user.surname}</h2><br>
+    <h3>${user.email} ${user.phoneNumber}</h3>
 </body>
 </html>

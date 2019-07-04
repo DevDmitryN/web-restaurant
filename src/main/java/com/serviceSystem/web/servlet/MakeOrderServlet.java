@@ -24,48 +24,46 @@ public class MakeOrderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String role = (String) req.getSession().getAttribute("role");
-        if(role.equals("worker")){
-            resp.sendRedirect("/");
-        }else{
-            DishService dishService = DishService.getInstance();
-            TableService tableService = TableService.getInstance();
-            List<RestaurantTable> tables = tableService.getAll();
-            List<Dish> dishes = dishService.getAll();
-            req.setAttribute("tables",tables);
-            req.setAttribute("dishes",dishes);
-            req.getRequestDispatcher("makeOrder.jsp").forward(req,resp);
-        }
-
+        DishService dishService = DishService.getInstance();
+        TableService tableService = TableService.getInstance();
+        List<RestaurantTable> tables = tableService.getAll();
+        List<Dish> dishes = dishService.getAll();
+        req.setAttribute("tables", tables);
+        req.setAttribute("dishes", dishes);
+        req.getRequestDispatcher("makeOrder.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        OrderService.getInstance().save(fillOrder(req));
+        req.getRequestDispatcher("success.jsp").forward(req, resp);
+    }
+
+    private Order fillOrder(HttpServletRequest req) {
         List<RestaurantTable> tables = TableService.getInstance().getAll();
         List<Dish> dishes = DishService.getInstance().getAll();
         int tableId = Integer.valueOf(req.getParameter("table"));
         List<Dish> orderedDishes = new ArrayList<Dish>();
-        for(Dish dish : dishes){
-            String parameter = "dish_"+dish.getId();
+        for (Dish dish : dishes) {
+            String parameter = "dish_" + dish.getId();
             int amount = Integer.parseInt(req.getParameter(parameter));
-            for(int i=0; i < amount ; i++){
+            if (amount != 0) {
+                dish.setAmount(amount);
                 orderedDishes.add(dish);
             }
         }
         RestaurantTable orderedTable = null;
         for (RestaurantTable table : tables) {
-            if(table.getId() == tableId){
+            if (table.getId() == tableId) {
                 orderedTable = table;
             }
         }
         String bookingTime = req.getParameter("bookingTime");
         Client client = (Client) req.getSession().getAttribute("user");
         LocalDateTime bookingDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));
-        Order order = new Order(orderedTable,orderedDishes);
+        Order order = new Order(orderedTable, orderedDishes);
         order.setClient(client);
         order.setBookingTime(bookingDateTime);
-        OrderService.getInstance().save(order);
-//        resp.sendRedirect("/view/success.jsp");
-        req.getRequestDispatcher("success.jsp").forward(req,resp);
+        return order;
     }
 }

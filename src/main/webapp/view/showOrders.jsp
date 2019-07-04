@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <%--
@@ -41,11 +42,12 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Номер</th>
-                    <th scope="col">номер столика</th>
-                    <th scope="col">клиент</th>
-                    <th scope="col">работник</th>
-                    <th scope="col">создан</th>
-                    <th scope="col">заказанное время</th>
+                    <th scope="col">Номер столика</th>
+                    <th scope="col">Клиент</th>
+                    <th scope="col">Работник</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Создан</th>
+                    <th scope="col">Заказанное время</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -58,6 +60,13 @@
                         <td>${order.table.id}</td>
                         <td>${order.client.email}</td>
                         <td>${order.worker.name} ${order.worker.surname}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${order.status == 'NOT_TAKEN'}">Не принят</c:when>
+                                <c:when test="${order.status == 'BEING_PERFORMED'}">Выполняется</c:when>
+                                <c:when test="${order.status == 'COMPLETED'}">Выполнен</c:when>
+                            </c:choose>
+                        </td>
                         <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>
@@ -73,9 +82,11 @@
                             </form>
                         </td>
                         <td>
-                            <form action="updateOrder" method="get">
-                                <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
-                            </form>
+                            <c:if test="${order.status != 'COMPLETED'}">
+                                <form action="updateOrder" method="get">
+                                    <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
+                                </form>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

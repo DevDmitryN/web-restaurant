@@ -10,8 +10,8 @@ public class DtoTest {
     @Test
     public void ConvertToDto(){
         ModelMapper modelMapper = new ModelMapper();
-        Order order = OrderService.getInstance().getOrderById(16);
+        Order order = OrderService.getInstance().getOrderById(32);
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-        assertNotEquals(orderDTO.getCreationTime(),order.getCreationTime());
+        assertNotEquals(orderDTO.getCreationTime(),order.getCreationTime().toString());
     }
 }

@@ -21,6 +21,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="makeOrder">Сделать заказ</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="frontController?command=show_active_orders">Активные заказы</a>
+                </li>
             </c:if>
             <c:if test="${role == 'worker'}">
                 <li class="nav-item">

@@ -26,15 +26,16 @@ public class OrderDaoJDBCImpl implements OrderDAO {
             "join restaurantdb.\"tables\" as t on o.table_id = t.id " +
             "join restaurantdb.clients as c on o.client_id = c.id " +
             "left join restaurantdb.workers as w on o.worker_id = w.id";
-    private final String DISHES_FROM_ORDER = "select d.id,name,price,description from restaurantdb.order_dish as od\n" +
+    private final String DISHES_FROM_ORDER = "select d.id,name,price,description,od.amount from restaurantdb.order_dish as od " +
             "join restaurantdb.dishes as d on od.dish_id=d.id " +
             "where od.order_id=?";
     private final String ORDER_BY_ID = SELECT_ALL + " where o.id=?";
     private final String INSERT_INTO_ORDERS = "INSERT INTO restaurantdb.orders (table_id,client_id,creation_time,booking_time) VALUES (?,?,?,?) RETURNING id";
-    private final String INSERT_INTO_ORDER_DISH = "INSERT INTO restaurantdb.order_dish (order_id, dish_id) VALUES (?,?)";
+    private final String INSERT_INTO_ORDER_DISH = "INSERT INTO restaurantdb.order_dish (order_id, dish_id,amount) VALUES (?,?,?)";
     private final String DELETE_FROM_ORDERS = "delete from restaurantdb.orders where id=?";
     private final String ORDERS_BY_TABLEID = SELECT_ALL + " where o.table_id=?";
-    private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ?, booking_time = ? where id = ?";
+    private final String UPDATE_ORDER = "UPDATE restaurantdb.orders set table_id = ?, worker_id = ? , status = CAST(? as status) where id = ?";
+    private final String GET_NOT_COMPLETED_BY_CLIENT_ID = SELECT_ALL + " where client_id = ? and status != CAST(\'COMPLETED\' as status)";
     @Override
     public void save(Order order) {
         logger.info("save the order");
@@ -48,13 +49,18 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 statementForOrder.setTimestamp(3,Timestamp.valueOf(order.getCreationTime()));
                 statementForOrder.setTimestamp(4,Timestamp.valueOf(order.getBookingTime()));
                 ResultSet setOfId = statementForOrder.executeQuery();
-                long id = setOfId.next() ? setOfId.getLong(1) : -1;
-                for (Dish dish : order.getDishes()) {
-                    statementForDishes.setLong(1, id);
-                    statementForDishes.setInt(2, dish.getId());
-                    statementForDishes.executeUpdate();
+                if(setOfId.next()){
+                    long id = setOfId.getLong(1);
+                    for (Dish dish : order.getDishes()) {
+                        statementForDishes.setLong(1, id);
+                        statementForDishes.setInt(2, dish.getId());
+                        statementForDishes.setInt(3,dish.getAmount());
+                        statementForDishes.executeUpdate();
+                    }
+                    connection.commit();
+                }else{
+                    throw new  SQLException();
                 }
-                connection.commit();
             }catch (SQLException e){
                 connection.rollback();
                 logger.error("can't save the order");
@@ -75,7 +81,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 connection.setAutoCommit(false);
                 statement.setInt(1,order.getTable().getId());
                 statement.setLong(2,order.getWorker().getId());
-                statement.setTimestamp(3,Timestamp.valueOf(order.getBookingTime()));
+                statement.setString(3,order.getStatus().toString());
                 statement.setLong(4,order.getId());
                 statement.executeUpdate();
                 connection.commit();
@@ -93,19 +99,13 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     @Override
     public List<Order> getAll() {
         logger.info("getting all orders");
-        List<Order> orders = new ArrayList<Order>();
+//        List<Order> orders = new ArrayList<Order>();
+        List<Order> orders = null;
         try (Connection connection = HikariCP.getConnection();
              Statement statement = connection.createStatement();
-             PreparedStatement preparedStatement = connection.prepareStatement(DISHES_FROM_ORDER);) {
+             PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER);) {
             ResultSet setOfOrders = statement.executeQuery(SELECT_ALL);
-            ResultSet setOfDishes;
-            while (setOfOrders.next()) {
-                preparedStatement.setInt(1, setOfOrders.getInt(1));
-                setOfDishes = preparedStatement.executeQuery();
-                Order order = EntityBuilder.buildOrder(setOfOrders);
-                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
-                orders.add(order);
-            }
+            orders = EntityBuilder.buildOrders(setOfOrders,statementForDishes);
         } catch (SQLException e) {
             logger.error("can't get all orders");
             e.printStackTrace();
@@ -124,10 +124,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
             statementForOrder.setLong(1, id);
             ResultSet setOfOrders = statementForOrder.executeQuery();
             if (setOfOrders.next()) {
-                order = EntityBuilder.buildOrder(setOfOrders);
-                statementForDishes.setLong(1, id);
-                ResultSet setOfDishes = statementForDishes.executeQuery();
-                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
+                order = EntityBuilder.buildOrder(setOfOrders,statementForDishes);
             }
         } catch (SQLException e) {
             logger.error("can't get the order by id");
@@ -157,25 +154,32 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getOrdersByTable(int tableId) {
+    public List<Order> getByTable(int tableId) {
         logger.info("getting orders by table");
-        List<Order> orders = new ArrayList<Order>();
-        Order order;
+        List<Order> orders = null;
         try(Connection connection = HikariCP.getConnection();
             PreparedStatement statementForOrders = connection.prepareStatement(ORDERS_BY_TABLEID);
             PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER);){
             statementForOrders.setInt(1,tableId);
             ResultSet setOfOrders = statementForOrders.executeQuery();
-            ResultSet setOfDishes;
-            while (setOfOrders.next()){
-                order = EntityBuilder.buildOrder(setOfOrders);
-                statementForDishes.setLong(1, order.getId());
-                setOfDishes = statementForDishes.executeQuery();
-                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
-                orders.add(order);
-            }
+            orders = EntityBuilder.buildOrders(setOfOrders,statementForDishes);
         }catch (SQLException e){
             logger.error("can't get orders by table");
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> getNotCompletedByClientId(long clientId) {
+        List<Order> orders = null;
+        try(Connection connection = HikariCP.getConnection();
+            PreparedStatement statementForOrders = connection.prepareStatement(GET_NOT_COMPLETED_BY_CLIENT_ID);
+            PreparedStatement statementForDishes = connection.prepareStatement(DISHES_FROM_ORDER)){
+            statementForOrders.setLong(1,clientId);
+            ResultSet setOfOrders = statementForOrders.executeQuery();
+            orders = EntityBuilder.buildOrders(setOfOrders,statementForDishes);
+        }catch (SQLException e){
             e.printStackTrace();
         }
         return orders;

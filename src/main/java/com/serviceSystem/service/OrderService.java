@@ -27,7 +27,7 @@ public class OrderService {
         return orderDAO.getAll();
     }
     public List<Order> getOrdersByTableId(int id){
-        return orderDAO.getOrdersByTable(id);
+        return orderDAO.getByTable(id);
     }
     public void save(Order order){
         orderDAO.save(order);
@@ -40,5 +40,8 @@ public class OrderService {
     }
     public void update(Order order){
         orderDAO.update(order);
+    }
+    public List<Order> getNotCompletedByClientId(long clientId){
+        return orderDAO.getNotCompletedByClientId(clientId);
     }
 }

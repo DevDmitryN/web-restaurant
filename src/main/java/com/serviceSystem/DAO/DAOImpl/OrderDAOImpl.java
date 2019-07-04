@@ -59,7 +59,12 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getOrdersByTable(int tableId) {
+    public List<Order> getByTable(int tableId) {
+        return null;
+    }
+
+    @Override
+    public List<Order> getNotCompletedByClientId(long clientId) {
         return null;
     }
 }

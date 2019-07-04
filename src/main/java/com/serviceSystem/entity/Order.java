@@ -4,9 +4,11 @@ import com.serviceSystem.entity.enums.Status;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders",schema = "restaurantdb")
@@ -14,8 +16,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private float totalPrice;
+    @Transient
+    private BigDecimal totalPrice = new BigDecimal(0);
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -68,8 +70,8 @@ public class Order {
         return id;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
+    public BigDecimal getTotalPrice() {
+        return totalPrice.setScale(2, RoundingMode.DOWN);
     }
 
 //    public void setTotalPrice(double totalPrice) {
@@ -120,7 +122,7 @@ public class Order {
         this.worker = worker;
     }
     private void countTotalPrice(){
-        dishes.forEach( a -> totalPrice += a.getPrice()  );
+        dishes.forEach( a -> totalPrice = totalPrice.add(new BigDecimal(a.getPrice())));
     }
 
     public LocalDateTime getCreationTime() {
@@ -138,12 +140,15 @@ public class Order {
     public void setBookingTime(LocalDateTime bookingTime) {
         this.bookingTime = bookingTime;
     }
+
     public String getFormatedCreationTime(){
         return creationTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
+
     public String getFormatedBookingTime(){
         return bookingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -154,4 +159,5 @@ public class Order {
                 ", dishes=" + dishes +
                 '}';
     }
+
 }

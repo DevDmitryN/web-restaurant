@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface OrderDAO extends BaseDAO<Order> {
     void delete(long id);
-    List<Order> getOrdersByTable(int tableId);
+    List<Order> getByTable(int tableId);
+    List<Order> getNotCompletedByClientId(long clientId);
 }

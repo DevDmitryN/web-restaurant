@@ -20,6 +20,8 @@ public class Dish implements Serializable {
     private String description;
     @ManyToMany(mappedBy = "dishes")
     List<Order> orders = new ArrayList<Order>();
+    @Transient
+    private int amount;
 
     public Dish(){}
 
@@ -75,6 +77,14 @@ public class Dish implements Serializable {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     @Override

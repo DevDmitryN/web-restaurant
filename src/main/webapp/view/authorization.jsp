@@ -9,7 +9,7 @@
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Authorization page</title>
     <%@include file="header.html"%>
 </head>
 <body>

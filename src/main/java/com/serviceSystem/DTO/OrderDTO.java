@@ -1,12 +1,13 @@
 package com.serviceSystem.DTO;
 
-import com.serviceSystem.entity.Client;
-import com.serviceSystem.entity.Dish;
-import com.serviceSystem.entity.RestaurantTable;
-import com.serviceSystem.entity.Worker;
+import com.serviceSystem.entity.*;
 import com.serviceSystem.entity.enums.Status;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.spi.Mapping;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDTO {
@@ -18,7 +19,7 @@ public class OrderDTO {
     private Worker worker;
     private String creationTime;
     private String bookingTime;
-
+    private BigDecimal totalPrice;
     public OrderDTO(){
 
     }
@@ -85,5 +86,23 @@ public class OrderDTO {
 
     public void setBookingTime(String bookingTime) {
         this.bookingTime = bookingTime;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public static List<OrderDTO> toListOfOrderDTO(List<Order> orders){
+        List<OrderDTO> ordersDTO = new ArrayList<>();
+        orders.forEach( order -> ordersDTO.add(toOrderDTO(order)));
+        return ordersDTO;
+    }
+    public static OrderDTO toOrderDTO(Order order){
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(order,OrderDTO.class);
     }
 }
