@@ -47,10 +47,12 @@
             <param-name>workerAccess</param-name>
             <param-value>updateOrder,show_orders,delete_order,show_dishes_of_order,index.jsp</param-value>
         </init-param>
-        <init-param>
-            <param-name>unsecuredAccess</param-name>
-            <param-value>authorization,logout,error,authorization.jsp,badRequest.jsp,style.css</param-value>
-        </init-param>
+<!--        <init-param>-->
+<!--            <param-name>unsecuredAccess</param-name>-->
+<!--            <param-value>authorization,logout,error,authorization.jsp,badRequest.jsp,style.css,sign_in,-->
+<!--                signIn.jsp-->
+<!--            </param-value>-->
+<!--        </init-param>-->
     </filter>
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>

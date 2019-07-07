@@ -31,7 +31,7 @@
                             <input required name="password" type="password" class="form-control" id="password" placeholder="Password">
                         </div>
                         <button type="submit" class="btn btn-primary">Вход</button>
-                        <a href="">Зарегистрироваться</a>
+                        <a href="signIn.jsp">Зарегистрироваться</a>
                     </form>
                 </div>
             </div>

@@ -26,4 +26,10 @@ public class ClientService {
     public Client getByEmail(String email){
         return clientDAO.getByEmail(email);
     }
+    public boolean isEmailExist(String email){
+        return clientDAO.isEmailExist(email);
+    }
+    public void save(Client client){
+        clientDAO.save(client);
+    }
 }

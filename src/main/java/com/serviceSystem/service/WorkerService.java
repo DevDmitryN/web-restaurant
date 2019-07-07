@@ -32,4 +32,7 @@ public class WorkerService {
     public Worker getById(long id){
         return workerDAO.getById(id);
     }
+    public boolean isEmailExist(String email){
+        return workerDAO.isEmailExist(email);
+    }
 }

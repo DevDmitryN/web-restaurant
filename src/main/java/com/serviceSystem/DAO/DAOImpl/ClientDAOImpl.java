@@ -10,7 +10,7 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class ClientDAOImpl implements ClientDAO {
-    private final String IS_EXIST = "from com.serviceSystem.entity.Client c where c.email like :email and c.password like :password";
+    private final String GET_BY_EMAIL_AND_PASSWORD = "from com.serviceSystem.entity.Client c where c.email like :email and c.password like :password";
     private final String GET_BY_EMAIL = "from com.serviceSystem.entity.Client c where c.email like :email";
     @Override
     public void save(Client client){
@@ -46,7 +46,7 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public boolean isExist(String email, String password) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(IS_EXIST);
+        Query query = session.createQuery(GET_BY_EMAIL_AND_PASSWORD);
         query.setParameter("email",email);
         query.setParameter("password",password);
         List<Client> client = query.list();
@@ -58,5 +58,13 @@ public class ClientDAOImpl implements ClientDAO {
         Query query = session.createQuery(GET_BY_EMAIL);
         query.setParameter("email",email);
         return (Client) query.list().get(0);
+    }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(GET_BY_EMAIL);
+        query.setParameter("email",email);
+        return query.list().size() == 0 ? false : true;
     }
 }

@@ -13,25 +13,28 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SecurityFilter implements Filter {
-    private Set<String> unsecuredAccess = new HashSet<>();
+//    private Set<String> unsecuredAccess = new HashSet<>();
     private Set<String> clientAccess = new HashSet<>();
     private Set<String> workerAccess = new HashSet<>();
     private final String AUTHORIZATION_PATH = "/view/authorization.jsp";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        String[] arr = filterConfig.getInitParameter("unsecuredAccess").split(",");
-        unsecuredAccess.addAll(Set.of(arr));
+//        String[] arr = filterConfig.getInitParameter("unsecuredAccess")
+//                .replaceAll("\n","")
+//                .replaceAll(" ","")
+//                .split(",");
+//        unsecuredAccess.addAll(Set.of(arr));
 
-        clientAccess.addAll(unsecuredAccess);
+//        clientAccess.addAll(unsecuredAccess);
         clientAccess.addAll(Set.of(filterConfig.getInitParameter("clientAccess").split(",")));
 
-        workerAccess.addAll(unsecuredAccess);
+//        workerAccess.addAll(unsecuredAccess);
         workerAccess.addAll(Set.of(filterConfig.getInitParameter("workerAccess").split(",")));
     }
 
     @Override
     public void destroy() {
-        unsecuredAccess = null;
+//        unsecuredAccess = null;
         clientAccess = null;
         workerAccess = null;
     }
@@ -41,6 +44,9 @@ public class SecurityFilter implements Filter {
         final HttpServletRequest req = (HttpServletRequest) servletRequest;
         final HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
+        servletRequest.setCharacterEncoding("UTF-8");
+        servletResponse.setContentType("text/html; charset=UTF-8");
+
         HttpSession session = req.getSession();
 
         final String command = req.getParameter("command");
@@ -48,7 +54,8 @@ public class SecurityFilter implements Filter {
 
         boolean isUserAuthorized = SessionHandler.isUserAuthorized(session);
 
-        if((requestPath.equals("frontController") && unsecuredAccess.contains(command)) || unsecuredAccess.contains(requestPath)){
+//        if((requestPath.equals("frontController") && unsecuredAccess.contains(command)) || unsecuredAccess.contains(requestPath)){
+        if(!(clientAccess.contains(command) || workerAccess.contains(command)) && !(clientAccess.contains(requestPath) || workerAccess.contains(requestPath))){
             filterChain.doFilter(req,resp);
         }else if(isUserAuthorized && SessionHandler.getRole(session).equals("client") &&
                 (clientAccess.contains(requestPath) || clientAccess.contains(command))){

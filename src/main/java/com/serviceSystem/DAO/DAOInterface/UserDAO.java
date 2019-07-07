@@ -5,4 +5,5 @@ import com.serviceSystem.entity.User;
 public interface UserDAO<T extends User> extends BaseDAO<T> {
     T getByEmail(String email);
     boolean isExist(String email, String password);
+    boolean isEmailExist(String email);
 }

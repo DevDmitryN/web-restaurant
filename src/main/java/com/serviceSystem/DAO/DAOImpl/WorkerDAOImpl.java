@@ -74,4 +74,12 @@ public class WorkerDAOImpl implements WorkerDAO {
         query.setParameter("email",email);
         return  (Worker) query.list().get(0);
     }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(GET_BY_EMAIL);
+        query.setParameter("email",email);
+        return query.list().size() == 0 ? false : true;
+    }
 }
