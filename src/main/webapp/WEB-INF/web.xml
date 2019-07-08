@@ -50,7 +50,7 @@
 <!--        <init-param>-->
 <!--            <param-name>unsecuredAccess</param-name>-->
 <!--            <param-value>authorization,logout,error,authorization.jsp,badRequest.jsp,style.css,sign_in,-->
-<!--                signIn.jsp-->
+<!--                signUp.jsp-->
 <!--            </param-value>-->
 <!--        </init-param>-->
     </filter>

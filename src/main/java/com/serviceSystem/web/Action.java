@@ -3,7 +3,7 @@ package com.serviceSystem.web;
 import com.serviceSystem.web.command.*;
 
 public enum Action {
-    SIGN_IN(new SignIn()),
+    SIGN_UP(new SignUp()),
     SHOW_ACTIVE_ORDERS(new ShowActiveOrders()),
     SHOW_ORDERS(new ShowOrders()),
     DELETE_ORDER(new DeleteOrder()),

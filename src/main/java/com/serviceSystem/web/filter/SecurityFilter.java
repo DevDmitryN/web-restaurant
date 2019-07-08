@@ -16,7 +16,6 @@ public class SecurityFilter implements Filter {
 //    private Set<String> unsecuredAccess = new HashSet<>();
     private Set<String> clientAccess = new HashSet<>();
     private Set<String> workerAccess = new HashSet<>();
-    private final String AUTHORIZATION_PATH = "/view/authorization.jsp";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 //        String[] arr = filterConfig.getInitParameter("unsecuredAccess")
@@ -55,7 +54,8 @@ public class SecurityFilter implements Filter {
         boolean isUserAuthorized = SessionHandler.isUserAuthorized(session);
 
 //        if((requestPath.equals("frontController") && unsecuredAccess.contains(command)) || unsecuredAccess.contains(requestPath)){
-        if(!(clientAccess.contains(command) || workerAccess.contains(command)) && !(clientAccess.contains(requestPath) || workerAccess.contains(requestPath))){
+        if(!(clientAccess.contains(command) || workerAccess.contains(command))
+                && !(clientAccess.contains(requestPath) || workerAccess.contains(requestPath))){
             filterChain.doFilter(req,resp);
         }else if(isUserAuthorized && SessionHandler.getRole(session).equals("client") &&
                 (clientAccess.contains(requestPath) || clientAccess.contains(command))){
