@@ -23,4 +23,10 @@ public class TableService {
     public List<RestaurantTable> getAll(){
         return tableDAO.getAll();
     }
+    public void update(RestaurantTable table){
+        tableDAO.update(table);
+    }
+    public List<RestaurantTable> getFree(){
+        return tableDAO.getFree();
+    }
 }

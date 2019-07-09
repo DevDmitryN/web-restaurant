@@ -21,10 +21,12 @@ public class EntityBuilder {
         order.setWorker(buildWorker(setOfOrder));
         order.setCreationTime(setOfOrder.getTimestamp(CREATION_TIME).toLocalDateTime());
         order.setBookingTime(setOfOrder.getTimestamp(BOOKING_TIME).toLocalDateTime());
-        statementForDishes.setLong(1, order.getId());
-        ResultSet setOfDishes = statementForDishes.executeQuery();
-        if (setOfDishes.next()) {
-            order.setDishes(EntityBuilder.buildDishes(setOfDishes));
+        if(statementForDishes != null){
+            statementForDishes.setLong(1, order.getId());
+            ResultSet setOfDishes = statementForDishes.executeQuery();
+//            if (setOfDishes.next()) {
+                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
+//            }
         }
         return order;
     }

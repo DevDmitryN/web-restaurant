@@ -148,7 +148,9 @@ public class Order {
     public String getFormatedBookingTime(){
         return bookingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
-
+    public String getStatusAsString(){
+        return status.getNameInRussian();
+    }
     @Override
     public String toString() {
         return "Order{" +

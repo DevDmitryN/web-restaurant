@@ -26,10 +26,11 @@ public class MakeOrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DishService dishService = DishService.getInstance();
         TableService tableService = TableService.getInstance();
-        List<RestaurantTable> tables = tableService.getAll();
+        List<RestaurantTable> tables = tableService.getFree();
         List<Dish> dishes = dishService.getAll();
         req.setAttribute("tables", tables);
         req.setAttribute("dishes", dishes);
+        req.setAttribute("year",LocalDate.now().getYear());
         req.getRequestDispatcher("makeOrder.jsp").forward(req, resp);
     }
 
@@ -58,12 +59,18 @@ public class MakeOrderServlet extends HttpServlet {
                 orderedTable = table;
             }
         }
-        String bookingTime = req.getParameter("bookingTime");
         Client client = (Client) req.getSession().getAttribute("user");
-        LocalDateTime bookingDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.parse(bookingTime));
-        Order order = new Order(orderedTable, orderedDishes);
+        Order order = new Order();
+        order.setTable(orderedTable);
+        order.setDishes(orderedDishes);
         order.setClient(client);
-        order.setBookingTime(bookingDateTime);
+
+        int hour = Integer.valueOf(req.getParameter("hour"));
+        int minutes = Integer.valueOf(req.getParameter("minutes"));
+        int month = Integer.valueOf(req.getParameter("month"));
+        int day = Integer.valueOf(req.getParameter("day"));
+        LocalDateTime bookingTime = LocalDateTime.of(LocalDate.of(LocalDate.now().getYear(),month,day),LocalTime.of(hour,minutes));
+        order.setBookingTime(bookingTime);
         return order;
     }
 }

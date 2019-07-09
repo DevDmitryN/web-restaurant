@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class RestaurantTableDAOImpl implements RestaurantTableDAO {
+    private final String GET_FREE = "from com.serviceSystem.entity.RestaurantTable r where r.freeStatus = true";
 
     public void save(RestaurantTable table) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -61,5 +62,12 @@ public class RestaurantTableDAOImpl implements RestaurantTableDAO {
         session.delete(table);
         transaction.commit();
         session.close();
+    }
+
+    @Override
+    public List<RestaurantTable> getFree(){
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Query query = session.createQuery(GET_FREE);
+        return (List<RestaurantTable>) query.list();
     }
 }

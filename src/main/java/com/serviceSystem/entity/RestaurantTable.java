@@ -69,4 +69,7 @@ public class RestaurantTable implements Serializable{
                 ", freeStatus=" + freeStatus +
                 '}';
     }
+    public String getFreeStatusAsString(){
+        return freeStatus ? "Не занят" : "Занят";
+    }
 }

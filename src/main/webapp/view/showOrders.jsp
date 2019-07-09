@@ -60,13 +60,7 @@
                         <td>${order.table.id}</td>
                         <td>${order.client.email}</td>
                         <td>${order.worker.name} ${order.worker.surname}</td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${order.status == 'NOT_TAKEN'}">Не принят</c:when>
-                                <c:when test="${order.status == 'BEING_PERFORMED'}">Выполняется</c:when>
-                                <c:when test="${order.status == 'COMPLETED'}">Выполнен</c:when>
-                            </c:choose>
-                        </td>
+                        <td>${order.status}</td>
                         <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>
@@ -82,7 +76,7 @@
                             </form>
                         </td>
                         <td>
-                            <c:if test="${order.status != 'COMPLETED'}">
+                            <c:if test="${order.status != 'Выполнен' && order.status != 'Отменен'}">
                                 <form action="updateOrder" method="get">
                                     <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
                                 </form>

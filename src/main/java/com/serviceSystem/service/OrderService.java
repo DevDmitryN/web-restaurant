@@ -44,4 +44,7 @@ public class OrderService {
     public List<Order> getNotCompletedByClientId(long clientId){
         return orderDAO.getNotCompletedByClientId(clientId);
     }
+    public List<Order> getWithFreeTable(){
+        return orderDAO.getWithFreeTable();
+    }
 }

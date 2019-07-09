@@ -14,20 +14,18 @@
 </head>
 <body>
 <%@include file="menu-nav-bar.jsp"%>
-    <div>
+    <div class="default-padding-top">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <c:if test="${orders == null}">
+                        <h3>Нет активгых заказов</h3>
+                    </c:if>
                     <c:forEach var="order" items="${orders}">
                         <p>Номер заказа: ${order.id}</p>
                         <p>Номер столика: ${order.table.id}</p>
                         <p>Сумма: ${order.totalPrice}</p>
-                        <p>Статус заказа:
-                            <c:choose>
-                                <c:when test="${order.status == 'NOT_TAKEN'}"><span>Не принят</span></c:when>
-                                <c:when test="${order.status == 'BEING_PERFORMED'}"><span>Выполняется</span></c:when>
-                            </c:choose>
-                        </p>
+                        <p>Статус заказа: ${order.status}</p>
                         <p>Время создания заказа: ${order.creationTime}</p>
                         <p>Время бронирования: ${order.bookingTime}</p>
                         <p>Список блюд:</p>
@@ -35,17 +33,16 @@
                             <p><bold>${dish.name}</bold>; Описание: ${dish.description}; Цена за одну порцию: ${dish.price}; Кол-во: ${dish.amount}</p>
                         </c:forEach>
                         <c:choose>
-                            <c:when test="${order.status == 'NOT_TAKEN'}">
+                            <c:when test="${order.status == 'Не принят'}">
                                 <form action="frontController">
                                     <input hidden name="command" value="show_dishes_of_order"/>
                                     <button type="submit" name="id" value="${order.id}" class="btn btn-success">Редактировать</button>
                                 </form>
-                                <form action="frontController">
-                                    <input hidden name="command" value="cancel_order">
+                                <form action="frontController?command=cancel_order" method="post">
                                     <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Отменить заказ</button>
                                 </form>
                             </c:when>
-                            <c:when test="${order.status == 'BEING_PERFORMED'}">
+                            <c:when test="${order.status == 'Выполняется'}">
                                 <span style="color: red">Заказ выполняется, редактирование или отмена невозможны</span>
                             </c:when>
                         </c:choose>

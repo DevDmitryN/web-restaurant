@@ -22,9 +22,13 @@
 .form-selector{
     width: 20em;
 }
-.updated-block{
-    margin-top: 3em;
-}
+
 .signIn-field{
     width: 15em;
+}
+.default-padding-top{
+    padding-top: 2em;
+}
+.table-full-width{
+    width: 100%;
 }

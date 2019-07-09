@@ -15,7 +15,7 @@
 </head>
 <body>
     <%@include file="menu-nav-bar.jsp"%>
-    <div class="updated-block">
+    <div class="default-padding-top">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -27,7 +27,7 @@
                                 <option value="${order.table.id}">id: ${order.table.id}, вместимость:${order.table.capacity} </option>
                                 <c:forEach var="table" items="${tables}">
                                     <c:if test="${table.id != order.table.id}">
-                                        <option value="${table.id}">id: ${table.id}, вместимость: ${table.capacity},свободен:${table.freeStatus}</option>
+                                        <option value="${table.id}">id: ${table.id}, вместимость: ${table.capacity}, ${table.getFreeStatusAsString()}</option>
                                     </c:if>
                                 </c:forEach>
                             </select>

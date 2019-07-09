@@ -56,7 +56,8 @@ public class SignUp extends Command {
         String cardNumber = req.getParameter("cardNumber");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
-        if(!(password.equals(confirmPassword) && matches(regexForPhoneNumber,phoneNumber) && matches(regexForCardNumber,cardNumber))){
+        System.out.println((!(password.equals(confirmPassword)) + "" + (!matches(regexForPhoneNumber,phoneNumber)) + !matches(regexForCardNumber,cardNumber)));
+        if(!(password.equals(confirmPassword) || !matches(regexForPhoneNumber,phoneNumber) || !matches(regexForCardNumber,cardNumber))){
             req.setAttribute("error","incorrectFields");
             req.getRequestDispatcher("signUp.jsp").forward(req,resp);
             return false;

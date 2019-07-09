@@ -14,7 +14,7 @@
 
 </head>
 <body>
-<div style="padding-top: 2em;">
+<div class="default-padding-top">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10">
@@ -44,7 +44,7 @@
                     </div>
                     <div class="form-group">
                         <label for="confirm-password">Повторите пароль</label>
-                        <input required type="password" class="form-control signIn-field" id="confirm-password">
+                        <input name="confirmPassword" required type="password" class="form-control signIn-field" id="confirm-password">
                         <span id="password-message" style="color: red;"></span>
                     </div>
                     <div class="form-group">

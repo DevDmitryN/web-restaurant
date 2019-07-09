@@ -1,6 +1,7 @@
 package com.serviceSystem.web.filter;
 
 import com.serviceSystem.service.ClientService;
+import com.serviceSystem.service.ScheduledService;
 import com.serviceSystem.service.WorkerService;
 
 import javax.servlet.*;
@@ -11,29 +12,24 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class SecurityFilter implements Filter {
-//    private Set<String> unsecuredAccess = new HashSet<>();
     private Set<String> clientAccess = new HashSet<>();
     private Set<String> workerAccess = new HashSet<>();
+    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-//        String[] arr = filterConfig.getInitParameter("unsecuredAccess")
-//                .replaceAll("\n","")
-//                .replaceAll(" ","")
-//                .split(",");
-//        unsecuredAccess.addAll(Set.of(arr));
-
-//        clientAccess.addAll(unsecuredAccess);
+    public void init(FilterConfig filterConfig){
         clientAccess.addAll(Set.of(filterConfig.getInitParameter("clientAccess").split(",")));
-
-//        workerAccess.addAll(unsecuredAccess);
         workerAccess.addAll(Set.of(filterConfig.getInitParameter("workerAccess").split(",")));
+        executorService.scheduleAtFixedRate(new ScheduledService(),0,20, TimeUnit.MINUTES);
     }
 
     @Override
     public void destroy() {
-//        unsecuredAccess = null;
+        executorService.shutdown();
         clientAccess = null;
         workerAccess = null;
     }
@@ -70,16 +66,5 @@ public class SecurityFilter implements Filter {
                 resp.sendRedirect("frontController?command=error");
             }
         }
-//        if(session.getAttribute("user") != null){
-//            filterChain.doFilter(req,resp);
-//        }else if(clientService.isExist(email,password)){
-//            SessionHandler.setUser(session,clientService.getByEmail(email),"client");
-//            filterChain.doFilter(req,resp);
-//        }else if(workerService.isExist(email,password)){
-//            SessionHandler.setUser(session,workerService.getByEmail(email),"worker");
-//            filterChain.doFilter(req,resp);
-//        }else{
-//            req.getRequestDispatcher("/view/authorization.jsp").forward(req,resp);
-//        }
     }
 }

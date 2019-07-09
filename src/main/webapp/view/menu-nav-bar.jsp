@@ -27,7 +27,10 @@
             </c:if>
             <c:if test="${role == 'worker'}">
                 <li class="nav-item">
-                    <a class="nav-link" href="frontController?command=show_orders">Посмотреть заказы</a>
+                    <a class="nav-link" href="frontController?command=show_orders">Заказы</a>
+                </li>
+                <li class="nav-item">
+                    <a href="frontController?command=show_tables" class="nav-link">Столики</a>
                 </li>
             </c:if>
             <li class="nav-item">

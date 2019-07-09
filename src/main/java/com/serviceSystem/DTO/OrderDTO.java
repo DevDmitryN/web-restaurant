@@ -12,7 +12,7 @@ import java.util.List;
 
 public class OrderDTO {
     private Long id;
-    private Status status;
+    private String status;
     private RestaurantTable table;
     private List<Dish> dishes;
     private Client client;
@@ -32,11 +32,11 @@ public class OrderDTO {
         this.id = id;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

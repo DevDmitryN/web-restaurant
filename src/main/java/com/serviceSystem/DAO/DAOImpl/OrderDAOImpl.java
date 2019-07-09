@@ -67,4 +67,9 @@ public class OrderDAOImpl implements OrderDAO {
     public List<Order> getNotCompletedByClientId(long clientId) {
         return null;
     }
+
+    @Override
+    public List<Order> getWithFreeTable() {
+        return null;
+    }
 }
