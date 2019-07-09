@@ -29,4 +29,7 @@ public class TableService {
     public List<RestaurantTable> getFree(){
         return tableDAO.getFree();
     }
+    public void save(RestaurantTable table){
+        tableDAO.save(table);
+    }
 }

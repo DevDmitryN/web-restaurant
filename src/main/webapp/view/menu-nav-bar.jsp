@@ -25,12 +25,24 @@
                     <a class="nav-link" href="frontController?command=show_active_orders">Активные заказы</a>
                 </li>
             </c:if>
-            <c:if test="${role == 'worker'}">
+            <c:if test="${role == 'worker' || role == 'admin'}">
                 <li class="nav-item">
                     <a class="nav-link" href="frontController?command=show_orders">Заказы</a>
                 </li>
                 <li class="nav-item">
                     <a href="frontController?command=show_tables" class="nav-link">Столики</a>
+                </li>
+            </c:if>
+            <c:if test="${role == 'admin'}">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Расширенные настройки
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="frontController?command=show_staff">Сотрудники</a>
+                        <a class="dropdown-item" href="#">Клиенты</a>
+                        <a class="dropdown-item" href="signUpWorker.jsp">Добавить сотрудника</a>
+                    </div>
                 </li>
             </c:if>
             <li class="nav-item">

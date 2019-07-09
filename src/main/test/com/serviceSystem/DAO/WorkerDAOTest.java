@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class WorkerDAOTest {
     @Test
     public void getByEmail(){
-        long id = 2;
-        String email = "lord@ring.net";
+        long id = 3;
+        String email = "putin@rf.ru";
         Worker worker1 = WorkerService.getInstance().getById(id);
         Worker worker2 = WorkerService.getInstance().getByEmail(email);
-
+        System.out.println(worker1);
         assertEquals(worker1,worker2);
     }
     @Test

@@ -22,6 +22,7 @@ public class SessionHandler {
                 session.setAttribute(USER,(Client) user);
                 session.setAttribute(ROLE,role);
                 break;
+            case "admin":
             case "worker":
                 session.setAttribute(USER,(Worker) user);
                 session.setAttribute(ROLE,role);

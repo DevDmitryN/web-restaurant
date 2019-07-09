@@ -3,6 +3,8 @@ package com.serviceSystem.web;
 import com.serviceSystem.web.command.*;
 
 public enum Action {
+    SHOW_STAFF(new ShowStaff()),
+    ADD_TABLE(new AddTable()),
     CANCEL_ORDER(new CancelOrder()),
     SHOW_TABLES(new ShowTables()),
     CHANGE_TABLE_STATUS(new ChangeTableStatus()),

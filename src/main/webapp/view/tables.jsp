@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <table class="table-full-width">
+                <table class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Номер</th>
@@ -41,9 +41,20 @@
                     </tr>
                     </c:forEach>
                 </table>
+                <c:if test="${role == 'admin'}">
+                    <hr>
+                    <div>
+                        <form action="frontController?command=add_table" method="post">
+                            <label for="capacity">Количество мест</label>
+                            <input id="capacity" type="number" name="capacity">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Добавить новый столик</button>
+                        </form>
+                    </div>
+                </c:if>
             </div>
         </div>
     </div>
 </div>
 </body>
+<script src="https://kit.fontawesome.com/dc95f87e79.js"></script>
 </html>

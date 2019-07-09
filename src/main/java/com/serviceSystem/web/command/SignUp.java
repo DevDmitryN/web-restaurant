@@ -1,6 +1,9 @@
 package com.serviceSystem.web.command;
 
 import com.serviceSystem.entity.Client;
+import com.serviceSystem.entity.User;
+import com.serviceSystem.entity.Worker;
+import com.serviceSystem.entity.enums.Role;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.WorkerService;
 
@@ -17,28 +20,22 @@ public class SignUp extends Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if(isFieldsCorrect(req,resp)){
-            clientService.save(buildClient(req));
-            resp.sendRedirect("authorization.jsp");
+        if(req.getSession().getAttribute("user") == null){
+            if(isFieldsCorrect(req,resp)){
+                clientService.save(buildClient(req));
+                resp.sendRedirect("authorization.jsp");
+            }
+        }else{
+            workerService.save(buildWorker(req));
+            resp.sendRedirect("index.jsp");
         }
-//        else{
-//            req.setAttribute("error","error");
-//            req.getRequestDispatcher("signUp.jsp").forward(req,resp);
-//        }
+
+
     }
     private Client buildClient(HttpServletRequest req){
-        String name = req.getParameter("name");
-        String surname = req.getParameter("surname");
-        String password = req.getParameter("password");
-        String phoneNumber = req.getParameter("phoneNumber");
-        String cardNumber = req.getParameter("cardNumber");
-        String email = req.getParameter("email");
         Client client = new Client();
-        client.setName(name);
-        client.setSurname(surname);
-        client.setEmail(email);
-        client.setPassword(password);
-        client.setPhoneNumber(phoneNumber);
+        setUserFields(client,req);
+        String cardNumber = req.getParameter("cardNumber");
         client.setCardNumber(cardNumber);
         return client;
     }
@@ -56,12 +53,30 @@ public class SignUp extends Command {
         String cardNumber = req.getParameter("cardNumber");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
-        System.out.println((!(password.equals(confirmPassword)) + "" + (!matches(regexForPhoneNumber,phoneNumber)) + !matches(regexForCardNumber,cardNumber)));
         if(!(password.equals(confirmPassword) || !matches(regexForPhoneNumber,phoneNumber) || !matches(regexForCardNumber,cardNumber))){
             req.setAttribute("error","incorrectFields");
             req.getRequestDispatcher("signUp.jsp").forward(req,resp);
             return false;
         }
         return  true;
+    }
+    private Worker buildWorker(HttpServletRequest req){
+        Worker worker = new Worker();
+        setUserFields(worker,req);
+        Role role = Role.valueOf(req.getParameter("role"));
+        worker.setRole(role);
+        return worker;
+    }
+    private void setUserFields(User user,HttpServletRequest req){
+        String name = req.getParameter("name");
+        String surname = req.getParameter("surname");
+        String password = req.getParameter("password");
+        String phoneNumber = req.getParameter("phoneNumber");
+        String email = req.getParameter("email");
+        user.setName(name);
+        user.setSurname(surname);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNumber(phoneNumber);
     }
 }

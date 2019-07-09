@@ -35,4 +35,7 @@ public class WorkerService {
     public boolean isEmailExist(String email){
         return workerDAO.isEmailExist(email);
     }
+    public void save(Worker worker){
+        workerDAO.save(worker);
+    }
 }

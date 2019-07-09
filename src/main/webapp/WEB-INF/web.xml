@@ -47,6 +47,10 @@
             <param-name>workerAccess</param-name>
             <param-value>updateOrder,show_orders,delete_order,show_dishes_of_order,index.jsp,show_tables,change_table_status</param-value>
         </init-param>
+        <init-param>
+            <param-name>adminAccess</param-name>
+            <param-value>add_table,show_staff,</param-value>
+        </init-param>
 <!--        <init-param>-->
 <!--            <param-name>unsecuredAccess</param-name>-->
 <!--            <param-value>authorization,logout,error,authorization.jsp,badRequest.jsp,style.css,sign_in,-->

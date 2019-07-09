@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <c:if test="${orders == null}">
-                        <h3>Нет активгых заказов</h3>
+                        <h3>Нет активных заказов</h3>
                     </c:if>
                     <c:forEach var="order" items="${orders}">
                         <p>Номер заказа: ${order.id}</p>
@@ -46,7 +46,7 @@
                                 <span style="color: red">Заказ выполняется, редактирование или отмена невозможны</span>
                             </c:when>
                         </c:choose>
-
+                        <hr>
                     </c:forEach>
                 </div>
             </div>
