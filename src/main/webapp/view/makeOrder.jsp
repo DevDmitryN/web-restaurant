@@ -27,7 +27,7 @@
                 <form method="post">
                     <div>
                         <label>Меню:</label>
-                        <c:forEach var="dish" items="${dishes}">
+                        <c:forEach var="dish" items="${orderDishComposites}">
                             <div>
                                     <%--<input type="checkbox" name=${dish.id} value=${dish.id}>--%>
                                 <input type="number" min="0" max="20" value="0" style=" width: 50px;"

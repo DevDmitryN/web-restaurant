@@ -2,10 +2,9 @@ package com.serviceSystem.DAO.DAOInterface;
 
 import java.util.List;
 
-public interface BaseDAO<T> {
-    void save(T entity);
-//    void delete(T entity);
+public interface BaseDAO<T, ID> {
+    ID save(T entity);
     void update(T entity);
     List<T> getAll();
-    T getById(long id);
+    T getById(ID id);
 }

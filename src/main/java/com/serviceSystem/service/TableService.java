@@ -32,4 +32,7 @@ public class TableService {
     public void save(RestaurantTable table){
         tableDAO.save(table);
     }
+    public RestaurantTable getById(Integer id){
+        return tableDAO.getById(id);
+    }
 }

@@ -1,11 +1,9 @@
 package com.serviceSystem.web.command;
 
 import com.serviceSystem.DTO.OrderDTO;
-import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
-import org.modelmapper.ModelMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +22,8 @@ public class ShowOrders extends Command {
         if(tableId == null || tableId.equals("all")){
             orders = OrderDTO.toListOfOrderDTO(orderService.getAll());
         }else{
-            orders = OrderDTO.toListOfOrderDTO(orderService.getOrdersByTableId(Integer.parseInt(tableId)));
-//            for (Order order : orderService.getOrdersByTableId(Integer.parseInt(tableId))) {
+            orders = OrderDTO.toListOfOrderDTO(orderService.getByTableId(Integer.parseInt(tableId)));
+//            for (Order order : orderService.getByTableId(Integer.parseInt(tableId))) {
 //                orders.add(modelMapper.map(order,OrderDTO.class));
 //            }
         }

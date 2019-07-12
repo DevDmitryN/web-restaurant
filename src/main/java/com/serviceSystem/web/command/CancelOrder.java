@@ -13,7 +13,7 @@ public class CancelOrder extends Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long id = Long.valueOf(req.getParameter("id"));
-        Order order = OrderService.getInstance().getOrderById(id);
+        Order order = OrderService.getInstance().getById(id);
         order.setStatus(Status.CANCELLED);
         OrderService.getInstance().update(order);
         resp.sendRedirect("frontController?command=show_active_orders");

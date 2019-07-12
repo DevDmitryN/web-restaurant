@@ -5,6 +5,8 @@ import com.serviceSystem.DAO.DAOInterface.ClientDAO;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Client;
 
+import java.util.List;
+
 public class ClientService {
     private ClientDAO clientDAO;
 
@@ -31,5 +33,11 @@ public class ClientService {
     }
     public void save(Client client){
         clientDAO.save(client);
+    }
+    public List<Client> getAll(){
+        return clientDAO.getAll();
+    }
+    public Client getById(Long id){
+        return clientDAO.getById(id);
     }
 }

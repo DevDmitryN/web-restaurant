@@ -8,65 +8,72 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "orders",schema = "restaurantdb")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Transient
     private BigDecimal totalPrice = new BigDecimal(0);
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.NOT_TAKEN;
 
     @ManyToOne
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
-    @ManyToMany
-    @JoinTable(
-            name = "order_dish",
-            schema = "restaurantdb",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
-    )
-    private List<Dish> dishes;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "order_dish",
+//            schema = "restaurantdb",
+//            joinColumns = {@JoinColumn(name = "order_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
+//    )
+//    private List<Dish> orderDishes;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    private List<OrderDish> orderDishes;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
     @ManyToOne
     @JoinColumn(name = "worker_id")
     private Worker worker;
+    @Column(name = "creation_time")
     private LocalDateTime creationTime = LocalDateTime.now();
+    @Column(name = "booking_time")
     private LocalDateTime bookingTime;
+
+
 
     public Order(){
 
     }
-    public Order(RestaurantTable table, List<Dish> dishes,Client client,Worker worker){
-        init(null,table,dishes,client,worker);
-    }
-    public Order(RestaurantTable table, List<Dish> dishes) {
-        init(null,table,dishes,null,null);
-    }
-    public Order(Status status, RestaurantTable table, List<Dish> dishes) {
-        init(status,table,dishes,null,null);
-    }
-    public void init(Status status, RestaurantTable table,List<Dish> dishes,Client client,Worker worker){
-        this.status = status != null ? status : Status.NOT_TAKEN;;
-        this.table = table;
-        this.dishes = dishes;
-        countTotalPrice();
-        this.client = client;
-        this.worker = worker;
-    }
+//    public Order(RestaurantTable table, List<Dish> orderDishes,Client client,Worker worker){
+//        init(null,table,orderDishes,client,worker);
+//    }
+//    public Order(RestaurantTable table, List<Dish> orderDishes) {
+//        init(null,table,orderDishes,null,null);
+//    }
+//    public Order(Status status, RestaurantTable table, List<Dish> orderDishes) {
+//        init(status,table,orderDishes,null,null);
+//    }
+//    public void init(Status status, RestaurantTable table,List<Dish> orderDishes,Client client,Worker worker){
+//        this.status = status != null ? status : Status.NOT_TAKEN;;
+//        this.table = table;
+//        this.orderDishes = orderDishes;
+//        countTotalPrice();
+//        this.client = client;
+//        this.worker = worker;
+//    }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -97,12 +104,12 @@ public class Order {
         this.table = table;
     }
 
-    public List<Dish> getDishes() {
-        return dishes;
+    public List<OrderDish> getOrderDish() {
+        return orderDishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
-        this.dishes = dishes;
+    public void setOrderDish(List<OrderDish> orderDishes) {
+        this.orderDishes = orderDishes;
         countTotalPrice();
     }
 
@@ -122,7 +129,7 @@ public class Order {
         this.worker = worker;
     }
     private void countTotalPrice(){
-        dishes.forEach( a -> totalPrice = totalPrice.add(new BigDecimal(a.getPrice())));
+        orderDishes.forEach( a -> totalPrice = totalPrice.add(new BigDecimal(a.getDish().getPrice() * a.getAmount())));
     }
 
     public LocalDateTime getCreationTime() {
@@ -151,6 +158,7 @@ public class Order {
     public String getStatusAsString(){
         return status.getNameInRussian();
     }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -158,8 +166,11 @@ public class Order {
                 ", totalPrice=" + totalPrice +
                 ", status=" + status +
                 ", table=" + table +
-                ", dishes=" + dishes +
+//                ", orderDishes=" + orderDishes +
+                ", client=" + client +
+                ", worker=" + worker +
+                ", creationTime=" + creationTime +
+                ", bookingTime=" + bookingTime +
                 '}';
     }
-
 }

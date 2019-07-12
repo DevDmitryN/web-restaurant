@@ -17,9 +17,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 public class UpdateOrderServlet extends HttpServlet {
@@ -32,7 +29,7 @@ public class UpdateOrderServlet extends HttpServlet {
         List<Dish> dishes = DishService.getInstance().getAll();
         List<Worker> workers = WorkerService.getInstance().getAll();
 
-        order = OrderService.getInstance().getOrderById(orderId);
+        order = OrderService.getInstance().getById(orderId);
 
         ModelMapper modelMapper = new ModelMapper();
         OrderDTO orderDTO = modelMapper.map(order,OrderDTO.class);

@@ -23,4 +23,13 @@ public class DishService {
     public List<Dish> getAll(){
         return dishDAO.getAll();
     }
+    public Dish getById(Integer id){
+        return dishDAO.getById(id);
+    }
+    public void save(Dish dish){
+        dishDAO.save(dish);
+    }
+//    public void delete(Dish dish){
+//        dishDAO.delete(dish);
+//    }
 }

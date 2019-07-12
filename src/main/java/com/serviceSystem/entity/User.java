@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class User {
+public abstract class User<ID extends Number> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private ID id;
     @Column
     private String name;
     @Column
@@ -22,19 +22,19 @@ public abstract class User {
     public User(){
         
     }
-    public User(String name, String surname, String password, String email, String phoneNumber) {
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-    }
+//    public User(String name, String surname, String password, String email, String phoneNumber) {
+//        this.name = name;
+//        this.surname = surname;
+//        this.password = password;
+//        this.email = email;
+//        this.phoneNumber = phoneNumber;
+//    }
 
-    public void setId(long id) {
+    public void setId(ID id) {
         this.id = id;
     }
 
-    public long getId() {
+    public ID getId() {
         return id;
     }
 

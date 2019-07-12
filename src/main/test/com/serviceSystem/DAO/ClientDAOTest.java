@@ -1,12 +1,16 @@
 package com.serviceSystem.DAO;
 
+import com.serviceSystem.entity.Client;
 import com.serviceSystem.service.ClientService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClientDAOTest {
+
     @Test
     public void isExistTrue(){
         String email = "boris@britva.com";
@@ -24,6 +28,12 @@ public class ClientDAOTest {
         String phoneNumber = "boris@britva.com";
         String password = "0000";
         assertFalse(ClientService.getInstance().isExist(phoneNumber,password));
+    }
+    @Test
+    void getAll(){
+        List<Client> clients = ClientService.getInstance().getAll();
+        assertNotNull(clients);
+        clients.forEach(client -> assertNotNull(client));
     }
 
 }

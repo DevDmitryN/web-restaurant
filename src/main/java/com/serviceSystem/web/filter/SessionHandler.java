@@ -29,6 +29,7 @@ public class SessionHandler {
                 break;
         }
     }
+
     public static void removeUser(HttpSession session){
         if(session.getAttribute(USER) != null){
             session.removeAttribute(USER);

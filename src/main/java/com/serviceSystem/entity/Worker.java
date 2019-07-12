@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="workers",schema = "restaurantdb")
-public class Worker extends User{
+public class Worker extends User<Integer>{
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -18,10 +18,10 @@ public class Worker extends User{
     public Worker(){
 
     }
-    public Worker(String name, String surname, String password, String email, String phoneNumber, Role role){
-        super(name, surname, password, email, phoneNumber);
-        this.role = role;
-    }
+//    public Worker(String name, String surname, String password, String email, String phoneNumber, Role role){
+//        super(name, surname, password, email, phoneNumber);
+//        this.role = role;
+//    }
 
 
 

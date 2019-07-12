@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "clients", schema = "restaurantdb")
-public class Client extends User {
+public class Client extends User<Long> {
     @Column(name = "card_number")
     private String cardNumber;
     @OneToMany(mappedBy = "client")
@@ -19,10 +19,10 @@ public class Client extends User {
 
     }
 
-    public Client(String name, String surname, String password, String email, String phoneNumber, String cardNumber) {
-        super(name, surname, password, email, phoneNumber);
-        this.cardNumber = cardNumber;
-    }
+//    public Client(String name, String surname, String password, String email, String phoneNumber, String cardNumber) {
+//        super(name, surname, password, email, phoneNumber);
+//        this.cardNumber = cardNumber;
+//    }
 
     public String getCardNumber() {
         return cardNumber;

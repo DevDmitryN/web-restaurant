@@ -25,7 +25,7 @@ public class EntityBuilder {
             statementForDishes.setLong(1, order.getId());
             ResultSet setOfDishes = statementForDishes.executeQuery();
 //            if (setOfDishes.next()) {
-                order.setDishes(EntityBuilder.buildDishes(setOfDishes));
+//                order.setOrderDishComposites(EntityBuilder.buildDishes(setOfDishes));
 //            }
         }
         return order;
@@ -56,7 +56,7 @@ public class EntityBuilder {
         if (resultSet.getString(WORKER_NAME) == null) {
             return worker;
         }
-        worker.setId(resultSet.getLong(WORKER_ID));
+        worker.setId(resultSet.getInt(WORKER_ID));
         worker.setName(resultSet.getString(WORKER_NAME));
         worker.setSurname(resultSet.getString(WORKER_SURNAME));
         worker.setEmail(resultSet.getString(WORKER_EMAIL));

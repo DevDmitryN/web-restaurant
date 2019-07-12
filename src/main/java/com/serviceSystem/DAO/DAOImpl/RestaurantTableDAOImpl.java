@@ -9,41 +9,13 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class RestaurantTableDAOImpl implements RestaurantTableDAO {
+public class RestaurantTableDAOImpl extends BaseDAOImpl<RestaurantTable,Integer> implements RestaurantTableDAO {
     private final String GET_FREE = "from com.serviceSystem.entity.RestaurantTable r where r.freeStatus = true";
 
-    public void save(RestaurantTable table) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.save(table);
-        tx1.commit();
-        session.close();
-    }
-    @Override
-    public RestaurantTable getById(long id){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        RestaurantTable table = session.get(RestaurantTable.class,id);
-        transaction.commit();
-        session.close();
-        return table;
-    }
-    public List<RestaurantTable> getAll(){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery("FROM com.serviceSystem.entity.RestaurantTable");
-        List<RestaurantTable> tables = (List<RestaurantTable>) query.list();
-        session.close();
-        return tables;
+    public RestaurantTableDAOImpl(){
+        super(RestaurantTable.class);
     }
 
-    @Override
-    public void update(RestaurantTable table) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(table);
-        transaction.commit();
-        session.close();
-    }
 
     public void updateFreeStatus(int id, boolean status){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -68,6 +40,8 @@ public class RestaurantTableDAOImpl implements RestaurantTableDAO {
     public List<RestaurantTable> getFree(){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Query query = session.createQuery(GET_FREE);
-        return (List<RestaurantTable>) query.list();
+        List<RestaurantTable> tables = (List<RestaurantTable>) query.list();
+        session.close();
+        return tables;
     }
 }

@@ -2,8 +2,6 @@ package com.serviceSystem.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,17 +9,21 @@ import java.util.List;
 public class Dish implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column
     private String name;
     @Column
     private float price;
     @Column
     private String description;
-    @ManyToMany(mappedBy = "dishes")
-    List<Order> orders = new ArrayList<Order>();
+//    @ManyToMany(mappedBy = "dishes")
+//    List<Order> orders = new ArrayList<Order>();
+
     @Transient
     private int amount;
+
+    @OneToMany(mappedBy = "dish")
+    private List<OrderDish> orders;
 
     public Dish(){}
 
@@ -43,7 +45,7 @@ public class Dish implements Serializable {
         this.id = id;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -71,20 +73,28 @@ public class Dish implements Serializable {
         this.description = description;
     }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
+//    public List<Order> getOrders() {
+//        return orders;
+//    }
+//
+//    public void setOrders(List<Order> orders) {
+//        this.orders = orders;
+//    }
+//
     public int getAmount() {
         return amount;
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public List<OrderDish> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<OrderDish> orders) {
+        this.orders = orders;
     }
 
     @Override

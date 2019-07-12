@@ -38,7 +38,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     //CAST('COMPLETED' as status)
     @Override
-    public void save(Order order) {
+    public Long save(Order order) {
         logger.info("save the order");
         try (Connection connection = HikariCP.getConnection();
              PreparedStatement statementForOrder = connection.prepareStatement(INSERT_INTO_ORDERS);
@@ -52,12 +52,12 @@ public class OrderDaoJDBCImpl implements OrderDAO {
                 ResultSet setOfId = statementForOrder.executeQuery();
                 if (setOfId.next()) {
                     long id = setOfId.getLong(1);
-                    for (Dish dish : order.getDishes()) {
-                        statementForDishes.setLong(1, id);
-                        statementForDishes.setInt(2, dish.getId());
-                        statementForDishes.setInt(3, dish.getAmount());
-                        statementForDishes.executeUpdate();
-                    }
+//                    for (Dish dish : order.getOrderDishComposites()) {
+//                        statementForDishes.setLong(1, id);
+//                        statementForDishes.setInt(2, dish.getId());
+//                        statementForDishes.setInt(3, dish.getAmount());
+//                        statementForDishes.executeUpdate();
+//                    }
                     connection.commit();
                 } else {
                     throw new SQLException();
@@ -71,6 +71,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
             logger.error("can't rollback the transaction");
             e.printStackTrace();
         }
+        return 1L;
     }
 
     @Override
@@ -121,8 +122,9 @@ public class OrderDaoJDBCImpl implements OrderDAO {
 
     }
 
+
     @Override
-    public Order getById(long id) {
+    public Order getById(Long id) {
         logger.info("getting the order by id");
         Order order = null;
         try (Connection connection = HikariCP.getConnection();
@@ -178,7 +180,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getNotCompletedByClientId(long clientId) {
+    public List<Order> getActiveByClientId(long clientId) {
         List<Order> orders = null;
         try (Connection connection = HikariCP.getConnection();
              PreparedStatement statementForOrders = connection.prepareStatement(GET_ACTIVE_BY_CLIENT_ID);

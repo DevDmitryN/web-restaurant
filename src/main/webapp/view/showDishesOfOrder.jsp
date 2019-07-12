@@ -30,7 +30,7 @@
                 <tr/>
                 </thead>
                 <tbody>
-                <c:forEach var="dish" items="${dishes}">
+                <c:forEach var="dish" items="${orderDishComposites}">
                     <tr>
                         <th scope="row">${dish.id}</th>
                         <td>${dish.name}</td>

@@ -62,7 +62,7 @@ public class MakeOrderServlet extends HttpServlet {
         Client client = (Client) req.getSession().getAttribute("user");
         Order order = new Order();
         order.setTable(orderedTable);
-        order.setDishes(orderedDishes);
+        //order.setOrderDishComposites(orderedDishes);
         order.setClient(client);
 
         int hour = Integer.valueOf(req.getParameter("hour"));

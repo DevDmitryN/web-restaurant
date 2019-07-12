@@ -14,11 +14,19 @@
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
         <!-- Echo the SQL to stdout -->
         <property name="show_sql">true</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.acquire_increment">5</property>
+        <property name="hibernate.c3p0.timeout">1800</property>
+
         <mapping class="com.serviceSystem.entity.Dish"/>
         <mapping class="com.serviceSystem.entity.RestaurantTable"/>
         <mapping class="com.serviceSystem.entity.User"/>
         <mapping class="com.serviceSystem.entity.Client"/>
         <mapping class="com.serviceSystem.entity.Worker"/>
         <mapping class="com.serviceSystem.entity.Order"/>
+        <mapping class="com.serviceSystem.entity.compositeKeys.OrderDish"/>
+        <mapping class="com.serviceSystem.entity.compositeKeys.OrderDishKey"/>
     </session-factory>
 </hibernate-configuration>

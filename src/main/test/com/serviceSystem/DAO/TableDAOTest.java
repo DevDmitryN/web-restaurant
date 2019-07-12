@@ -14,4 +14,10 @@ public class TableDAOTest {
         List<RestaurantTable> tables = TableService.getInstance().getFree();
         assertNotNull(tables);
     }
+    @Test
+    void getAll(){
+        List<RestaurantTable> tables = TableService.getInstance().getAll();
+        assertNotNull(tables);
+        tables.forEach( table -> assertNotNull(table));
+    }
 }

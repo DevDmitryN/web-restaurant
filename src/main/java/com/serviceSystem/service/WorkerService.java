@@ -29,7 +29,7 @@ public class WorkerService {
     public Worker getByEmail(String email){
         return workerDAO.getByEmail(email);
     }
-    public Worker getById(long id){
+    public Worker getById(Integer id){
         return workerDAO.getById(id);
     }
     public boolean isEmailExist(String email){

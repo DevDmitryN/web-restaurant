@@ -29,7 +29,7 @@
                         <p>Время создания заказа: ${order.creationTime}</p>
                         <p>Время бронирования: ${order.bookingTime}</p>
                         <p>Список блюд:</p>
-                        <c:forEach var="dish" items="${order.dishes}">
+                        <c:forEach var="dish" items="${order.orderDishComposites}">
                             <p><bold>${dish.name}</bold>; Описание: ${dish.description}; Цена за одну порцию: ${dish.price}; Кол-во: ${dish.amount}</p>
                         </c:forEach>
                         <c:choose>
