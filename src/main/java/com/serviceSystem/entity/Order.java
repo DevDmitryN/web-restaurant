@@ -1,6 +1,7 @@
 package com.serviceSystem.entity;
 
 import com.serviceSystem.entity.enums.Status;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Component
 @Entity
 @Table(name = "orders",schema = "restaurantdb")
 public class Order {

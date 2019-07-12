@@ -1,10 +1,13 @@
 package com.serviceSystem.entity;
 
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Component
 @Entity
 @Table(name="tables",schema = "restaurantdb")
 public class RestaurantTable implements Serializable{
@@ -45,7 +48,7 @@ public class RestaurantTable implements Serializable{
         this.capacity = capacity;
     }
 
-    public boolean isFreeStatus() {
+    public boolean getFreeStatus() {
         return freeStatus;
     }
 

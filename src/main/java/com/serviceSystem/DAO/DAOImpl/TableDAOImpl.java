@@ -6,13 +6,15 @@ import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public class RestaurantTableDAOImpl extends BaseDAOImpl<RestaurantTable,Integer> implements RestaurantTableDAO {
+@Repository
+public class TableDAOImpl extends BaseDAOImpl<RestaurantTable,Integer> implements RestaurantTableDAO {
     private final String GET_FREE = "from com.serviceSystem.entity.RestaurantTable r where r.freeStatus = true";
 
-    public RestaurantTableDAOImpl(){
+    public TableDAOImpl(){
         super(RestaurantTable.class);
     }
 

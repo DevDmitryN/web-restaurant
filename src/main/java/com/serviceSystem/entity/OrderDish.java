@@ -1,10 +1,13 @@
 package com.serviceSystem.entity;
 
 import org.hibernate.annotations.Fetch;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+
+@Component
 @Entity
 @Table(name = "order_dish",schema = "restaurantdb")
 public class OrderDish implements Serializable {

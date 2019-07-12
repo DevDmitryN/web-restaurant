@@ -6,14 +6,16 @@ import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     private final String DELETE = "from com.serviceSystem.entity.Order o where o.id = :id";
     private final String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id";
     private final String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id";
-    private final String GET_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true";
+    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status like 'NOT_TAKEN'";
 
     public OrderDAOImpl(){
         super(Order.class);
@@ -50,9 +52,9 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     }
 
     @Override
-    public List<Order> getWithFreeTable() {
+    public List<Order> getNotTakenWithFreeTable() {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(GET_WITH_FREE_TABLE);
+        Query query = session.createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
         List<Order> orders = query.list();
         session.close();
         return orders;

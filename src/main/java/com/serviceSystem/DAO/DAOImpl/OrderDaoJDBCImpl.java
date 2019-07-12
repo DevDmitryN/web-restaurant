@@ -195,7 +195,7 @@ public class OrderDaoJDBCImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getWithFreeTable() {
+    public List<Order> getNotTakenWithFreeTable() {
         List<Order> orders = null;
         try (Connection connection = HikariCP.getConnection();
              Statement statementForOrders = connection.createStatement()) {

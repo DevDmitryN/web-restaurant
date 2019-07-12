@@ -1,15 +1,24 @@
 package com.serviceSystem.DAO;
 
 import com.serviceSystem.entity.Client;
+import com.serviceSystem.hibernate.Config;
 import com.serviceSystem.service.ClientService;
+import org.junit.Test;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {Config.class})
 public class ClientDAOTest {
+
 
     @Test
     public void isExistTrue(){
@@ -30,7 +39,7 @@ public class ClientDAOTest {
         assertFalse(ClientService.getInstance().isExist(phoneNumber,password));
     }
     @Test
-    void getAll(){
+    public void getAll(){
         List<Client> clients = ClientService.getInstance().getAll();
         assertNotNull(clients);
         clients.forEach(client -> assertNotNull(client));

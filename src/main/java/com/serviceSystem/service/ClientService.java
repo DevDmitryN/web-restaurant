@@ -4,10 +4,15 @@ import com.serviceSystem.DAO.DAOImpl.ClientDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.ClientDAO;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Client;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ClientService {
+
+    @Autowired
     private ClientDAO clientDAO;
 
     private static ClientService instance;
@@ -18,11 +23,13 @@ public class ClientService {
         }
         return instance;
     }
+    public ClientService(){}
 
-    private ClientService(){
-        clientDAO = new ClientDAOImpl();
-    }
-    public boolean isExist(String email,String password){
+//    public ClientService() {
+//        clientDAO = new ClientDAOImpl();
+//    }
+
+    public boolean isExist(String email, String password){
         return clientDAO.isExist(email,password);
     }
     public Client getByEmail(String email){

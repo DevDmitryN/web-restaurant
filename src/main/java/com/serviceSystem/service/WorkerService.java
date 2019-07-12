@@ -3,9 +3,11 @@ package com.serviceSystem.service;
 import com.serviceSystem.DAO.DAOImpl.WorkerDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class WorkerService {
     private WorkerDAO workerDAO;
 

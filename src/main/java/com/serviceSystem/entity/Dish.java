@@ -1,9 +1,12 @@
 package com.serviceSystem.entity;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Component
 @Entity
 @Table(name="dishes",schema = "restaurantdb")
 public class Dish implements Serializable {

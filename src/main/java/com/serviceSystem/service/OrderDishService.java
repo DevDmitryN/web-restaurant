@@ -2,7 +2,9 @@ package com.serviceSystem.service;
 
 import com.serviceSystem.DAO.DAOImpl.OrderDishDAOImpl;
 import com.serviceSystem.entity.OrderDish;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OrderDishService {
     private static OrderDishService instance;
 

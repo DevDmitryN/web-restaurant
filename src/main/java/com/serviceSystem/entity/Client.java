@@ -1,5 +1,7 @@
 package com.serviceSystem.entity;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -7,6 +9,7 @@ import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
 
+@Component
 @Entity
 @Table(name = "clients", schema = "restaurantdb")
 public class Client extends User<Long> {

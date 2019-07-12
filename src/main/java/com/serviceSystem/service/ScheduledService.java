@@ -4,23 +4,19 @@ import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.enums.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
-
-
+@Service
 public class ScheduledService implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ScheduledService.class);
     @Override
     public void run() {
         OrderService orderService = OrderService.getInstance();
-        List<Order> orders = orderService.getWithFreeTable();
+        List<Order> orders = orderService.getNotTakenWithFreeTable();
         LocalDateTime now = LocalDateTime.now();
         for (Order order : orders) {
             LocalDateTime bookingTime = order.getBookingTime().minus(Duration.ofHours(1));

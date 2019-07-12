@@ -17,7 +17,7 @@ public class HibernateSessionFactoryUtil {
 
         if (sessionFactory == null) {
             try {
-                Configuration configuration = new Configuration().configure();
+                Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
                 configuration.addAnnotatedClass(Dish.class);
                 configuration.addAnnotatedClass(RestaurantTable.class);
                 configuration.addAnnotatedClass(Order.class);

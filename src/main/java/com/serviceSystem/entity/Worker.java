@@ -1,11 +1,13 @@
 package com.serviceSystem.entity;
 
 import com.serviceSystem.entity.enums.Role;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Component
 @Entity
 @Table(name="workers",schema = "restaurantdb")
 public class Worker extends User<Integer>{

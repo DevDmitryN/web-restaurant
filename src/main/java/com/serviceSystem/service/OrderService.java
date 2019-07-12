@@ -1,12 +1,13 @@
 package com.serviceSystem.service;
 
 import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
-import com.serviceSystem.DAO.DAOImpl.OrderDaoJDBCImpl;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Order;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderService {
 
     private OrderDAO orderDAO;
@@ -45,7 +46,7 @@ public class OrderService {
     public List<Order> getNotCompletedByClientId(long clientId){
         return orderDAO.getActiveByClientId(clientId);
     }
-    public List<Order> getWithFreeTable(){
-        return orderDAO.getWithFreeTable();
+    public List<Order> getNotTakenWithFreeTable(){
+        return orderDAO.getNotTakenWithFreeTable();
     }
 }

@@ -1,11 +1,13 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.DAO.DAOImpl.RestaurantTableDAOImpl;
+import com.serviceSystem.DAO.DAOImpl.TableDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.RestaurantTableDAO;
 import com.serviceSystem.entity.RestaurantTable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TableService {
     private RestaurantTableDAO tableDAO;
 
@@ -18,7 +20,7 @@ public class TableService {
         return instance;
     }
     private TableService(){
-        tableDAO = new RestaurantTableDAOImpl();
+        tableDAO = new TableDAOImpl();
     }
     public List<RestaurantTable> getAll(){
         return tableDAO.getAll();

@@ -6,21 +6,18 @@ import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.entity.OrderDish;
+import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OrderDishTest {
-//    @Test
-//    void getById(){
-//        OrderDishKey orderDishKey = new OrderDishKey(2L,4);
-//        OrderDish orderDish = new OrderDishDAOImpl().getById(orderDishKey);
-//        Assertions.assertNotNull(orderDish);
-//    }
+
     @Test
     void save(){
         Long clientId = 2L;
@@ -47,5 +44,14 @@ public class OrderDishTest {
         orderDish.setAmount(1);
 
         OrderDishService.getInstance().save(orderDish);
+    }
+    @Test
+    void getNotTakenWithFreeTables(){
+        List<Order> orders = OrderService.getInstance().getNotTakenWithFreeTable();
+        for (Order order : orders) {
+            assertNotNull(order);
+            assertEquals(true,order.getTable().getFreeStatus());
+            assertEquals(Status.NOT_TAKEN,order.getStatus());
+        }
     }
 }

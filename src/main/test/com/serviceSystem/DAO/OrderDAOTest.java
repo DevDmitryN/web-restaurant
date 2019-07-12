@@ -38,7 +38,7 @@ public class OrderDAOTest {
     }
     @Test
     void getWithFreeTables(){
-        List<Order> orders = OrderService.getInstance().getWithFreeTable();
+        List<Order> orders = OrderService.getInstance().getNotTakenWithFreeTable();
         orders.forEach( order -> assertNotNull(order));
     }
 
