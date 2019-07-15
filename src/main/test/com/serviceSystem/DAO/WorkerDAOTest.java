@@ -1,40 +1,52 @@
 package com.serviceSystem.DAO;
 
+import com.serviceSystem.appConfig.ApplicationConfig;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.service.WorkerService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {ApplicationConfig.class})
 public class WorkerDAOTest {
+    @Autowired
+    WorkerService workerService;
     @Test
     public void getByEmail(){
         String email = "putin@rf.ru";
-        Worker worker2 = WorkerService.getInstance().getByEmail(email);
+        Worker worker2 = workerService.getByEmail(email);
         assertNotNull(worker2);
     }
     @Test
     public void isExistTrue(){
         String email = "putin@rf.ru";
         String password = "1234";
-        assertTrue(WorkerService.getInstance().isExist(email,password));
+        assertTrue(workerService.isExist(email,password));
     }
     @Test
     public void incorrectEmail(){
         String email = "lord@rig.net";
         String password = "1234";
-        assertFalse(WorkerService.getInstance().isExist(email,password));
+        assertFalse(workerService.isExist(email,password));
     }
     @Test
     public void incorrectPassword(){
         String email = "putin@rf.ru";
         String password = "0010";
-        assertFalse(WorkerService.getInstance().isExist(email,password));
+        assertFalse(workerService.isExist(email,password));
     }
     @Test
-    void getById(){
+    public void getById(){
         Integer id = 3;
-        Worker worker = WorkerService.getInstance().getById(id);
+        Worker worker = workerService.getById(id);
         assertNotNull(worker);
     }
 }

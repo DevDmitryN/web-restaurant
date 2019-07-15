@@ -6,6 +6,7 @@ import com.serviceSystem.entity.enums.Role;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.WorkerService;
 import com.serviceSystem.web.filter.SessionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Authorization extends Command {
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    WorkerService workerService;
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientService clientService = ClientService.getInstance();
-        WorkerService workerService = WorkerService.getInstance();
 
         final String email = req.getParameter("email");
         final String password = req.getParameter("password");

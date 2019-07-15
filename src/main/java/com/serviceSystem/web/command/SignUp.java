@@ -6,6 +6,7 @@ import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Role;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.WorkerService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,11 @@ import java.io.IOException;
 import static java.util.regex.Pattern.matches;
 
 public class SignUp extends Command {
-    ClientService clientService = ClientService.getInstance();
-    WorkerService workerService = WorkerService.getInstance();
+
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    WorkerService workerService;
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

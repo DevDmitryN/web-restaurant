@@ -3,22 +3,16 @@ package com.serviceSystem.service;
 import com.serviceSystem.DAO.DAOImpl.TableDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.RestaurantTableDAO;
 import com.serviceSystem.entity.RestaurantTable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class TableService {
+    @Autowired
     private RestaurantTableDAO tableDAO;
 
-    private static TableService instance;
-
-    public static TableService getInstance(){
-        if(instance == null){
-            instance = new TableService();
-        }
-        return instance;
-    }
     private TableService(){
         tableDAO = new TableDAOImpl();
     }

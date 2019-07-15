@@ -2,11 +2,9 @@ package com.serviceSystem.DAO.DAOImpl;
 
 import com.serviceSystem.DAO.DAOInterface.RestaurantTableDAO;
 import com.serviceSystem.entity.RestaurantTable;
-import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,32 +16,24 @@ public class TableDAOImpl extends BaseDAOImpl<RestaurantTable,Integer> implement
         super(RestaurantTable.class);
     }
 
-
+    @Override
+    @Transactional
     public void updateFreeStatus(int id, boolean status){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        RestaurantTable table = session.get(RestaurantTable.class,id);
+        RestaurantTable table = getCurrentSession().get(RestaurantTable.class,id);
         table.setFreeStatus(status);
-        session.update(table);
-        transaction.commit();
-        session.close();
+        getCurrentSession().update(table);
     }
 
     @Override
+    @Transactional
     public void delete(RestaurantTable table) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.delete(table);
-        transaction.commit();
-        session.close();
+        getCurrentSession().delete(table);
     }
 
     @Override
     public List<RestaurantTable> getFree(){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(GET_FREE);
+        Query query = getCurrentSession().createQuery(GET_FREE);
         List<RestaurantTable> tables = (List<RestaurantTable>) query.list();
-        session.close();
         return tables;
     }
 }

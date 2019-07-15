@@ -7,6 +7,7 @@ import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.DishService;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,11 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MakeOrderServlet extends HttpServlet {
-
+    @Autowired
+    DishService dishService;
+    @Autowired
+    TableService tableService;
+    @Autowired
+    OrderService orderService;
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        DishService dishService = DishService.getInstance();
-        TableService tableService = TableService.getInstance();
         List<RestaurantTable> tables = tableService.getFree();
         List<Dish> dishes = dishService.getAll();
         req.setAttribute("tables", tables);
@@ -36,13 +40,13 @@ public class MakeOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        OrderService.getInstance().save(fillOrder(req));
+        orderService.save(fillOrder(req));
         req.getRequestDispatcher("success.jsp").forward(req, resp);
     }
 
     private Order fillOrder(HttpServletRequest req) {
-        List<RestaurantTable> tables = TableService.getInstance().getAll();
-        List<Dish> dishes = DishService.getInstance().getAll();
+        List<RestaurantTable> tables = tableService.getAll();
+        List<Dish> dishes = dishService.getAll();
         int tableId = Integer.valueOf(req.getParameter("table"));
         List<Dish> orderedDishes = new ArrayList<Dish>();
         for (Dish dish : dishes) {

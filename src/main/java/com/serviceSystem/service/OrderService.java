@@ -3,6 +3,7 @@ package com.serviceSystem.service;
 import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,20 +11,8 @@ import java.util.List;
 @Service
 public class OrderService {
 
+    @Autowired
     private OrderDAO orderDAO;
-
-    private static OrderService instance;
-
-    public static OrderService getInstance(){
-        if(instance == null){
-            instance = new OrderService();
-        }
-        return instance;
-    }
-
-    private OrderService(){
-        orderDAO = new OrderDAOImpl();
-    }
 
     public List<Order> getAll(){
         return orderDAO.getAll();

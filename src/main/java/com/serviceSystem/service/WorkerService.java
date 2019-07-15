@@ -3,22 +3,17 @@ package com.serviceSystem.service;
 import com.serviceSystem.DAO.DAOImpl.WorkerDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class WorkerService {
+
+    @Autowired
     private WorkerDAO workerDAO;
 
-    private static WorkerService instance;
-
-    public static WorkerService getInstance(){
-        if(instance == null){
-            instance = new WorkerService();
-        }
-        return instance;
-    }
     private WorkerService(){
         workerDAO = new WorkerDAOImpl();
     }

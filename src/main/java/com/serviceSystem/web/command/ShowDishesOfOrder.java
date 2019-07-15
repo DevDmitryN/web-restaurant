@@ -2,6 +2,7 @@ package com.serviceSystem.web.command;
 
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ShowDishesOfOrder extends Command {
+    @Autowired
+    OrderService orderService;
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         long orderId = Long.valueOf(req.getParameter("id"));
-        Order order = OrderService.getInstance().getById(orderId);
+        Order order = orderService.getById(orderId);
         req.setAttribute("orderId",order.getId());
         req.setAttribute("dishes",order.getOrderDish());
         resp.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");

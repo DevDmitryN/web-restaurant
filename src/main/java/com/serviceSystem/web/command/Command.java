@@ -1,6 +1,5 @@
 package com.serviceSystem.web.command;
 
-import com.serviceSystem.DAO.builder.ColumnNames;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

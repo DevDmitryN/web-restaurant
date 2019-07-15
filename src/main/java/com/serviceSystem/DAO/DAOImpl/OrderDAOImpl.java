@@ -2,11 +2,9 @@ package com.serviceSystem.DAO.DAOImpl;
 
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Order;
-import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,41 +20,36 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery(DELETE);
+        Query query = getCurrentSession().createQuery(DELETE);
         query.setParameter("id",id);
         query.executeUpdate();
-        transaction.commit();
-        session.close();
     }
 
     @Override
+    @Transactional
     public List<Order> getByTable(int tableId) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(GET_BY_TABLE_ID);
+        Query query = getCurrentSession().createQuery(GET_BY_TABLE_ID);
         query.setParameter("table_id",tableId);
         List<Order> orders = query.list();
         return orders;
     }
 
     @Override
+    @Transactional
     public List<Order> getActiveByClientId(long clientId) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(GET_ACTIVE_BY_CLIENT_ID);
+        Query query = getCurrentSession().createQuery(GET_ACTIVE_BY_CLIENT_ID);
         query.setParameter("client_id",clientId);
         List<Order> orders = (List<Order>) query.list();
-        session.close();
         return orders;
     }
 
     @Override
+    @Transactional
     public List<Order> getNotTakenWithFreeTable() {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Query query = session.createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
+        Query query = getCurrentSession().createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
         List<Order> orders = query.list();
-        session.close();
         return orders;
     }
 }

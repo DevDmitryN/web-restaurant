@@ -2,11 +2,6 @@ package com.serviceSystem.DAO.DAOImpl;
 
 import com.serviceSystem.DAO.DAOInterface.ClientDAO;
 import com.serviceSystem.entity.Client;
-import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

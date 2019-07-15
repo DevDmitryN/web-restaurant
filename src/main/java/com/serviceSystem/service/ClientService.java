@@ -15,19 +15,7 @@ public class ClientService {
     @Autowired
     private ClientDAO clientDAO;
 
-    private static ClientService instance;
-
-    public static ClientService getInstance(){
-        if(instance == null){
-            instance = new ClientService();
-        }
-        return instance;
-    }
     public ClientService(){}
-
-//    public ClientService() {
-//        clientDAO = new ClientDAOImpl();
-//    }
 
     public boolean isExist(String email, String password){
         return clientDAO.isExist(email,password);

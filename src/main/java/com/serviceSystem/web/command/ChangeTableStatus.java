@@ -2,6 +2,7 @@ package com.serviceSystem.web.command;
 
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.TableService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ChangeTableStatus extends Command {
+    @Autowired
+    TableService tableService;
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.valueOf(req.getParameter("id"));
@@ -18,7 +21,7 @@ public class ChangeTableStatus extends Command {
         table.setId(id);
         table.setCapacity(capacity);
         table.setFreeStatus(freeStatus ? false : true);
-        TableService.getInstance().update(table);
+        tableService.update(table);
         resp.sendRedirect("frontController?command=show_tables");
     }
 }

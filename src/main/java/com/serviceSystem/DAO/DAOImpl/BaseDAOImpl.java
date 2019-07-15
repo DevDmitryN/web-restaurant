@@ -1,11 +1,10 @@
 package com.serviceSystem.DAO.DAOImpl;
 
 import com.serviceSystem.DAO.DAOInterface.BaseDAO;
-import com.serviceSystem.hibernate.HibernateSessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +14,8 @@ public abstract class BaseDAOImpl<T,ID extends Serializable> implements BaseDAO<
 
 
     private Class<T> classOfEntity;
-    private SessionFactory sessionFactory = HibernateSessionFactoryUtil.getSessionFactory();
+    @Autowired
+    private SessionFactory sessionFactory;
 
 
     public BaseDAOImpl(Class classOfEntity){
@@ -23,43 +23,34 @@ public abstract class BaseDAOImpl<T,ID extends Serializable> implements BaseDAO<
     }
 
     @Override
+    @Transactional
     public ID save(T entity) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        ID id = (ID) session.save(entity);
-        transaction.commit();
-        session.close();
-        System.out.println(id);
+        ID id = (ID) getCurrentSession().save(entity);
         return id;
     }
 
     @Override
+    @Transactional
     public void update(T entity) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(entity);
-        transaction.commit();
-        session.close();
+        getCurrentSession().update(entity);
     }
 
     @Override
+    @Transactional
     public List<T> getAll() {
         String GET_ALL = "from " + classOfEntity.getName();
-        Session session = sessionFactory.openSession();
-        List<T> entities = (List<T>) session.createQuery(GET_ALL).list();
-        session.close();
+        List<T> entities = (List<T>) getCurrentSession().createQuery(GET_ALL).list();
         return entities;
     }
 
     @Override
+    @Transactional
     public T getById(ID id) {
-        Session session = sessionFactory.openSession();
-        T entity = (T) session.get(classOfEntity.getName(),id);
-        session.close();
+        T entity = (T) getCurrentSession().get(classOfEntity.getName(),id);
         return entity;
     }
 
-    protected SessionFactory getSessionFactory(){
-        return sessionFactory;
+    protected Session getCurrentSession(){
+        return sessionFactory.getCurrentSession();
     }
 }
