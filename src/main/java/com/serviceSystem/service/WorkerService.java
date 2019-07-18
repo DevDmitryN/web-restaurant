@@ -4,12 +4,16 @@ import com.serviceSystem.DAO.DAOImpl.WorkerDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class WorkerService {
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private WorkerDAO workerDAO;
@@ -33,6 +37,11 @@ public class WorkerService {
         return workerDAO.isEmailExist(email);
     }
     public void save(Worker worker){
+        worker.setPassword(encoder.encode(worker.getPassword()));
         workerDAO.save(worker);
+    }
+    public void update(Worker worker){
+        worker.setPassword(encoder.encode(worker.getPassword()));
+        workerDAO.update(worker);
     }
 }

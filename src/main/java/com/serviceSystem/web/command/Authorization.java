@@ -1,8 +1,6 @@
 package com.serviceSystem.web.command;
 
-import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.Worker;
-import com.serviceSystem.entity.enums.Role;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.WorkerService;
 import com.serviceSystem.web.filter.SessionHandler;
@@ -30,7 +28,7 @@ public class Authorization extends Command {
         }else if(workerService.isExist(email,password)){
             Worker worker = workerService.getByEmail(email);
             switch (worker.getRole()){
-                case USER:
+                case WAITER:
                     SessionHandler.setUser(req.getSession(),worker,"worker");
                     resp.sendRedirect("index.jsp");
                     break;

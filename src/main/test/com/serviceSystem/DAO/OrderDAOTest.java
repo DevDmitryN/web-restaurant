@@ -81,10 +81,11 @@ public class OrderDAOTest {
     @Test
     public void save(){
         Long clientId = 2L;
-        Client client = clientService.getById(clientId);
-        Integer dishId = 5;
-        Dish dish = dishService.getById(dishId);
-
+        Client client = new Client();
+        client.setId(clientId);
+        Dish dish = dishService.getById(4);
+        Dish dish1 = dishService.getById(5);
+        Dish dish2 = dishService.getById(7);
 
         LocalDateTime creationTime = LocalDateTime.now();
         LocalDateTime bookingTime = LocalDateTime.now();
@@ -95,7 +96,7 @@ public class OrderDAOTest {
         order.setClient(client);
         order.setCreationTime(creationTime);
         order.setBookingTime(bookingTime);
-        order.setOrderDish(Arrays.asList(new OrderDish(order,dish,1)));
+        order.setOrderDish(Arrays.asList(new OrderDish(order,dish,1),new OrderDish(order,dish1,3),new OrderDish(order,dish2,2)));
 
         orderService.save(order);
         order.getOrderDish().forEach( orderDish -> orderDishService.save(orderDish));

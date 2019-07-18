@@ -5,12 +5,16 @@ import com.serviceSystem.DAO.DAOInterface.ClientDAO;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Client;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ClientService {
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @Autowired
     private ClientDAO clientDAO;
@@ -27,6 +31,7 @@ public class ClientService {
         return clientDAO.isEmailExist(email);
     }
     public void save(Client client){
+        client.setPassword(encoder.encode(client.getPassword()));
         clientDAO.save(client);
     }
     public List<Client> getAll(){

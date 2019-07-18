@@ -21,8 +21,14 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         String getByEmail = "from " + classOfUser.getName() + " user where user.email like :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
-        T user = (T) query.list().get(0);
-        return  user;
+        List objects = query.list();
+//        if(objects.size() != 0){
+//            T user = (T) query.list().get(0);
+//            return user;
+//        }else{
+//            return null;
+//        }
+        return (T) query.list().get(0);
     }
 
     @Override

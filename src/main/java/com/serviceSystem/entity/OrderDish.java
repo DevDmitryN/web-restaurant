@@ -15,6 +15,7 @@ public class OrderDish implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
@@ -27,6 +28,7 @@ public class OrderDish implements Serializable {
     private int amount;
 
     public OrderDish() {
+
     }
 
     public OrderDish(Order order, Dish dish, int amount) {

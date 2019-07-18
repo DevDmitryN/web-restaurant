@@ -14,11 +14,11 @@
 <html>
 <head>
     <title>Page for sending order</title>
-    <%@include file="/view/header.html" %>
+    <%@include file="/WEB-INF/view/header.html" %>
 </head>
 <body>
 
-<%@include file="/view/menu-nav-bar.jsp" %>
+<%@include file="/WEB-INF/view/menu-nav-bar.jsp" %>
 <div class="default-padding-top">
     <div class="container">
         <div class="row">

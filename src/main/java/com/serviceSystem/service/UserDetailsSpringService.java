@@ -1,0 +1,57 @@
+package com.serviceSystem.service;
+
+import com.serviceSystem.entity.Client;
+import com.serviceSystem.entity.User;
+import com.serviceSystem.entity.Worker;
+import com.serviceSystem.entity.enums.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Service
+public class UserDetailsSpringService implements UserDetailsService {
+    @Autowired
+    ClientService clientService;
+    @Autowired
+    WorkerService workerService;
+
+    public User getUserByEmail(String email){
+        if(clientService.isEmailExist(email)){
+            return clientService.getByEmail(email);
+        }else{
+            return workerService.getByEmail(email);
+        }
+    }
+    public Set<GrantedAuthority> getRole(User user){
+        Set<GrantedAuthority> roles = new HashSet<>();
+        if(user instanceof Client){
+            roles.add(new SimpleGrantedAuthority("CLIENT"));
+            return roles;
+        }
+        if(user instanceof Worker){
+            Worker worker = (Worker) user;
+            switch (worker.getRole()){
+                case WAITER:
+                    roles.add(new SimpleGrantedAuthority(Role.WAITER.name()));
+                    break;
+                case ADMIN:
+                    roles.add(new SimpleGrantedAuthority(Role.WAITER.name()));
+                    roles.add(new SimpleGrantedAuthority(Role.ADMIN.name()));
+                    break;
+            }
+        }
+        return roles;
+    }
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = getUserByEmail(email);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),getRole(user));
+    }
+}

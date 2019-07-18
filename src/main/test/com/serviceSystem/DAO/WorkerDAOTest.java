@@ -1,6 +1,6 @@
 package com.serviceSystem.DAO;
 
-import com.serviceSystem.appConfig.ApplicationConfig;
+import com.serviceSystem.appConfig.*;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.service.WorkerService;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertFalse;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {ApplicationConfig.class})
+@ContextConfiguration(classes = {ApplicationConfig.class, SecurityConfig.class, WebConfig.class, WebInitializer.class, SpringSecurityInitializer.class})
 public class WorkerDAOTest {
     @Autowired
     WorkerService workerService;
@@ -49,4 +49,10 @@ public class WorkerDAOTest {
         Worker worker = workerService.getById(id);
         assertNotNull(worker);
     }
+//    @Test
+//    public void updatePassword(){
+//        Worker worker = workerService.getByEmail("putin@rf.ru");
+//        worker.setPassword("0000");
+//        workerService.update(worker);
+//    }
 }
