@@ -25,7 +25,7 @@
                     </c:if>
                     <div class="form-group">
                         <label for="name">Имя</label>
-                        <input name="name" required type="text" class="form-control signIn-field" id="name" placeholder="Введите имя">
+                        <input name="name" value="${client.name}" required type="text" class="form-control signIn-field" id="name" placeholder="Введите имя">
                     </div>
                     <div class="form-group">
                         <label for="surname">Фамилия</label>

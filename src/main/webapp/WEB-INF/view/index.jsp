@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Title</title>
-    <%@include file="header.html"%>
+    <%@include file="header.jsp"%>
 <%--    <sec:csrfMetaTags />--%>
 </head>
 <body>

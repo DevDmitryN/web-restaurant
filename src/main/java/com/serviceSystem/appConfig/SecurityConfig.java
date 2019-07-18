@@ -48,16 +48,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
-
+        System.out.println(http);
         http.addFilterBefore(filter, CsrfFilter.class)
                 .authorizeRequests()
                 .antMatchers("/403").permitAll()
                 .antMatchers("/").access("hasRole('CLIENT') or hasRole('WAITER')")
                 .antMatchers("/list").access("hasRole('ADMIN') or hasRole('WAITER')")
+                .antMatchers("/orders/creating").access("hasRole('CLIENT')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/authorization")
+                .usernameParameter("email")
                 .defaultSuccessUrl("/",true)
                 .failureUrl("/authorization?error=error").permitAll()
                 .and()

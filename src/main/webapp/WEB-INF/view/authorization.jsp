@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Authorization page</title>
-    <%@include file="header.html"%>
+    <%@include file="header.jsp"%>
 <%--    <spring:theme code="styleSheet" var="app css" />--%>
 <%--    <spring:url value="/${app_css)" var="app_css_url" />--%>
 <%--    <link rel="stylesheet" type="text/css" media="screen" href="${app_css_url}" />--%>
@@ -23,9 +23,9 @@
 <%--    <link type="text/css" href="resources/style.css"/>--%>
 <%--    <link type="text/css" href="/resources/style.css"/>--%>
 <%--    <link type="text/css" href="style.css"/>--%>
-    <style>
-        <%@include file="resources/style.css"%>
-    </style>
+<%--    <style>--%>
+<%--        <%@include file="resources/style.css"%>--%>
+<%--    </style>--%>
 </head>
 <body>
     <div>
@@ -39,7 +39,7 @@
                         </c:if>
                         <div class="form-group">
                             <label for="email">Адрес электронной почты</label>
-                            <input required name="username" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <input required name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
                         </div>
                         <div class="form-group">
                             <label for="password">Пароль</label>

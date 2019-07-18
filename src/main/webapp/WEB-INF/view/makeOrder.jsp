@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" %>
 <%@ page import="com.serviceSystem.entity.Dish" %>
 <%@ page import="java.util.List" %>
@@ -14,7 +15,7 @@
 <html>
 <head>
     <title>Page for sending order</title>
-    <%@include file="/WEB-INF/view/header.html" %>
+    <%@include file="/WEB-INF/view/header.jsp" %>
 </head>
 <body>
 
@@ -24,15 +25,13 @@
         <div class="row">
             <div class="col-md-10">
                 <h1>Заполнение заказа</h1>
-                <form method="post">
+                <form method="post" action="/orders/creating">
                     <div>
                         <label>Меню:</label>
-                        <c:forEach var="dish" items="${orderDishComposites}">
+                        <c:forEach var="dish" items="${dishes}" varStatus="status">
                             <div>
-                                    <%--<input type="checkbox" name=${dish.id} value=${dish.id}>--%>
-                                <input type="number" min="0" max="20" value="0" style=" width: 50px;"
-                                       name="dish_${dish.id}" <%--name=<c:out value="dish_${dish.id}"/>--%>>
-                                    ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}<br>
+                                <input type="number" name="dishes[${status.index}].amount" value="${dish.amount}">
+                                ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}<br>
                             </div>
                         </c:forEach>
                     </div>
@@ -121,8 +120,9 @@
                         <label>Год: ${year}</label>
                     </div>
                     <div class="default-padding-top">
-                        <button  type="submit" class="btn btn-primary">Отправить</button>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
                     </div>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </div>
         </div>

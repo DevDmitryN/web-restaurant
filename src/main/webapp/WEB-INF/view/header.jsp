@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page isELIgnored="false" %>
-<title>instant messenger</title>
+<jsp:useBean id="_csrf" scope="request" type="org.springframework.security.web.csrf.CsrfToken"/>
+
 <!-- CSS only -->
 
 <link rel="stylesheet"
@@ -8,7 +9,9 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous">
 
-
+<style>
+    <%@include file="resources/style.css"%>
+</style>
 <!-- JS, Popper.js, and jQuery -->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

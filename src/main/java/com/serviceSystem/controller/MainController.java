@@ -1,13 +1,24 @@
 package com.serviceSystem.controller;
 
+import com.serviceSystem.entity.Worker;
+import com.serviceSystem.service.ClientService;
+import com.serviceSystem.service.WorkerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-@Controller
+import java.security.Principal;
 
+@Controller
 public class MainController {
+
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private WorkerService workerService;
 
     @GetMapping("/authorization")
     public String authorization(Model model, @ModelAttribute("error") String error,@ModelAttribute("logout") String logout){
@@ -20,8 +31,13 @@ public class MainController {
 //        }
         return "authorization";
     }
-//    @GetMapping("/logout")
-//    public String logout(){
-//        return "redirect: authorization";
+
+//    @GetMapping("/*")
+//    public String mainPage(Model model, Principal user){
+//        if(user != null){
+//            SecurityContextHolderAwareRequestWrapper securityContex =
+//            user.
+//            Long userId =
+//        }
 //    }
 }

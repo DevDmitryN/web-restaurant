@@ -18,9 +18,9 @@
             <li class="nav-item active">
                 <a class="nav-link" href="index.jsp">Главная <span class="sr-only">(current)</span></a>
             </li>
-            <sec:authorize access="hasRole('CLIENT')">
+            <sec:authorize url="/orders/creating">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Сделать заказ</a>
+                    <a class="nav-link" href="/orders/creating">Сделать заказ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="f#">Активные заказы</a>
