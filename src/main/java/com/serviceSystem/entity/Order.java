@@ -53,24 +53,6 @@ public class Order {
     public Order(){
 
     }
-//    public Order(RestaurantTable table, List<Dish> orderDishes,Client client,Worker worker){
-//        init(null,table,orderDishes,client,worker);
-//    }
-//    public Order(RestaurantTable table, List<Dish> orderDishes) {
-//        init(null,table,orderDishes,null,null);
-//    }
-//    public Order(Status status, RestaurantTable table, List<Dish> orderDishes) {
-//        init(status,table,orderDishes,null,null);
-//    }
-//    public void init(Status status, RestaurantTable table,List<Dish> orderDishes,Client client,Worker worker){
-//        this.status = status != null ? status : Status.NOT_TAKEN;;
-//        this.table = table;
-//        this.orderDishes = orderDishes;
-//        countTotalPrice();
-//        this.client = client;
-//        this.worker = worker;
-//    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -83,9 +65,6 @@ public class Order {
         return totalPrice.setScale(2, RoundingMode.DOWN);
     }
 
-//    public void setTotalPrice(double totalPrice) {
-//        this.totalPrice = new BigDecimal(totalPrice);
-//    }
 
     public Status getStatus() {
         return status;

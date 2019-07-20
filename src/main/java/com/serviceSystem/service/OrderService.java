@@ -2,6 +2,7 @@ package com.serviceSystem.service;
 
 import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
+import com.serviceSystem.DAO.DAOInterface.OrderDishDAO;
 import com.serviceSystem.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ public class OrderService {
 
     @Autowired
     private OrderDAO orderDAO;
+    @Autowired
+    private OrderDishDAO orderDishDAO;
 
     public List<Order> getAll(){
         return orderDAO.getAll();
@@ -20,8 +23,9 @@ public class OrderService {
     public List<Order> getByTableId(int id){
         return orderDAO.getByTable(id);
     }
-    public Long save(Order order){
-        return orderDAO.save(order);
+    public void save(Order order){
+        orderDAO.save(order);
+        order.getOrderDish().forEach( orderDish -> orderDishDAO.save(orderDish));
     }
     public void delete(long id){
         orderDAO.delete(id);

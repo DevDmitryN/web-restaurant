@@ -18,7 +18,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
     @Override
     @Transactional
     public T getByEmail(String email) {
-        String getByEmail = "from " + classOfUser.getName() + " user where user.email like :email";
+        String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
         List objects = query.list();
@@ -34,7 +34,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
     @Override
     @Transactional
     public boolean isExist(String email, String password) {
-        String getByEmailAndPassword = "from " + classOfUser.getName() + " user where user.email like :email and user.password like :password";
+        String getByEmailAndPassword = "from " + classOfUser.getName() + " user where user.email = :email and user.password = :password";
         Query query = getCurrentSession().createQuery(getByEmailAndPassword);
         query.setParameter("email",email);
         query.setParameter("password",password);
@@ -45,7 +45,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
     @Override
     @Transactional
     public boolean isEmailExist(String email) {
-        String getByEmail = "from " + classOfUser.getName() + " user where user.email like :email";
+        String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
         boolean result = query.list().size() == 0 ? false : true;

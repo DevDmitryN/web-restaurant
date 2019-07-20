@@ -13,7 +13,7 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     private final String DELETE = "from com.serviceSystem.entity.Order o where o.id = :id";
     private final String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id";
     private final String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id";
-    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status like 'NOT_TAKEN'";
+    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status = 'NOT_TAKEN'";
 
     public OrderDAOImpl(){
         super(Order.class);

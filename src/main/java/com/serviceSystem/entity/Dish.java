@@ -19,11 +19,9 @@ public class Dish implements Serializable {
     private float price;
     @Column
     private String description;
-//    @ManyToMany(mappedBy = "dishes")
-//    List<Order> orders = new ArrayList<Order>();
 
-    @Transient
-    private int amount;
+    @Column
+    private boolean isInMenu;
 
     @OneToMany(mappedBy = "dish")
     private List<OrderDish> orders;
@@ -76,21 +74,6 @@ public class Dish implements Serializable {
         this.description = description;
     }
 
-//    public List<Order> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<Order> orders) {
-//        this.orders = orders;
-//    }
-//
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 
     public List<OrderDish> getOrders() {
         return orders;
@@ -98,6 +81,14 @@ public class Dish implements Serializable {
 
     public void setOrders(List<OrderDish> orders) {
         this.orders = orders;
+    }
+
+    public boolean isInMenu() {
+        return isInMenu;
+    }
+
+    public void setInMenu(boolean inMenu) {
+        isInMenu = inMenu;
     }
 
     @Override

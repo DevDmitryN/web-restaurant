@@ -93,13 +93,5 @@ public class OrderDTO {
         this.totalPrice = totalPrice;
     }
 
-    public static List<OrderDTO> toListOfOrderDTO(List<Order> orders){
-        List<OrderDTO> ordersDTO = new ArrayList<>();
-        orders.forEach( order -> ordersDTO.add(toOrderDTO(order)));
-        return ordersDTO;
-    }
-    public static OrderDTO toOrderDTO(Order order){
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(order,OrderDTO.class);
-    }
+
 }

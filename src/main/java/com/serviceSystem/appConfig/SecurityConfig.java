@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class)
                 .authorizeRequests()
                 .antMatchers("/403").permitAll()
+                .antMatchers("/orders/success").permitAll()
                 .antMatchers("/").access("hasRole('CLIENT') or hasRole('WAITER')")
                 .antMatchers("/list").access("hasRole('ADMIN') or hasRole('WAITER')")
                 .antMatchers("/orders/creating").access("hasRole('CLIENT')")

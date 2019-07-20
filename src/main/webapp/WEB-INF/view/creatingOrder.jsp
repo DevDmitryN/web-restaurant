@@ -25,29 +25,28 @@
         <div class="row">
             <div class="col-md-10">
                 <h1>Заполнение заказа</h1>
-                <form method="post" action="/orders/creating">
+                <form:form modelAttribute="creatingOrderForm" method="post" action="/orders/creating">
                     <div>
                         <label>Меню:</label>
-                        <c:forEach var="dish" items="${dishes}" varStatus="status">
+                        <c:forEach var="dish" items="${creatingOrderForm.dishes}" varStatus="status">
                             <div>
-                                <input type="number" name="dishes[${status.index}].amount" value="${dish.amount}">
-                                ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}<br>
+                                <input hidden name="dishes[${status.index}].id" value="${dish.id}" readonly>
+                                <input hidden name="dishes[${status.index}].price" value="${dish.price}" readonly>
+                                <input type="number" name="dishes[${status.index}].amount" value="${dish.amount}" min="0" max="20">
+                                ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}
+                                <br>
                             </div>
                         </c:forEach>
                     </div>
-
                     <div class="default-padding-top">
-                        <label for="table">Выберите столик:</label>
-                        <select required name="table" id="table">
-                            <c:forEach var="table" items="${tables}">
-                                <option value=${table.id}>id: ${table.id} Мест: ${table.capacity}
-                                    Свободен: ${table.getFreeStatusAsString()}</option>
-                            </c:forEach>
-                        </select>
+                        <label for="tableId">Выберите столик:</label>
+                        <form:select path="tableId">
+                            <form:options items="${creatingOrderForm.tables}" itemValue="id"/>
+                        </form:select>
                     </div>
                     <div class="default-padding-top">Укажите время заказа:
                         <label for="hour">Час</label>
-                        <select name="hour" id="hour">
+                        <form:select path="hour">
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
@@ -60,16 +59,16 @@
                             <option value="19">19</option>
                             <option value="20">20</option>
                             <option value="21">21</option>
-                        </select>
-                        <label for="minuts">Минуты</label>
-                        <select name="minutes" id="minuts">
+                        </form:select>
+                        <label for="minutes">Минуты</label>
+                        <form:select path="minutes">
                             <option value="0">00</option>
                             <option value="30">30</option>
-                        </select>
+                        </form:select>
                     </div>
                     <div class="default-padding-top">
                         <label for="month">Месяц</label>
-                        <select name="month" id="month">
+                        <form:select path="month">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -82,9 +81,9 @@
                             <option value="10">10</option>
                             <option value="11">11</option>
                             <option value="12">12</option>
-                        </select>
+                        </form:select>
                         <label for="day">День</label>
-                        <select name="day" id="day">
+                        <form:select path="day">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -116,14 +115,15 @@
                             <option value="29">29</option>
                             <option value="30">30</option>
                             <option value="31">31</option>
-                        </select>
-                        <label>Год: ${year}</label>
+                        </form:select>
+                        <label>Год: ${creatingOrderForm.year}</label>
+                        <form:input hidden="true" path="year" value="${creatingOrderForm.year}"/>
                     </div>
                     <div class="default-padding-top">
                         <button type="submit" class="btn btn-primary">Отправить</button>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                </form>
+                </form:form>
             </div>
         </div>
     </div>
