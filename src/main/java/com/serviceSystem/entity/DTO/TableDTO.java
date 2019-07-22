@@ -34,6 +34,6 @@ public class TableDTO {
     public String toString() {
         return  "Номер: " + id +
                 ", вместимость: " + capacity +
-                (freeStatus ? " занят" : " свободен");
+                (freeStatus ? " свободен" : " занят");
     }
 }

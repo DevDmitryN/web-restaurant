@@ -1,9 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page isELIgnored="false" %>
-<%@ page import="com.serviceSystem.entity.Dish" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.serviceSystem.entity.RestaurantTable" %>
+
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -15,7 +13,7 @@
 <html>
 <head>
     <title>Page for sending order</title>
-    <%@include file="/WEB-INF/view/header.jsp" %>
+    <%@include file="header.jsp" %>
 </head>
 <body>
 
@@ -27,38 +25,32 @@
                 <h1>Заполнение заказа</h1>
                 <form:form modelAttribute="creatingOrderForm" method="post" action="/orders/creating">
                     <div>
+                        <form:errors path="dishes" cssClass="error"/><br>
                         <label>Меню:</label>
                         <c:forEach var="dish" items="${creatingOrderForm.dishes}" varStatus="status">
                             <div>
                                 <input hidden name="dishes[${status.index}].id" value="${dish.id}" readonly>
-                                <input hidden name="dishes[${status.index}].price" value="${dish.price}" readonly>
                                 <input type="number" name="dishes[${status.index}].amount" value="${dish.amount}" min="0" max="20">
-                                ${dish.name} Цена: ${dish.price}, Описание: ${dish.description}
+                                ${dish}
                                 <br>
                             </div>
                         </c:forEach>
                     </div>
                     <div class="default-padding-top">
+                        <form:errors path="tables" cssClass="error"/><br>
                         <label for="tableId">Выберите столик:</label>
                         <form:select path="tableId">
                             <form:options items="${creatingOrderForm.tables}" itemValue="id"/>
                         </form:select>
                     </div>
-                    <div class="default-padding-top">Укажите время заказа:
+                    <div class="default-padding-top">
+                        <form:errors path="bookingTime" cssClass="error"/>
+                        <p>Укажите время заказа:</p>
                         <label for="hour">Час</label>
                         <form:select path="hour">
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
+                            <c:forEach begin="10" end="21" var="varHour">
+                                <option value="${varHour}">${varHour}</option>
+                            </c:forEach>
                         </form:select>
                         <label for="minutes">Минуты</label>
                         <form:select path="minutes">
@@ -69,52 +61,15 @@
                     <div class="default-padding-top">
                         <label for="month">Месяц</label>
                         <form:select path="month">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
+                            <c:forEach begin="1" end="12" var="varMonth">
+                                <option value="${varMonth}">${varMonth}</option>
+                            </c:forEach>
                         </form:select>
                         <label for="day">День</label>
                         <form:select path="day">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="19">19</option>
-                            <option value="20">20</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                            <option value="24">24</option>
-                            <option value="25">25</option>
-                            <option value="26">26</option>
-                            <option value="27">27</option>
-                            <option value="28">28</option>
-                            <option value="29">29</option>
-                            <option value="30">30</option>
-                            <option value="31">31</option>
+                            <c:forEach begin="1" end="31" var="varDay">
+                                <option value="${varDay}">${varDay}</option>
+                            </c:forEach>
                         </form:select>
                         <label>Год: ${creatingOrderForm.year}</label>
                         <form:input hidden="true" path="year" value="${creatingOrderForm.year}"/>

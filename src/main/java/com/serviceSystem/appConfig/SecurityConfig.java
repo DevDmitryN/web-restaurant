@@ -48,26 +48,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
-        System.out.println(http);
         http.addFilterBefore(filter, CsrfFilter.class)
                 .authorizeRequests()
                 .antMatchers("/403").permitAll()
                 .antMatchers("/orders/success").permitAll()
+                .antMatchers("/users/signUpForClient").anonymous()
                 .antMatchers("/").access("hasRole('CLIENT') or hasRole('WAITER')")
                 .antMatchers("/list").access("hasRole('ADMIN') or hasRole('WAITER')")
                 .antMatchers("/orders/creating").access("hasRole('CLIENT')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/authorization")
+                .loginPage("/users/authorization")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/",true)
-                .failureUrl("/authorization?error=error").permitAll()
+                .failureUrl("/users/authorization?error=error").permitAll()
                 .and()
                 .logout()
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/authorization?logout=true").permitAll()
+                .logoutSuccessUrl("/users/authorization?logout=true").permitAll()
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/403");

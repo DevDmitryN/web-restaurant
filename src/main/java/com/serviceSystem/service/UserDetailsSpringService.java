@@ -4,6 +4,8 @@ import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.User;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +19,7 @@ import java.util.Set;
 
 @Service
 public class UserDetailsSpringService implements UserDetailsService {
+    private Logger logger = LoggerFactory.getLogger(UserDetailsSpringService.class);
     @Autowired
     ClientService clientService;
     @Autowired
@@ -25,9 +28,10 @@ public class UserDetailsSpringService implements UserDetailsService {
     public User getUserByEmail(String email){
         if(clientService.isEmailExist(email)){
             return clientService.getByEmail(email);
-        }else{
+        }else if(workerService.isEmailExist(email)){
             return workerService.getByEmail(email);
         }
+        return null;
     }
     public Set<GrantedAuthority> getRole(User user){
         Set<GrantedAuthority> roles = new HashSet<>();
@@ -52,6 +56,10 @@ public class UserDetailsSpringService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = getUserByEmail(email);
+        if(user == null){
+            logger.info("user with email " + email + " not found");
+            throw new UsernameNotFoundException("user with email" + email + " not found");
+        }
         return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),getRole(user));
     }
 }

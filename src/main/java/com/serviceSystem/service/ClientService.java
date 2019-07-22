@@ -40,4 +40,10 @@ public class ClientService {
     public Client getById(Long id){
         return clientDAO.getById(id);
     }
+    public boolean isPhoneNumberExist(String phoneNumber){
+        return clientDAO.isPhoneNumberExist(phoneNumber);
+    }
+    public boolean isCardNumberExist(String cardNumber){
+        return clientDAO.isCardNumberExist(cardNumber);
+    }
 }

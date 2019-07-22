@@ -10,13 +10,14 @@ import java.util.List;
 public class OrderDTO {
     private Long id;
     private String status;
-    private RestaurantTable table;
-    private List<Dish> dishes;
+    private TableDTO table;
+    private List<DishDTO> dishes;
     private Client client;
     private Worker worker;
     private String creationTime;
     private String bookingTime;
     private BigDecimal totalPrice;
+
     public OrderDTO(){
 
     }
@@ -37,19 +38,19 @@ public class OrderDTO {
         this.status = status;
     }
 
-    public RestaurantTable getTable() {
+    public TableDTO getTable() {
         return table;
     }
 
-    public void setTable(RestaurantTable table) {
+    public void setTable(TableDTO table) {
         this.table = table;
     }
 
-    public List<Dish> getDishes() {
+    public List<DishDTO> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(List<DishDTO> dishes) {
         this.dishes = dishes;
     }
 

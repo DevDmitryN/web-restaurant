@@ -44,4 +44,7 @@ public class WorkerService {
         worker.setPassword(encoder.encode(worker.getPassword()));
         workerDAO.update(worker);
     }
+    public boolean isPhoneNumberExist(String phoneNumber){
+        return workerDAO.isPhoneNumberExist(phoneNumber);
+    }
 }

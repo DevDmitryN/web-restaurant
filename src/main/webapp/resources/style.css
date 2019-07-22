@@ -23,7 +23,7 @@
     width: 20em;
 }
 
-.signIn-field{
+.signUp-field{
     width: 15em;
 }
 .default-padding-top{
@@ -31,4 +31,7 @@
 }
 .table-full-width{
     width: 100%;
+}
+.error{
+    color: red;
 }

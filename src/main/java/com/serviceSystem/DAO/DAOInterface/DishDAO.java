@@ -2,7 +2,8 @@ package com.serviceSystem.DAO.DAOInterface;
 
 import com.serviceSystem.entity.Dish;
 
+import java.util.List;
+
 public interface DishDAO extends BaseDAO<Dish,Integer> {
-//    void delete(Dish dish);
-//    void delete(Integer id);
+    List<Dish> getWhichAreInMenu();
 }

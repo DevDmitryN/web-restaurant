@@ -24,32 +24,32 @@
                         </c:if>
                         <div class="form-group">
                             <label for="name">Имя</label>
-                            <input name="name" required type="text" class="form-control signIn-field" id="name" placeholder="Введите имя">
+                            <input name="name" required type="text" class="form-control signUp-field" id="name" placeholder="Введите имя">
                         </div>
                         <div class="form-group">
                             <label for="surname">Фамилия</label>
-                            <input name="surname" required type="text" class="form-control signIn-field" id="surname" placeholder="Введите фамилию" >
+                            <input name="surname" required type="text" class="form-control signUp-field" id="surname" placeholder="Введите фамилию" >
                         </div>
                         <div class="form-group">
                             <label for="email">Электронная почта</label>
                             <c:if test="${error == 'existedEmail'}">
                                 <span style="color: red">Пользователь с таким адрессом уже существует</span>
                             </c:if>
-                            <input name="email" required type="email" class="form-control signIn-field" id="email" aria-describedby="emailHelp" placeholder="Адресс электронной почты">
+                            <input name="email" required type="email" class="form-control signUp-field" id="email" aria-describedby="emailHelp" placeholder="Адресс электронной почты">
                         </div>
                         <div class="form-group">
                             <label for="password">Пароль</label>
-                            <input name="password" required type="password" class="form-control signIn-field" id="password">
+                            <input name="password" required type="password" class="form-control signUp-field" id="password">
                         </div>
                         <div class="form-group">
                             <label for="confirm-password">Повторите пароль</label>
-                            <input name="confirmPassword" required type="password" class="form-control signIn-field" id="confirm-password">
+                            <input name="confirmPassword" required type="password" class="form-control signUp-field" id="confirm-password">
                             <span id="password-message" style="color: red;"></span>
                         </div>
                         <div class="form-group">
                             <label for="phoneNumber">Номер мобильного телефона</label>
-                            <input name="phoneNumber"required pattern="^(44|29|25|17)(\s|-)?\d{3}(\s|-)?\d{2}(\s|-)?\d{2}$"
-                                   type="tel" class="form-control signIn-field" id="phoneNumber" placeholder="XX XXX XX XX" title="С кодом оператора 44,29,25,17">
+                            <input name="phoneNumber" required pattern="^(44|29|25|17)(\s|-)?\d{3}(\s|-)?\d{2}(\s|-)?\d{2}$"
+                                   type="tel" class="form-control signUp-field" id="phoneNumber" placeholder="XX XXX XX XX" title="С кодом оператора 44,29,25,17">
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="role" id="user" value="USER" checked>
@@ -61,7 +61,7 @@
                                 ADMIN
                             </label>
                         </div>
-                        <button  type="submit" class="btn btn-primary signIn-field">Добавить</button>
+                        <button  type="submit" class="btn btn-primary signUp-field">Добавить</button>
                     </form>
                 </div>
             </div>

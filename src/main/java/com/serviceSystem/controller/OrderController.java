@@ -10,21 +10,21 @@ import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.DishService;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,20 +40,39 @@ public class OrderController {
     private ClientService clientService;
     @Autowired
     private OrderService orderService;
+    @Qualifier(value = "creatingOrderFormValidator")
+    @Autowired
+    private Validator orderFormValidator;
 
     private DtoConvertrer dishDtoConverter = new DtoConverterImpl(Dish.class,DishDTO.class);
     private DtoConvertrer tableDtoConverter = new DtoConverterImpl(RestaurantTable.class,TableDTO.class);
+
+
     @GetMapping("creating")
     public String creating(Model model){
         CreatingOrderForm creatingOrderForm = new CreatingOrderForm();
-        creatingOrderForm.setDishes(dishDtoConverter.toDTOList(dishService.getAll()));
+        creatingOrderForm.setDishes(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
         creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
         creatingOrderForm.setYear(LocalDate.now().getYear());
         model.addAttribute("creatingOrderForm", creatingOrderForm);
         return "creatingOrder";
     }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder){
+//        binder.setValidator(orderFormValidator);
+        binder.addValidators(orderFormValidator);
+    }
+
     @PostMapping("creating")
-    public String save(@ModelAttribute("creatingOrderForm") CreatingOrderForm creatingOrderForm, Principal principalUser){
+    public String save( @ModelAttribute("creatingOrderForm") @Valid CreatingOrderForm creatingOrderForm,BindingResult bindingResult
+            ,Model model, Principal principalUser ){
+        if(bindingResult.hasErrors()){
+            logger.info("Binding result " + bindingResult.getAllErrors());
+            creatingOrderForm.setDishes(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
+            creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
+            return "creatingOrder";
+        }
         Order order = new Order();
         List<OrderDish> orderDishes = new ArrayList<>();
         for (DishDTO dishDTO : creatingOrderForm.getDishes()) {
@@ -67,16 +86,8 @@ public class OrderController {
         RestaurantTable table = new RestaurantTable();
         table.setId(creatingOrderForm.getTableId());
         order.setTable(table);
-        LocalDateTime creationTime = LocalDateTime.of(LocalDate.now(), LocalTime.now());
-        LocalDateTime bookingTime = LocalDateTime.of(
-                creatingOrderForm.getYear(),
-                creatingOrderForm.getMonth(),
-                creatingOrderForm.getDay(),
-                creatingOrderForm.getHour(),
-                creatingOrderForm.getMinutes()
-        );
-        order.setCreationTime(creationTime);
-        order.setBookingTime(bookingTime);
+        order.setCreationTime(LocalDateTime.now());
+        order.setBookingTime(creatingOrderForm.getBookingTimeFromFields());
         orderService.save(order);
         return "redirect: success";
     }

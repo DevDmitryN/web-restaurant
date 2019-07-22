@@ -23,6 +23,9 @@ public class DishService {
     public void save(Dish dish){
         dishDAO.save(dish);
     }
+    public List<Dish> getWhichAreInMenu(){
+        return dishDAO.getWhichAreInMenu();
+    }
 //    public void delete(Dish dish){
 //        dishDAO.delete(dish);
 //    }

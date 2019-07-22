@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -20,6 +21,7 @@ import static org.hibernate.cfg.AvailableSettings.C3P0_MAX_STATEMENTS;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+@PropertySource("classpath:messages.properties")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.serviceSystem.DAO","com.serviceSystem.service"})
 public class ApplicationConfig {
@@ -68,5 +70,4 @@ public class ApplicationConfig {
         dataSource.setPassword(environment.getProperty("postgresql.password"));
         return dataSource;
     }
-
 }

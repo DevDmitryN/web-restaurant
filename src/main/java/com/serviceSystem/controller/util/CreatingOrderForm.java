@@ -17,7 +17,7 @@ public class CreatingOrderForm {
     private int month;
     private int day;
     private int year;
-
+    private LocalDateTime bookingTime;
     public CreatingOrderForm(){}
 
     public CreatingOrderForm(List<DishDTO> dishes, List<TableDTO> tables) {
@@ -87,5 +87,22 @@ public class CreatingOrderForm {
 
     public void setTableId(int tableId) {
         this.tableId = tableId;
+    }
+
+    public LocalDateTime getBookingTime(){
+        return bookingTime;
+    }
+
+    public void setBookingTime(LocalDateTime bookingTime) {
+        this.bookingTime = bookingTime;
+        year = bookingTime.getYear();
+        month = bookingTime.getMonth().getValue();
+        day = bookingTime.getDayOfMonth();
+        hour = bookingTime.getHour();
+        minutes = bookingTime.getMinute();
+
+    }
+    public LocalDateTime getBookingTimeFromFields(){
+        return LocalDateTime.of(year,month,day,hour,minutes);
     }
 }

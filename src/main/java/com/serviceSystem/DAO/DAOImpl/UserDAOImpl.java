@@ -21,14 +21,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
-        List objects = query.list();
-//        if(objects.size() != 0){
-//            T user = (T) query.list().get(0);
-//            return user;
-//        }else{
-//            return null;
-//        }
-        return (T) query.list().get(0);
+        return (T) query.getSingleResult();
     }
 
     @Override
@@ -52,5 +45,12 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         return result;
     }
 
-
+    @Override
+    @Transactional
+    public boolean isPhoneNumberExist(String phoneNumber) {
+        String getByPhoneNumber = "from " + classOfUser.getName() + " u where u.phoneNumber = :phoneNumber";
+        Query query = getCurrentSession().createQuery(getByPhoneNumber);
+        query.setParameter("phoneNumber",phoneNumber);
+        return query.list().size() != 0;
+    }
 }

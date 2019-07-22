@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/","classpath:/META-INF/view/resources/**","/resources/**","resources/**")
+                .addResourceLocations("/resources/")
                 .setCachePeriod(31556926);
     }
     @Bean

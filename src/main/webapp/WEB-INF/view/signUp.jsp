@@ -1,3 +1,5 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -9,8 +11,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
 <head>
-    <title>Sign In</title>
-    <%@include file="header.html" %>
+    <title>Sign Up</title>
+    <%@include file="header.jsp" %>
 
 </head>
 <body>
@@ -19,45 +21,46 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <h2>Регистрация</h2>
-                <form id="signIn" action="frontController?command=sign_up" method="post">
-                    <c:if test="${error == 'incorrectFields'}">
-                        <span style="color: red">Не правильно заполнены поля</span>
-                    </c:if>
+                <form:form id="signIn" action="/users/signUpForClient" method="post" modelAttribute="client">
                     <div class="form-group">
+                        <form:errors path="name" cssClass="error"/> <br>
                         <label for="name">Имя</label>
-                        <input name="name" value="${client.name}" required type="text" class="form-control signIn-field" id="name" placeholder="Введите имя">
+                        <form:input path="name"  value="${client.name}" type="text" class="form-control signUp-field" id="name" placeholder="Введите имя"/>
                     </div>
                     <div class="form-group">
+                        <form:errors path="surname" cssClass="error"/> <br>
                         <label for="surname">Фамилия</label>
-                        <input name="surname" required type="text" class="form-control signIn-field" id="surname" placeholder="Введите фамилию" >
+                        <form:input path="surname"  required="true" type="text" class="form-control signUp-field" id="surname" placeholder="Введите фамилию" />
                     </div>
                     <div class="form-group">
+                        <form:errors path="email" cssClass="error"/> <br>
                         <label for="email">Электронная почта</label>
-                        <c:if test="${error == 'existedEmail'}">
-                            <span style="color: red">Пользователь с таким адрессом уже существует</span>
-                        </c:if>
-                        <input name="email" required type="email" class="form-control signIn-field" id="email" aria-describedby="emailHelp" placeholder="Адресс электронной почты">
+                        <form:input path="email"  type="email" class="form-control signUp-field" id="email" aria-describedby="emailHelp" placeholder="Адресс электронной почты"/>
                     </div>
                     <div class="form-group">
+                        <form:errors path="password" cssClass="error"/> <br>
                         <label for="password">Пароль</label>
-                        <input name="password" required type="password" class="form-control signIn-field" id="password">
+                        <form:input path="password"   type="password" class="form-control signUp-field" id="password"/>
                     </div>
                     <div class="form-group">
+                        <form:errors path="confirmPassword" cssClass="error"/> <br>
                         <label for="confirm-password">Повторите пароль</label>
-                        <input name="confirmPassword" required type="password" class="form-control signIn-field" id="confirm-password">
+                        <form:input path="confirmPassword"  required="true" type="password" class="form-control signUp-field" id="confirm-password"/>
                         <span id="password-message" style="color: red;"></span>
                     </div>
                     <div class="form-group">
+                        <form:errors path="phoneNumber" cssClass="error"/> <br>
                         <label for="phoneNumber">Номер мобильного телефона</label>
-                        <input name="phoneNumber"required pattern="^(44|29|25|17)(\s|-)?\d{3}(\s|-)?\d{2}(\s|-)?\d{2}$"
-                               type="tel" class="form-control signIn-field" id="phoneNumber" placeholder="XX XXX XX XX" title="С кодом оператора 44,29,25,17">
+                        <form:input path="phoneNumber" required="true" pattern="^(44|29|25|17)(\s|-)?\d{3}(\s|-)?\d{2}(\s|-)?\d{2}$"
+                               type="tel" class="form-control signUp-field" id="phoneNumber" placeholder="XX XXX XX XX" title="С кодом оператора 44,29,25,17"/>
                     </div>
                     <div class="form-group">
+                        <form:errors path="cardNumber" cssClass="error"/> <br>
                         <label for="cardNumber">Номер банковской карточки</label>
-                        <input name="cardNumber" title="Введите данные в формате AAAA BBBB CCCC DDDD" required pattern="^([A-Z0-9]\s?){16}$" type="text" class="form-control signIn-field" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX">
+                        <form:input path="cardNumber"  title="Введите данные в формате AAAA BBBB CCCC DDDD" required="true" pattern="^([A-Z0-9]\s?){16}$" type="text" class="form-control signUp-field" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX"/>
                     </div>
-                    <button  type="submit" class="btn btn-primary signIn-field">Зарегистрироваться</button>
-                </form>
+                    <button  type="submit" class="btn btn-primary signUp-field">Зарегистрироваться</button>
+                </form:form>
             </div>
         </div>
     </div>

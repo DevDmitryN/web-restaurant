@@ -3,7 +3,9 @@ package com.serviceSystem.DAO.DAOImpl;
 import com.serviceSystem.DAO.DAOInterface.DishDAO;
 import com.serviceSystem.entity.Dish;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.Query;
 import java.util.List;
 
 @Repository
@@ -13,20 +15,11 @@ public class DishDAOImpl extends BaseDAOImpl<Dish,Integer> implements DishDAO {
         super(Dish.class);
     }
 
-//    @Override
-//    public void delete(Dish dish){
-//        Session session = getSessionFactory().openSession();
-//        Transaction transaction = session.beginTransaction();
-//        session.delete(dish);
-//        transaction.commit();
-//        session.close();
-//    }
-//    @Override
-//    public void delete(Integer id){
-//        Session session = getSessionFactory().openSession();
-//        Transaction transaction = session.beginTransaction();
-//        transaction.commit();
-//        session.close();
-//    }
 
+    @Override
+    @Transactional
+    public List<Dish> getWhichAreInMenu() {
+        String hql = "from com.serviceSystem.entity.Dish d where d.isInMenu = true";
+        return (List<Dish>) getCurrentSession().createQuery(hql).list();
+    }
 }
