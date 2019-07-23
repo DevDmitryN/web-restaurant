@@ -4,6 +4,7 @@ import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
 import com.serviceSystem.DAO.DAOInterface.OrderDAO;
 import com.serviceSystem.DAO.DAOInterface.OrderDishDAO;
 import com.serviceSystem.entity.Order;
+import com.serviceSystem.entity.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,14 @@ public class OrderService {
     }
     public List<Order> getNotTakenWithFreeTable(){
         return orderDAO.getNotTakenWithFreeTable();
+    }
+    public void changeWorkerForOrder(long orderId,Worker worker){
+        Order order = getById(orderId);
+        if(order.getWorker() != null){
+            order.setWorker(null);
+        }else{
+            order.setWorker(worker);
+        }
+        update(order);
     }
 }

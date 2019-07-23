@@ -23,12 +23,12 @@
                     <a class="nav-link" href="/orders/creating">Сделать заказ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="f#">Активные заказы</a>
+                    <a class="nav-link" href="#">Активные заказы</a>
                 </li>
             </sec:authorize>
-            <sec:authorize url="/list">
+            <sec:authorize url="/orders/all">
                 <li class="nav-item">
-                    <a class="nav-link" href="/list">Заказы</a>
+                    <a class="nav-link" href="/orders/all">Заказы</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Столики</a>

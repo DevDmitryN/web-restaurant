@@ -12,7 +12,7 @@ public class OrderDTO {
     private String status;
     private TableDTO table;
     private List<DishDTO> dishes;
-    private Client client;
+    private ClientDTO client;
     private Worker worker;
     private String creationTime;
     private String bookingTime;
@@ -54,11 +54,11 @@ public class OrderDTO {
         this.dishes = dishes;
     }
 
-    public Client getClient() {
+    public ClientDTO getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(ClientDTO client) {
         this.client = client;
     }
 
@@ -94,5 +94,22 @@ public class OrderDTO {
         this.totalPrice = totalPrice;
     }
 
+    public boolean isPossibleToChange(){
+        return !(status.equals("Выполнен") || status.equals("Отменен"));
+    }
 
+    @Override
+    public String toString() {
+        return "OrderDTO{" +
+                "id=" + id +
+                ", status='" + status + '\'' +
+                ", table=" + table +
+                ", dishes=" + dishes +
+                ", client=" + client +
+                ", worker=" + worker +
+                ", creationTime='" + creationTime + '\'' +
+                ", bookingTime='" + bookingTime + '\'' +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }

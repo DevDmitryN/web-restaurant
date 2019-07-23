@@ -34,7 +34,7 @@ public class Order {
 //    )
 //    private List<Dish> orderDishes;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
     private List<OrderDish> orderDishes;
 
     @ManyToOne

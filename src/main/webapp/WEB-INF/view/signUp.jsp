@@ -67,5 +67,5 @@
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script src="scripts/check-signIn-fields.js"></script>
+<script src="/resources/scripts/check-signUp-fields.js"></script>
 </html>

@@ -40,13 +40,13 @@ public class ClientSignUpValidator implements Validator {
         } else if (!client.getPassword().equals(client.getConfirmPassword())) {
             errors.rejectValue("confirmPassword", "doesntConfirm", "Пароли должны совпадать");
         }
-        String regexForEmail = "([\\d\\w-_]+)@([\\d\\w-_]+)[.](\\w{1,5})";
+        String regexForEmail = "\\A([\\w-]+)@([\\w-]+)[.](\\w{1,5})\\z";
         if (clientService.isEmailExist(client.getEmail()) || workerService.isEmailExist(client.getEmail())) {
             errors.rejectValue("email", "existedEmail", "Пользователь с таким адрессом уже существует");
         } else if (client.getEmail().length() == 0 || client.getEmail().length() > 60) {
             errors.rejectValue("email", "invalidEmail", "Длина адресса должна быть от 0 до 60 символов");
-        } else if(client.getEmail().matches(regexForEmail)){
-            errors.rejectValue("email","invalidEmailFormat","Неправильный формат адресса");
+        } else if (!client.getEmail().matches(regexForEmail)) {
+            errors.rejectValue("email", "invalidEmailFormat", "Неправильный формат адресса");
         }
         String regexForPhoneNumber = "\\A(44|29|25|17)(\\s|-)?\\d{3}(\\s|-)?\\d{2}(\\s|-)?\\d{2}\\z";
         if (client.getPhoneNumber().length() == 0) {

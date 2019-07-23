@@ -10,10 +10,9 @@ import java.util.List;
 
 @Repository
 public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
-    private final String DELETE = "from com.serviceSystem.entity.Order o where o.id = :id";
-    private final String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id";
-    private final String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id";
-    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status = 'NOT_TAKEN'";
+    private final String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id order by o.id desc ";
+    private final String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id order by o.id desc ";
+    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status = 'NOT_TAKEN' order by o.id desc ";
 
     public OrderDAOImpl(){
         super(Order.class);
@@ -22,9 +21,8 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     @Override
     @Transactional
     public void delete(long id) {
-        Query query = getCurrentSession().createQuery(DELETE);
-        query.setParameter("id",id);
-        query.executeUpdate();
+        Order order = getCurrentSession().get(Order.class,id);
+        getCurrentSession().delete(order);
     }
 
     @Override
@@ -51,5 +49,12 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
         Query query = getCurrentSession().createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
         List<Order> orders = query.list();
         return orders;
+    }
+    @Transactional
+    @Override
+    public Order getById(long id){
+        Order order = super.getById(id);
+        order.setOrderDish(order.getOrderDish());
+        return order;
     }
 }

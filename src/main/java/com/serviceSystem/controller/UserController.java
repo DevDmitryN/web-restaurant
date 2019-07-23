@@ -1,6 +1,10 @@
 package com.serviceSystem.controller;
 
+import com.serviceSystem.controller.util.dtoConverter.DtoConverterImpl;
+import com.serviceSystem.controller.util.dtoConverter.DtoConvertrer;
+import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.DTO.ClientDTO;
+import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.validator.ClientSignUpValidator;
 import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.slf4j.Logger;
@@ -24,6 +28,10 @@ public class UserController {
     @Qualifier(value = "clientSignUpValidator")
     @Autowired
     private Validator clientSignUpValidator;
+    @Autowired
+    private ClientService clientService;
+
+    private DtoConvertrer clientDtoConverter = new DtoConverterImpl(Client.class,ClientDTO.class);
 
 //    @InitBinder
 //    protected void initBinder(WebDataBinder binder){
@@ -50,6 +58,7 @@ public class UserController {
             return "signUp";
         }
         logger.info(clientDTO.toString());
-        return "authorization";
+        clientService.save((Client) clientDtoConverter.fromDTO(clientDTO));
+        return "redirect: authorization";
     }
 }

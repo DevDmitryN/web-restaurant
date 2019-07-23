@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
 <%--
@@ -12,7 +13,7 @@
 <html>
 <head>
     <title>All orders</title>
-    <%@include file="header.html" %>
+    <%@include file="header.jsp" %>
 </head>
 <body>
 <%@include file="menu-nav-bar.jsp" %>
@@ -20,13 +21,12 @@
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-md-6">
-                <form action="frontController" method="get" class="form-inline">
-                    <input hidden name="command" value="show_orders"/>
+                <form action="/orders/ordersForSpecificTable" method="get" class="form-inline">
                     <label for="table-selector" class="right-margin">Столики</label>
                     <select name="tableId" class="form-control right-margin" style="width: 100px" id="table-selector">
-                            <option value="all">Все</option>
+                            <option value=0>Все</option>
                         <c:forEach var="table" items="${tables}">
-                            <option>${table.id}</option>
+                            <option value=${table.id}>${table.id}</option>
                         </c:forEach>
                     </select>
                     <button type="submit" class="right-margin btn btn-outline-primary">Найти заказы по столику</button>
@@ -43,10 +43,7 @@
                 <tr>
                     <th scope="col">Номер</th>
                     <th scope="col">Номер столика</th>
-                    <th scope="col">Клиент</th>
-                    <th scope="col">Работник</th>
                     <th scope="col">Статус</th>
-                    <th scope="col">Создан</th>
                     <th scope="col">Заказанное время</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -58,27 +55,31 @@
                     <tr>
                         <th scope="row">${order.id}</th>
                         <td>${order.table.id}</td>
-                        <td>${order.client.email}</td>
-                        <td>${order.worker.name} ${order.worker.surname}</td>
                         <td>${order.status}</td>
-                        <td>${order.creationTime}</td>
                         <td>${order.bookingTime}</td>
                         <td>
-                            <form action="frontController"  method="get">
-                                <input hidden name="command" value="show_dishes_of_order"/>
-                                <button type="submit" name="id" value="${order.id}" class="btn btn-success">Список блюд</button>
+                            <form action="/orders/${order.id}"  method="get">
+                                <button type="submit" class="btn btn-success">Полная информация</button>
                             </form>
                         </td>
                         <td>
-                            <form action="frontController" method="post">
-                                <input hidden name="command" value="delete_order"/>
-                                <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Удалить</button>
+                            <form action="/orders/delete/${order.id}" method="post">
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             </form>
                         </td>
                         <td>
-                            <c:if test="${order.status != 'Выполнен' && order.status != 'Отменен'}">
-                                <form action="updateOrder" method="get">
-                                    <button type="submit" name="id" value="${order.id}" class="btn btn-secondary">Редактировать</button>
+                            <c:if test="${order.isPossibleToChange()}">
+                                <form action="/orders/setWorkerForOrder/${order.id}" method="post">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                    <c:choose>
+                                        <c:when test="${order.worker == null}">
+                                            <button type="submit" class="btn btn-secondary">Принять</button>
+                                        </c:when>
+                                        <c:when test="${order.worker.email == workerEmail}">
+                                            <button type="submit" class="btn btn-secondary">Отказаться</button>
+                                        </c:when>
+                                    </c:choose>
                                 </form>
                             </c:if>
                         </td>

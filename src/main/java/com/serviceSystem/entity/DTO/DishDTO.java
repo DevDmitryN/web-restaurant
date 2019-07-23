@@ -50,6 +50,6 @@ public class DishDTO {
 
     @Override
     public String toString(){
-        return "Номер: " + id + ", Название: " + name + ", описание: " + description + ", цена: " + price;
+        return "Номер: " + id + ", Название: " + name + (description != null ? ", описание: " + description : "") + ", цена: " + price + ", кол-во: " + amount;
     }
 }

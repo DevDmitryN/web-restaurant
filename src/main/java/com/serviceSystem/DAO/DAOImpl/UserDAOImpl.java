@@ -41,8 +41,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
-        boolean result = query.list().size() == 0 ? false : true;
-        return result;
+        return query.list().size() != 0;
     }
 
     @Override

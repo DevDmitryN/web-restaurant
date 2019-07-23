@@ -31,19 +31,16 @@ public class CreatingOrderFormValidator implements Validator {
         if(now.isAfter(creatingOrderForm.getBookingTimeFromFields())){
             errors.rejectValue("bookingTime","afterRealTime","Время бронирования должно быть позже текущего времени");
         }
-        boolean isAmountOfDishesNull = true;
+        boolean invalidAmountOfDishes = true;
         for (DishDTO dish : creatingOrderForm.getDishes()) {
-            if(dish.getAmount() > 0){
-                isAmountOfDishesNull = false;
+            if(dish.getAmount() > 0 && dish.getAmount()<=20){
+                invalidAmountOfDishes = false;
             }
         }
-        if(isAmountOfDishesNull){
-            errors.rejectValue("dishes","amountIsNull","В заказе должно быть хотя бы одно блюдо");
+        if(invalidAmountOfDishes){
+            errors.rejectValue("dishes","invalidAmount","В заказе должно быть от 1 до 20 блюд");
         }
         LocalDateTime nowPlusTwoHour = LocalDateTime.now().plus(Duration.ofHours(2));
-        LocalDateTime bookingTime = creatingOrderForm.getBookingTimeFromFields();
-        boolean tableFreeStatus = tableService.getById(creatingOrderForm.getTableId()).getFreeStatus();
-        boolean isBefore = creatingOrderForm.getBookingTimeFromFields().isBefore(nowPlusTwoHour);
         if(!tableService.getById(creatingOrderForm.getTableId()).getFreeStatus() && creatingOrderForm.getBookingTimeFromFields().isBefore(nowPlusTwoHour)){
             errors.rejectValue("tables","bookingTakenTable","Бронировать занятый столик нужно минимум за 2 часа");
         }

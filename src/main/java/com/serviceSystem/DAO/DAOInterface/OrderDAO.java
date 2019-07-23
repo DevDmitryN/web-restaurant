@@ -9,4 +9,5 @@ public interface OrderDAO extends BaseDAO<Order,Long> {
     List<Order> getByTable(int tableId);
     List<Order> getActiveByClientId(long clientId);
     List<Order> getNotTakenWithFreeTable();
+    Order getById(long id);
 }

@@ -38,7 +38,7 @@ public abstract class BaseDAOImpl<T,ID extends Serializable> implements BaseDAO<
     @Override
     @Transactional
     public List<T> getAll() {
-        String GET_ALL = "from " + classOfEntity.getName();
+        String GET_ALL = "from " + classOfEntity.getName() + " order by id desc";
         List<T> entities = (List<T>) getCurrentSession().createQuery(GET_ALL).list();
         return entities;
     }
