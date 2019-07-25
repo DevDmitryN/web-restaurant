@@ -10,10 +10,6 @@ import java.util.List;
 
 @Repository
 public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
-    private final String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id order by o.id desc ";
-    private final String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id order by o.id desc ";
-    private final String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status = 'NOT_TAKEN' order by o.id desc ";
-
     public OrderDAOImpl(){
         super(Order.class);
     }
@@ -28,6 +24,7 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     @Override
     @Transactional
     public List<Order> getByTable(int tableId) {
+        String GET_BY_TABLE_ID = "from com.serviceSystem.entity.Order o where o.table.id = :table_id order by o.id desc ";
         Query query = getCurrentSession().createQuery(GET_BY_TABLE_ID);
         query.setParameter("table_id",tableId);
         List<Order> orders = query.list();
@@ -37,6 +34,7 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     @Override
     @Transactional
     public List<Order> getActiveByClientId(long clientId) {
+        String GET_ACTIVE_BY_CLIENT_ID = "from com.serviceSystem.entity.Order o where o.client.id = :client_id order by o.id desc ";
         Query query = getCurrentSession().createQuery(GET_ACTIVE_BY_CLIENT_ID);
         query.setParameter("client_id",clientId);
         List<Order> orders = (List<Order>) query.list();
@@ -46,6 +44,7 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     @Override
     @Transactional
     public List<Order> getNotTakenWithFreeTable() {
+        String GET_NOT_TAKEN_WITH_FREE_TABLE = "from com.serviceSystem.entity.Order o where o.table.freeStatus = true and status = 'NOT_TAKEN' order by o.id desc ";
         Query query = getCurrentSession().createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
         List<Order> orders = query.list();
         return orders;
@@ -57,4 +56,12 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
         order.setOrderDish(order.getOrderDish());
         return order;
     }
+
+//    @Override
+//    @Transactional
+//    public List<Order> getNotTakenForTable(int tableId) {
+//        Query query = getCurrentSession().createQuery("from com.serviceSystem.entity.Order o where o.status = 'NOT_TAKEN' and o.table.id = :tableId order by o.bookingTime desc");
+//        query.setParameter("tableId",tableId);
+//        return (List<Order>) query.list();
+//    }
 }

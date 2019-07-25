@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <form:errors path="name" cssClass="error"/> <br>
                         <label for="name">Имя</label>
-                        <form:input path="name"  value="${client.name}" type="text" class="form-control signUp-field" id="name" placeholder="Введите имя"/>
+                        <form:input path="name"  type="text" class="form-control signUp-field" id="name" placeholder="Введите имя"/>
                     </div>
                     <div class="form-group">
                         <form:errors path="surname" cssClass="error"/> <br>

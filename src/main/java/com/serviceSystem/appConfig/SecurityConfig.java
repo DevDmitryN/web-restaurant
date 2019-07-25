@@ -51,30 +51,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(filter, CsrfFilter.class)
                 .authorizeRequests()
                 .antMatchers("/403").permitAll()
-                .antMatchers("/orders/success").permitAll()
-                .antMatchers("/users/signUpForClient").anonymous()
-                .antMatchers("/orders/creating").access("hasRole('CLIENT')")
+                .antMatchers("/order/creating/success").permitAll()
+                .antMatchers("/user/signUpClient").anonymous()
+                //access for client
+                .antMatchers("/order/creating").access("hasRole('CLIENT')")
+                .antMatchers("/orders/active").hasAuthority("CLIENT")
+                .antMatchers("/client/{userId}/orders/active/{orderId}/cancel").hasAuthority("CLIENT")
+                .antMatchers("/client").hasAnyAuthority("CLIENT")
+                //access for client and waiter
                 .antMatchers("/").access("hasRole('CLIENT') or hasRole('WAITER')")
-                .antMatchers("/orders/all").hasAuthority("WAITER")
-                .antMatchers("/orders/ordersForSpecificTable").hasAuthority("WAITER")
-                .antMatchers("/orders/{order_id}").hasAuthority("WAITER")
-                .antMatchers("/orders/delete/{order_id}").hasAuthority("WAITER")
-                .antMatchers("/orders/setWorkerForOrder/{order_id}").hasAuthority("WAITER")
+                //access for waiter
+                .antMatchers("/orders/list").hasAuthority("WAITER")
+                .antMatchers("/order/{order_id}").hasAuthority("WAITER")
+                .antMatchers("/order/delete/{order_id}").hasAuthority("WAITER")
+                .antMatchers("/order/{order_id}/setWorker").hasAuthority("WAITER")
+                .antMatchers("/tables/list").hasAuthority("WAITER")
                 .anyRequest().authenticated()
+                //authorization
                 .and()
                 .formLogin()
-                .loginPage("/users/authorization")
+                .loginPage("/user/authorization")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/",true)
-                .failureUrl("/users/authorization?error=error").permitAll()
+                .failureUrl("/user/authorization?error=error").permitAll()
                 .and()
+                //logout
                 .logout()
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .logoutSuccessUrl("/users/authorization?logout=true").permitAll()
+                .logoutSuccessUrl("/user/authorization?logout=true").permitAll()
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/403");
+
     }
 //    @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth){

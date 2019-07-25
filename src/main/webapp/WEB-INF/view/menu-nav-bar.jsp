@@ -18,35 +18,28 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
-            <sec:authorize url="/orders/creating">
+            <sec:authorize url="/order/creating">
                 <li class="nav-item">
-                    <a class="nav-link" href="/orders/creating">Сделать заказ</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Активные заказы</a>
+                    <a class="nav-link" href="/order/creating">Сделать заказ</a>
                 </li>
             </sec:authorize>
-            <sec:authorize url="/orders/all">
+            <sec:authorize url="/orders/list">
                 <li class="nav-item">
-                    <a class="nav-link" href="/orders/all">Заказы</a>
+                    <a class="nav-link" href="/orders/list">Заказы</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Столики</a>
+                    <a href="/tables/list" class="nav-link">Столики</a>
                 </li>
             </sec:authorize>
-            <sec:authorize access="hasRole('ADMIN')">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Расширенные настройки
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Сотрудники</a>
-                        <a class="dropdown-item" href="#">Клиенты</a>
-                        <a class="dropdown-item" href="signUpWorker.jsp">Добавить сотрудника</a>
-                    </div>
+            <sec:authorize url="/client">
+                <li class="nav-item">
+                    <form action="/client" method="get">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-outline-dark">Профиль</button>
+                    </form>
                 </li>
             </sec:authorize>
+
             <form action="/logout" method="post">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <li class="nav-item">

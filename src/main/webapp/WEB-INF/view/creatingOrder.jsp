@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-10">
                 <h1>Заполнение заказа</h1>
-                <form:form modelAttribute="creatingOrderForm" method="post" action="/orders/creating">
+                <form:form modelAttribute="creatingOrderForm" method="post" action="/order/creating">
                     <div>
                         <form:errors path="dishes" cssClass="error"/><br>
                         <label>Меню:</label>
@@ -58,22 +58,22 @@
                             <option value="30">30</option>
                         </form:select>
                     </div>
-                    <div class="default-padding-top">
-                        <label for="month">Месяц</label>
-                        <form:select path="month">
-                            <c:forEach begin="1" end="12" var="varMonth">
-                                <option value="${varMonth}">${varMonth}</option>
-                            </c:forEach>
-                        </form:select>
-                        <label for="day">День</label>
-                        <form:select path="day">
-                            <c:forEach begin="1" end="31" var="varDay">
-                                <option value="${varDay}">${varDay}</option>
-                            </c:forEach>
-                        </form:select>
-                        <label>Год: ${creatingOrderForm.year}</label>
-                        <form:input hidden="true" path="year" value="${creatingOrderForm.year}"/>
-                    </div>
+<%--                    <div class="default-padding-top">--%>
+<%--                        <label for="month">Месяц</label>--%>
+<%--                        <form:select path="month">--%>
+<%--                            <c:forEach begin="1" end="12" var="varMonth">--%>
+<%--                                <option value="${varMonth}">${varMonth}</option>--%>
+<%--                            </c:forEach>--%>
+<%--                        </form:select>--%>
+<%--                        <label for="day">День</label>--%>
+<%--                        <form:select path="day">--%>
+<%--                            <c:forEach begin="1" end="31" var="varDay">--%>
+<%--                                <option value="${varDay}">${varDay}</option>--%>
+<%--                            </c:forEach>--%>
+<%--                        </form:select>--%>
+<%--                        <label>Год: ${creatingOrderForm.year}</label>--%>
+<%--                        <form:input hidden="true" path="year" value="${creatingOrderForm.year}"/>--%>
+<%--                    </div>--%>
                     <div class="default-padding-top">
                         <button type="submit" class="btn btn-primary">Отправить</button>
                     </div>

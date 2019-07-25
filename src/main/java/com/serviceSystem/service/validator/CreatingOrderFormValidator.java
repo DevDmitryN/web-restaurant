@@ -3,6 +3,8 @@ package com.serviceSystem.service.validator;
 import com.serviceSystem.controller.util.CreatingOrderForm;
 import com.serviceSystem.entity.DTO.DishDTO;
 import com.serviceSystem.entity.DTO.TableDTO;
+import com.serviceSystem.entity.Order;
+import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -14,11 +16,14 @@ import org.springframework.validation.Validator;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalUnit;
+import java.util.List;
 
 @Service
 public class CreatingOrderFormValidator implements Validator {
     @Autowired
     private TableService tableService;
+    @Autowired
+    private OrderService orderService;
     @Override
     public boolean supports(Class<?> aClass) {
         return CreatingOrderForm.class.equals(aClass);
@@ -40,9 +45,16 @@ public class CreatingOrderFormValidator implements Validator {
         if(invalidAmountOfDishes){
             errors.rejectValue("dishes","invalidAmount","В заказе должно быть от 1 до 20 блюд");
         }
-        LocalDateTime nowPlusTwoHour = LocalDateTime.now().plus(Duration.ofHours(2));
-        if(!tableService.getById(creatingOrderForm.getTableId()).getFreeStatus() && creatingOrderForm.getBookingTimeFromFields().isBefore(nowPlusTwoHour)){
+        LocalDateTime nowPlusTwoHours = LocalDateTime.now().plusHours(2);
+//        List<Order> notTakenOrdersForTable = orderService.getNotTakenForTable(creatingOrderForm.getTableId());
+        if(!tableService.getById(creatingOrderForm.getTableId()).getFreeStatus() && creatingOrderForm.getBookingTimeFromFields().isBefore(nowPlusTwoHours)){
+
             errors.rejectValue("tables","bookingTakenTable","Бронировать занятый столик нужно минимум за 2 часа");
-        }
+        } /*else {
+            LocalDateTime bookingTimePlusTwoHours;
+            for (Order existedOrder : notTakenOrdersForTable) {
+                bookingTimePlusTwoHours = existedOrder.getBookingTime().plusHours(2);
+            }
+        }*/
     }
 }

@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-center fullscreen">
                 <div class="col-md-3">
-                    <form action="/users/authorization" method="post">
+                    <form action="/user/authorization" method="post">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         <c:if test="${error == 'error'}">
                             <span style="color: red">Не правильный email или пароль</span>
@@ -31,7 +31,7 @@
                             <input required name="password" type="password" class="form-control" id="password" placeholder="Password">
                         </div>
                         <button type="submit" class="btn btn-primary">Вход</button>
-                        <a href="/users/signUpForClient">Зарегистрироваться</a>
+                        <a href="/client/signUp">Зарегистрироваться</a>
                     </form>
                 </div>
             </div>

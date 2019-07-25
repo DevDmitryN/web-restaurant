@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Столики</title>
-    <%@include file="header.html" %>
+    <%@include file="header.jsp" %>
 </head>
 <body>
 <%@include file="menu-nav-bar.jsp" %>
@@ -21,20 +21,15 @@
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Номер</th>
-                            <th scope="col">Вместимость</th>
-                            <th scope="col">Статус</th>
-                            <th scope="col"></th>
+                            <th scope="col">Столики</th>
                         <tr/>
                     </thead>
                     <tbody>
                     <c:forEach var="table" items="${tables}">
                     <tr>
-                        <th scope="row">${table.id}</th>
-                        <td>${table.capacity}</td>
-                        <td>${table.getFreeStatusAsString()}</td>
+                        <th scope="row">${table}</th>
                         <td>
-                            <form action="frontController?command=change_table_status&capacity=${table.capacity}&status=${table.freeStatus}" method="post">
+                            <form action="" method="post">
                                 <button type="submit" name="id" value="${table.id}" class="btn btn-secondary">Изменить статус</button>
                             </form>
                         </td>

@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Active orders</title>
-    <%@include file="header.html"%>
+    <%@include file="header.jsp"%>
 </head>
 <body>
 <%@include file="menu-nav-bar.jsp"%>
@@ -29,7 +29,7 @@
                         <p>Время создания заказа: ${order.creationTime}</p>
                         <p>Время бронирования: ${order.bookingTime}</p>
                         <p>Список блюд:</p>
-                        <c:forEach var="dish" items="${order.orderDishComposites}">
+                        <c:forEach var="dish" items="${order.dishes}">
                             <p><bold>${dish.name}</bold>; Описание: ${dish.description}; Цена за одну порцию: ${dish.price}; Кол-во: ${dish.amount}</p>
                         </c:forEach>
                         <c:choose>
@@ -38,7 +38,8 @@
                                     <input hidden name="command" value="show_dishes_of_order"/>
                                     <button type="submit" name="id" value="${order.id}" class="btn btn-success">Редактировать</button>
                                 </form>
-                                <form action="frontController?command=cancel_order" method="post">
+                                <form action="active/${order.id}/cancel" method="post">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                     <button type="submit" name="id" value="${order.id}" class="btn btn-danger">Отменить заказ</button>
                                 </form>
                             </c:when>

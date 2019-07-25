@@ -5,7 +5,9 @@ import com.serviceSystem.entity.DTO.TableDTO;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.RestaurantTable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public class CreatingOrderForm {
@@ -14,9 +16,9 @@ public class CreatingOrderForm {
     private int tableId;
     private int hour;
     private int minutes;
-    private int month;
-    private int day;
-    private int year;
+//    private int month;
+//    private int day;
+//    private int year;
     private LocalDateTime bookingTime;
     public CreatingOrderForm(){}
 
@@ -57,29 +59,29 @@ public class CreatingOrderForm {
         this.minutes = minutes;
     }
 
-    public int getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
+//    public int getMonth() {
+//        return month;
+//    }
+//
+//    public void setMonth(int month) {
+//        this.month = month;
+//    }
+//
+//    public int getDay() {
+//        return day;
+//    }
+//
+//    public void setDay(int day) {
+//        this.day = day;
+//    }
+//
+//    public int getYear() {
+//        return year;
+//    }
+//
+//    public void setYear(int year) {
+//        this.year = year;
+//    }
 
     public int getTableId() {
         return tableId;
@@ -95,14 +97,14 @@ public class CreatingOrderForm {
 
     public void setBookingTime(LocalDateTime bookingTime) {
         this.bookingTime = bookingTime;
-        year = bookingTime.getYear();
-        month = bookingTime.getMonth().getValue();
-        day = bookingTime.getDayOfMonth();
+//        year = bookingTime.getYear();
+//        month = bookingTime.getMonth().getValue();
+//        day = bookingTime.getDayOfMonth();
         hour = bookingTime.getHour();
         minutes = bookingTime.getMinute();
 
     }
     public LocalDateTime getBookingTimeFromFields(){
-        return LocalDateTime.of(year,month,day,hour,minutes);
+        return LocalDateTime.of(LocalDate.now(), LocalTime.of(hour,minutes));
     }
 }

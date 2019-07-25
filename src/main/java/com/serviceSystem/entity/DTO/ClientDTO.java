@@ -3,6 +3,7 @@ package com.serviceSystem.entity.DTO;
 import javax.validation.constraints.NotNull;
 
 public class ClientDTO {
+    private long id;
     private String name;
     private String surname;
     private String password;
@@ -10,6 +11,14 @@ public class ClientDTO {
     private String email;
     private String phoneNumber;
     private String cardNumber;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
