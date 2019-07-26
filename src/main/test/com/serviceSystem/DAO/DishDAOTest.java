@@ -1,6 +1,6 @@
 package com.serviceSystem.DAO;
 
-import com.serviceSystem.appConfig.ApplicationConfig;
+import com.serviceSystem.config.ApplicationConfig;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.service.DishService;
 import org.junit.Test;

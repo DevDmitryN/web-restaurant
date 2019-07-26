@@ -1,6 +1,6 @@
 package com.serviceSystem.DAO;
 
-import com.serviceSystem.appConfig.*;
+import com.serviceSystem.config.*;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.service.WorkerService;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package com.serviceSystem.DAO;
 
-import com.serviceSystem.appConfig.ApplicationConfig;
+import com.serviceSystem.config.ApplicationConfig;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.TableService;
 import org.junit.Test;

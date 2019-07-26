@@ -1,19 +1,9 @@
 package com.serviceSystem.DAO;
 
-import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
-import com.serviceSystem.appConfig.ApplicationConfig;
-import com.serviceSystem.entity.*;
-import com.serviceSystem.entity.enums.Status;
-import com.serviceSystem.service.*;
-import org.junit.Test;
+import com.serviceSystem.config.ApplicationConfig;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;

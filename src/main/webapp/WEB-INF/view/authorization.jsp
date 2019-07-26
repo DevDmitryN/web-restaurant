@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: Admin
@@ -19,6 +20,7 @@
                 <div class="col-md-3">
                     <form action="/user/authorization" method="post">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
                         <c:if test="${error == 'error'}">
                             <span style="color: red">Не правильный email или пароль</span>
                         </c:if>

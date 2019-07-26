@@ -1,43 +1,48 @@
 package com.serviceSystem.controller;
 
-import com.serviceSystem.controller.util.dtoConverter.DtoConverterImpl;
-import com.serviceSystem.controller.util.dtoConverter.DtoConvertrer;
-import com.serviceSystem.entity.Client;
-import com.serviceSystem.entity.DTO.ClientDTO;
-import com.serviceSystem.service.ClientService;
-import com.serviceSystem.service.validator.ClientSignUpValidator;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
+import com.serviceSystem.config.jwt.JwtTokenProvider;
+import com.serviceSystem.entity.DTO.AuthenticationRequestDto;
+import com.serviceSystem.service.UserDetailsSpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
-@Controller
+@RestController
 public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private UserDetailsSpringService userDetailsSpringService;
 
-
-//    @InitBinder
-//    protected void initBinder(WebDataBinder binder){
-//        binder.setValidator(clientSignUpValidator);
-//        binder.addValidators(clientSignUpValidator);
-//    }
-    @GetMapping("/user/authorization")
-    public String getAuthorizationPage(Model model,@ModelAttribute("error") String error){
-        if(error!=null && !error.isEmpty()){
-            model.addAttribute(error,error);
+    @PostMapping("/user/login")
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword()));
+            UserDetails user = userDetailsSpringService.loadUserByUsername(requestDto.getEmail());
+            String token = jwtTokenProvider.createToken(user);
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", requestDto.getEmail());
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid username or password");
         }
-        return "authorization";
     }
 
 }

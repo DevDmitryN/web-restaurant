@@ -1,4 +1,4 @@
-package com.serviceSystem.appConfig;
+package com.serviceSystem.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -23,7 +22,7 @@ import static org.hibernate.cfg.AvailableSettings.C3P0_MAX_STATEMENTS;
 @PropertySource("classpath:application.properties")
 @PropertySource("classpath:messages.properties")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.serviceSystem.DAO","com.serviceSystem.service"})
+@ComponentScan(basePackages = {/*"com.serviceSystem.DAO","com.serviceSystem.service",*/"com.serviceSystem"})
 public class ApplicationConfig {
 
     @Autowired
