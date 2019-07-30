@@ -1,6 +1,8 @@
 package com.serviceSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ public class RestaurantTable implements Serializable{
     @Column(name = "is_free")
     private boolean freeStatus = true;
     @OneToMany(mappedBy = "table")
+    @JsonIgnore
     private List<Order> order;
 
     public RestaurantTable(){}

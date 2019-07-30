@@ -1,7 +1,7 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.DAO.DAOImpl.WorkerDAOImpl;
-import com.serviceSystem.DAO.DAOInterface.WorkerDAO;
+import com.serviceSystem.dao.DAOImpl.WorkerDAOImpl;
+import com.serviceSystem.dao.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

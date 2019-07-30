@@ -1,5 +1,7 @@
 package com.serviceSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.serviceSystem.entity.enums.Status;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @Component
 @Entity
 @Table(name = "orders",schema = "restaurantdb")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,17 +28,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "table_id")
     private RestaurantTable table;
-//    @ManyToMany
-//    @JoinTable(
-//            name = "order_dish",
-//            schema = "restaurantdb",
-//            joinColumns = {@JoinColumn(name = "order_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "dish_id")}
-//    )
-//    private List<Dish> orderDishes;
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
-    private List<OrderDish> orderDishes;
+    private List<OrderDish> orderDishes = null;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -73,9 +68,9 @@ public class Order {
     public void setStatus(Status status) {
         this.status = status;
     }
-    public void setStatus(String status) {
-        this.status = Status.valueOf(status);
-    }
+//    public void setStatus(String status) {
+//        this.status = Status.valueOf(status);
+//    }
 
     public RestaurantTable getTable() {
         return table;
@@ -129,16 +124,6 @@ public class Order {
         this.bookingTime = bookingTime;
     }
 
-    public String getFormatedCreationTime(){
-        return creationTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public String getFormatedBookingTime(){
-        return bookingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-    public String getStatusAsString(){
-        return status.getNameInRussian();
-    }
 
     @Override
     public String toString() {

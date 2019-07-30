@@ -2,7 +2,7 @@ package com.serviceSystem.controller;
 
 import com.serviceSystem.controller.util.dtoConverter.DtoConverterImpl;
 import com.serviceSystem.controller.util.dtoConverter.DtoConvertrer;
-import com.serviceSystem.entity.DTO.TableDTO;
+import com.serviceSystem.entity.dto.TableDto;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,11 @@ public class TableController {
 
     @Autowired
     private TableService tableService;
-    private DtoConvertrer<RestaurantTable, TableDTO> tableDtoConverter = new DtoConverterImpl<>(RestaurantTable.class,TableDTO.class);
+    private DtoConvertrer<RestaurantTable, TableDto> tableDtoConverter = new DtoConverterImpl<>(RestaurantTable.class, TableDto.class);
 
     @GetMapping("tables/list")
     public String getTables(Model model){
-        List<TableDTO> tables = tableDtoConverter.toDTOList(tableService.getAll());
+        List<TableDto> tables = tableDtoConverter.toDTOList(tableService.getAll());
         model.addAttribute("tables",tables);
         return "tables";
     }

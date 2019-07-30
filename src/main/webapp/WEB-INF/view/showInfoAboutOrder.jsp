@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <c:forEach items="${order.dishes}" var="dish">
+                <c:forEach items="${order.orderDishDtoList}" var="dish">
                     <p>${dish}</p>
                     <hr>
                 </c:forEach>

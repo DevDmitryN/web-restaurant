@@ -1,7 +1,6 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.DAO.DAOImpl.DishDAOImpl;
-import com.serviceSystem.DAO.DAOInterface.DishDAO;
+import com.serviceSystem.dao.DAOInterface.DishDAO;
 import com.serviceSystem.entity.Dish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

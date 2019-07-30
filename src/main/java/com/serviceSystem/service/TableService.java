@@ -1,7 +1,7 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.DAO.DAOImpl.TableDAOImpl;
-import com.serviceSystem.DAO.DAOInterface.RestaurantTableDAO;
+import com.serviceSystem.dao.DAOImpl.TableDAOImpl;
+import com.serviceSystem.dao.DAOInterface.RestaurantTableDAO;
 import com.serviceSystem.entity.RestaurantTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

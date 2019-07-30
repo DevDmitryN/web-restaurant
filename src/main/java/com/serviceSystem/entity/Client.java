@@ -1,21 +1,25 @@
 package com.serviceSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
 @Component
 @Entity
 @Table(name = "clients", schema = "restaurantdb")
-public class Client extends User<Long> {
+public class Client extends User<Long> implements Serializable {
     @Column(name = "card_number")
     private String cardNumber;
     @OneToMany(mappedBy = "client")
+    @JsonIgnore
     private List<Order> orders;
 
     public Client(){

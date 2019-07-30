@@ -1,9 +1,7 @@
 package com.serviceSystem.controller.util;
 
-import com.serviceSystem.entity.DTO.DishDTO;
-import com.serviceSystem.entity.DTO.TableDTO;
-import com.serviceSystem.entity.Dish;
-import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.entity.dto.DishDto;
+import com.serviceSystem.entity.dto.TableDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,8 +9,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class CreatingOrderForm {
-    private List<DishDTO> dishes;
-    private List<TableDTO> tables;
+    private List<DishDto> dishes;
+    private List<TableDto> tables;
     private int tableId;
     private int hour;
     private int minutes;
@@ -22,24 +20,24 @@ public class CreatingOrderForm {
     private LocalDateTime bookingTime;
     public CreatingOrderForm(){}
 
-    public CreatingOrderForm(List<DishDTO> dishes, List<TableDTO> tables) {
+    public CreatingOrderForm(List<DishDto> dishes, List<TableDto> tables) {
         this.dishes = dishes;
         this.tables = tables;
     }
 
-    public List<DishDTO> getDishes() {
+    public List<DishDto> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<DishDTO> dishes) {
+    public void setDishes(List<DishDto> dishes) {
         this.dishes = dishes;
     }
 
-    public List<TableDTO> getTables() {
+    public List<TableDto> getTables() {
         return tables;
     }
 
-    public void setTables(List<TableDTO> tables) {
+    public void setTables(List<TableDto> tables) {
         this.tables = tables;
     }
 

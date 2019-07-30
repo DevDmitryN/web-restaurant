@@ -1,34 +1,33 @@
 package com.serviceSystem.controller;
 
 import com.serviceSystem.controller.util.CreatingOrderForm;
-import com.serviceSystem.controller.util.dtoConverter.DtoConverterImpl;
-import com.serviceSystem.controller.util.dtoConverter.DtoConvertrer;
-import com.serviceSystem.entity.*;
-import com.serviceSystem.entity.DTO.DishDTO;
-import com.serviceSystem.entity.DTO.OrderDTO;
-import com.serviceSystem.entity.DTO.TableDTO;
-import com.serviceSystem.entity.enums.Status;
-import com.serviceSystem.exception.OrderAlreadyTakenException;
+import com.serviceSystem.entity.Order;
+import com.serviceSystem.entity.OrderDish;
+import com.serviceSystem.entity.RestaurantTable;
+import com.serviceSystem.entity.dto.DishDto;
+import com.serviceSystem.entity.dto.OrderDto;
 import com.serviceSystem.service.*;
+import com.serviceSystem.service.mapper.OrderDishMapper;
+import com.serviceSystem.service.mapper.OrderMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Controller
+@RestController
 public class OrderController {
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
     @Autowired
@@ -44,22 +43,21 @@ public class OrderController {
     @Qualifier(value = "creatingOrderFormValidator")
     @Autowired
     private Validator orderFormValidator;
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private OrderDishMapper orderDishMapper;
 
-    private DtoConvertrer<Dish,DishDTO> dishDtoConverter = new DtoConverterImpl(Dish.class, DishDTO.class);
-    private DtoConvertrer<RestaurantTable,TableDTO> tableDtoConverter = new DtoConverterImpl(RestaurantTable.class, TableDTO.class);
-    private DtoConvertrer<Order,OrderDTO> orderDtoConverter = new DtoConverterImpl(Order.class, OrderDTO.class);
 
-
-    @GetMapping("/order/creating")
-    public String creating(Model model) {
-        logger.info("Get page for creating order");
-        CreatingOrderForm creatingOrderForm = new CreatingOrderForm();
-        creatingOrderForm.setDishes(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
-        creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
-//        creatingOrderForm.setYear(LocalDate.now().getYear());
-        model.addAttribute("creatingOrderForm", creatingOrderForm);
-        return "creatingOrder";
-    }
+//    @GetMapping("/order/creating")
+//    public String creating(Model model) {
+//        logger.info("Get page for creating order");
+//        CreatingOrderForm creatingOrderForm = new CreatingOrderForm();
+//        creatingOrderForm.setOrderDishDtoList(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
+//        creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
+//        model.addAttribute("creatingOrderForm", creatingOrderForm);
+//        return "creatingOrder";
+//    }
 
 
     @PostMapping("/order/creating")
@@ -68,17 +66,16 @@ public class OrderController {
         orderFormValidator.validate(creatingOrderForm, bindingResult);
         if (bindingResult.hasErrors()) {
             logger.info("Binding result " + bindingResult.getAllErrors());
-            creatingOrderForm.setDishes(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
-            creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
+
             return "creatingOrder";
         }
         Order order = new Order();
         List<OrderDish> orderDishes = new ArrayList<>();
-        for (DishDTO dishDTO : creatingOrderForm.getDishes()) {
-            if (dishDTO.getAmount() != 0) {
-                Dish dish = dishDtoConverter.fromDTO(dishDTO);
-                orderDishes.add(new OrderDish(order, dish, dishDTO.getAmount()));
-            }
+        for (DishDto dishDTO : creatingOrderForm.getDishes()) {
+//            if (dishDTO.getAmount() != 0) {
+//                Dish dish = dishDtoConverter.fromDTO(dishDTO);
+//                orderDishes.add(new OrderDish(order, dish, dishDTO.getAmount()));
+//            }
         }
         order.setOrderDish(orderDishes);
         order.setClient(clientService.getByEmail(principalUser.getName()));
@@ -92,93 +89,89 @@ public class OrderController {
         return "redirect: /order/creating/success";
     }
 
-    @GetMapping("/orders/list")
-    public String getAll(Model model, @RequestParam(value = "table",required = false,defaultValue = "all") String id,
-                         Principal principalUser,@RequestParam(value = "errorOfTakingOrder",required = false) String error) {
-        if(error != null){
-            model.addAttribute("error",error);
-        }
+    @GetMapping("/orders")
+    @ResponseBody
+    public ResponseEntity<List<OrderDto>> getAll(@RequestParam(value = "table", required = false, defaultValue = "all") String id) {
+        List<OrderDto> orders;
         if (id.equals("all")) {
-//            return "redirect: /orders/all";
-            List<OrderDTO> orders = orderDtoConverter.toDTOList(orderService.getAll());
-            model.addAttribute("workerEmail", principalUser.getName());
-            model.addAttribute("orders", orders);
-            model.addAttribute("tables", tableDtoConverter.toDTOList(tableService.getAll()));
+            orders = orderService.getAll().stream().map(order -> orderMapper.toDto(order)).collect(Collectors.toList());
         } else {
             int tableId = Integer.valueOf(id);
-            model.addAttribute("workerEmail",principalUser.getName());
-            model.addAttribute("orders", orderDtoConverter.toDTOList(orderService.getByTableId(tableId)));
-            model.addAttribute("tables", tableDtoConverter.toDTOList(tableService.getAll()));
+            orders = orderMapper.toDtoList(orderService.getByTableId(tableId));
         }
-        return "showOrders";
+        return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
     }
-    @GetMapping("/order/{id}")
-    public String getOrderInfo(Model model, @PathVariable("id") long id){
-        Order order = orderService.getById(id);
-        OrderDTO  orderDTO = orderDtoConverter.toDTO(order);
-        List<DishDTO> dishes = new ArrayList<>();
-        int i = 0;
-        for (OrderDish orderDish : order.getOrderDish()) {
-            dishes.add(dishDtoConverter.toDTO(orderDish.getDish()));
-            dishes.get(i).setAmount(orderDish.getAmount());
-            i++;
-        }
-        orderDTO.setDishes(dishes);
-        model.addAttribute("order",orderDTO);
+
+    @GetMapping("/orders/{id}")
+    @ResponseBody
+    public ResponseEntity<OrderDto> getOrderInfo(@PathVariable("id") long id) {
         logger.info("Get info of order " + id);
-        return "showInfoAboutOrder";
+        Order order = orderService.getById(id);
+        if(order == null){
+            return new ResponseEntity<OrderDto>(HttpStatus.NO_CONTENT);
+        }
+        OrderDto orderDto = orderMapper.toDto(order);
+        orderDto.setOrderDishDtoList(orderDishMapper.toDtoList(order.getOrderDish()));
+        return new ResponseEntity<OrderDto>(orderDto,HttpStatus.OK);
     }
-    @PostMapping("/order/{order_id}/delete")
-    public String delete(Model model, @PathVariable("order_id") long orderId){
+
+    @DeleteMapping("/orders/{order_id}")
+    public ResponseEntity delete(@PathVariable("order_id") long orderId) {
         logger.info("Deleting order " + orderId);
-        orderService.delete(orderId);
-        return "redirect: /orders/list";
-    }
-    @PostMapping("/order/{order_id}/setWorker")
-    public String setWorkerForOrder(Model model, @PathVariable("order_id") long orderId,Principal principalUser){
-        logger.info("Changing worker of order " + orderId);
-        Worker worker = workerService.getByEmail(principalUser.getName());
-        try {
-            orderService.changeWorkerForOrder(orderId,worker);
-        } catch (OrderAlreadyTakenException e) {
-            return "redirect: /orders/list?errorOfTakingOrder=true";
-        }
-        return "redirect: /orders/list";
-    }
-
-    @GetMapping("/client/{userId}/orders/active")
-    public String getActive(Model model,@PathVariable("userId") long clientId){
-        List<Order> orders = orderService.getNotCompletedByClientId(clientId);
-        List<OrderDTO> ordersDTO = new ArrayList<>();
-
-        OrderDTO orderDTO;
-
-        for (Order order : orders) {
-            int i = 0;
-            List<DishDTO> dishes = new ArrayList<>();
-            for (OrderDish orderDish : order.getOrderDish()) {
-                dishes.add(dishDtoConverter.toDTO(orderDish.getDish()));
-                dishes.get(i).setAmount(orderDish.getAmount());
-                i++;
-            }
-            orderDTO = orderDtoConverter.toDTO(order);
-            orderDTO.setDishes(dishes);
-            ordersDTO.add(orderDTO);
-        }
-        model.addAttribute("orders",ordersDTO);
-        return "activeOrders";
-    }
-
-    @PostMapping("/client/{userId}/orders/active/{orderId}/cancel")
-    public String cancelOrder(Model model,@PathVariable("orderId") long orderId,@PathVariable("userId") long clientId){
         Order order = orderService.getById(orderId);
-        order.setStatus(Status.CANCELLED);
-        orderService.update(order);
-        return "/client/"+ clientId +"/orders/active";
+        if(order == null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }else {
+            orderService.delete(orderId);
+            return new ResponseEntity(HttpStatus.valueOf(204));
+        }
     }
 
-    @GetMapping("/order/creating/success")
-    public String getSuccessPage() {
-        return "success";
+//    @PutMapping("/orders/{order_id}/setWorker")
+//    public ResponseEntity setWorkerForOrder(@PathVariable("order_id") long orderId,Principal principalUser) {
+//        logger.info("Changing worker of order " + orderId);
+//        Worker worker = workerService.getByEmail(principalUser.getName());
+//        Order order  = orderService.getById(orderId);
+//        if (order == null) {
+//            return new ResponseEntity(HttpStatus.NOT_FOUND);
+//        }else {
+//            try {
+//                orderService.changeWorkerForOrder(order, worker);
+//                return new ResponseEntity(HttpStatus.OK);
+//            } catch (OrderAlreadyTakenException e) {
+//                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+//            }
+//        }
+//    }
+
+    @GetMapping("/clients/{clientId}/orders")
+    public ResponseEntity<List<OrderDto>> getActive(@PathVariable("clientId") long clientId,
+                                                    @RequestParam(value = "status", required = false, defaultValue = "") String status) {
+        logger.info("Get " + status + " orders of client " + clientId);
+        List<OrderDto> orders = null;
+        if(status.isEmpty()){
+            return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
+        }else{
+            orders = orderService.getActiveByClientId(clientId).stream().map(
+                    order -> {
+                        OrderDto dto = orderMapper.toDto(order);
+                        dto.setOrderDishDtoList(orderDishMapper.toDtoList(order.getOrderDish()));
+                        return dto;
+                    }
+            ).collect(Collectors.toList());
+            return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
+        }
     }
+//
+//    @PutMapping("/client/{userId}/orders/active/{orderId}/cancel")
+//    public ResponseEntity cancelOrder(@PathVariable("orderId") long orderId) {
+//        Order order = orderService.getById(orderId);
+//        if(order == null){
+//            return new ResponseEntity(HttpStatus.NOT_FOUND);
+//        }
+//        order.setStatus(Status.CANCELLED);
+//        orderService.update(order);
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
+
 }

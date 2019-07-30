@@ -22,13 +22,7 @@ public abstract class User<ID extends Number> {
     public User(){
         
     }
-//    public User(String name, String surname, String password, String email, String phoneNumber) {
-//        this.name = name;
-//        this.surname = surname;
-//        this.password = password;
-//        this.email = email;
-//        this.phoneNumber = phoneNumber;
-//    }
+
 
     public void setId(ID id) {
         this.id = id;

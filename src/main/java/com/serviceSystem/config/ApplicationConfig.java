@@ -1,6 +1,7 @@
 package com.serviceSystem.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +23,7 @@ import static org.hibernate.cfg.AvailableSettings.C3P0_MAX_STATEMENTS;
 @PropertySource("classpath:application.properties")
 @PropertySource("classpath:messages.properties")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {/*"com.serviceSystem.DAO","com.serviceSystem.service",*/"com.serviceSystem"})
+@ComponentScan(basePackages = {"com.serviceSystem.dao","com.serviceSystem.service"})
 public class ApplicationConfig {
 
     @Autowired
@@ -68,5 +69,9 @@ public class ApplicationConfig {
         dataSource.setUsername(environment.getProperty("postgresql.username"));
         dataSource.setPassword(environment.getProperty("postgresql.password"));
         return dataSource;
+    }
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 }

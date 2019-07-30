@@ -1,12 +1,12 @@
 package com.serviceSystem.service;
 
-import com.serviceSystem.DAO.DAOImpl.OrderDAOImpl;
-import com.serviceSystem.DAO.DAOInterface.OrderDAO;
-import com.serviceSystem.DAO.DAOInterface.OrderDishDAO;
+import com.serviceSystem.dao.DAOInterface.OrderDAO;
+import com.serviceSystem.dao.DAOInterface.OrderDishDAO;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.exception.OrderAlreadyTakenException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,17 +34,23 @@ public class OrderService {
     public void delete(long id){
         orderDAO.delete(id);
     }
+
+    @Transactional
     public Order getById(long id){
-        return orderDAO.getById(id);
+        Order order = orderDAO.getById(id);
+        Hibernate.initialize(order.getOrderDish());
+        return order;
     }
+
     public void update(Order order){
         orderDAO.update(order);
     }
+
     @Transactional
-    public List<Order> getNotCompletedByClientId(long clientId){
+    public List<Order> getActiveByClientId(long clientId){
         List<Order> orders = orderDAO.getActiveByClientId(clientId);
         for (Order order : orders) {
-            order.setOrderDish(order.getOrderDish());
+            Hibernate.initialize(order.getOrderDish());
         }
         return orders;
     }
@@ -53,8 +59,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void changeWorkerForOrder(long orderId,Worker worker) throws OrderAlreadyTakenException {
-        Order order = getById(orderId);
+    public void changeWorkerForOrder(Order order,Worker worker) throws OrderAlreadyTakenException {
         if(order.getWorker() != null){
             if(!order.getWorker().getEmail().equals(worker.getEmail())){
                 throw new OrderAlreadyTakenException();

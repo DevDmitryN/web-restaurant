@@ -1,22 +1,15 @@
 package com.serviceSystem.service.validator;
 
 import com.serviceSystem.controller.util.CreatingOrderForm;
-import com.serviceSystem.entity.DTO.DishDTO;
-import com.serviceSystem.entity.DTO.TableDTO;
-import com.serviceSystem.entity.Order;
+import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
 
 @Service
 public class CreatingOrderFormValidator implements Validator {
@@ -37,10 +30,10 @@ public class CreatingOrderFormValidator implements Validator {
             errors.rejectValue("bookingTime","afterRealTime","Время бронирования должно быть позже текущего времени");
         }
         boolean invalidAmountOfDishes = true;
-        for (DishDTO dish : creatingOrderForm.getDishes()) {
-            if(dish.getAmount() > 0 && dish.getAmount()<=20){
-                invalidAmountOfDishes = false;
-            }
+        for (DishDto dish : creatingOrderForm.getDishes()) {
+//            if(dish.getAmount() > 0 && dish.getAmount()<=20){
+//                invalidAmountOfDishes = false;
+//            }
         }
         if(invalidAmountOfDishes){
             errors.rejectValue("dishes","invalidAmount","В заказе должно быть от 1 до 20 блюд");

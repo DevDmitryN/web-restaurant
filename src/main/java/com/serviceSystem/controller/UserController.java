@@ -1,7 +1,7 @@
 package com.serviceSystem.controller;
 
 import com.serviceSystem.config.jwt.JwtTokenProvider;
-import com.serviceSystem.entity.DTO.AuthenticationRequestDto;
+import com.serviceSystem.entity.dto.AuthenticationRequestDto;
 import com.serviceSystem.service.UserDetailsSpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,5 +44,6 @@ public class UserController {
             throw new BadCredentialsException("Invalid username or password");
         }
     }
+
 
 }

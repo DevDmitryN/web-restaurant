@@ -25,12 +25,12 @@
                 <h1>Заполнение заказа</h1>
                 <form:form modelAttribute="creatingOrderForm" method="post" action="/order/creating">
                     <div>
-                        <form:errors path="dishes" cssClass="error"/><br>
+                        <form:errors path="orderDishDtoList" cssClass="error"/><br>
                         <label>Меню:</label>
-                        <c:forEach var="dish" items="${creatingOrderForm.dishes}" varStatus="status">
+                        <c:forEach var="dish" items="${creatingOrderForm.orderDishDtoList}" varStatus="status">
                             <div>
-                                <input hidden name="dishes[${status.index}].id" value="${dish.id}" readonly>
-                                <input type="number" name="dishes[${status.index}].amount" value="${dish.amount}" min="0" max="20">
+                                <input hidden name="orderDishDtoList[${status.index}].id" value="${dish.id}" readonly>
+                                <input type="number" name="orderDishDtoList[${status.index}].amount" value="${dish.amount}" min="0" max="20">
                                 ${dish}
                                 <br>
                             </div>
