@@ -2,6 +2,7 @@ package com.serviceSystem.service;
 
 import com.serviceSystem.dao.DAOInterface.ClientDAO;
 import com.serviceSystem.entity.Client;
+import com.serviceSystem.exception.NoSuchItemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,9 @@ public class ClientService {
 
     public ClientService(){}
 
-    public boolean isExist(String email, String password){
-        return clientDAO.isExist(email,password);
-    }
+//    public boolean isExist(String email, String password){
+//        return clientDAO.isExist(email,password);
+//    }
     public Client getByEmail(String email){
         return clientDAO.getByEmail(email);
     }
@@ -36,7 +37,11 @@ public class ClientService {
         return clientDAO.getAll();
     }
     public Client getById(Long id){
-        return clientDAO.getById(id);
+        Client client = clientDAO.getById(id);
+        if(client == null){
+            throw new NoSuchItemException("There is no client with id = " + id);
+        }
+        return client;
     }
     public boolean isPhoneNumberExist(String phoneNumber){
         return clientDAO.isPhoneNumberExist(phoneNumber);

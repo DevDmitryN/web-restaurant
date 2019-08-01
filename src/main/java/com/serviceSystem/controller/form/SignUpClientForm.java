@@ -1,4 +1,4 @@
-package com.serviceSystem.controller.util;
+package com.serviceSystem.controller.form;
 
 public class SignUpClientForm {
     private String name;
@@ -63,5 +63,18 @@ public class SignUpClientForm {
 
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "SignUpClientForm{" +
+                "name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                '}';
     }
 }

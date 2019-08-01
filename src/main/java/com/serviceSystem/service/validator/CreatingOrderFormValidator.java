@@ -1,6 +1,6 @@
 package com.serviceSystem.service.validator;
 
-import com.serviceSystem.controller.util.CreatingOrderForm;
+import com.serviceSystem.controller.form.CreatingOrderForm;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;
@@ -39,15 +39,9 @@ public class CreatingOrderFormValidator implements Validator {
             errors.rejectValue("dishes","invalidAmount","В заказе должно быть от 1 до 20 блюд");
         }
         LocalDateTime nowPlusTwoHours = LocalDateTime.now().plusHours(2);
-//        List<Order> notTakenOrdersForTable = orderService.getNotTakenForTable(creatingOrderForm.getTableId());
         if(!tableService.getById(creatingOrderForm.getTableId()).getFreeStatus() && creatingOrderForm.getBookingTimeFromFields().isBefore(nowPlusTwoHours)){
 
             errors.rejectValue("tables","bookingTakenTable","Бронировать занятый столик нужно минимум за 2 часа");
-        } /*else {
-            LocalDateTime bookingTimePlusTwoHours;
-            for (Order existedOrder : notTakenOrdersForTable) {
-                bookingTimePlusTwoHours = existedOrder.getBookingTime().plusHours(2);
-            }
-        }*/
+        }
     }
 }

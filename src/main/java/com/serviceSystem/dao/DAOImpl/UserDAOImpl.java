@@ -24,16 +24,16 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         return (T) query.getSingleResult();
     }
 
-    @Override
-    @Transactional
-    public boolean isExist(String email, String password) {
-        String getByEmailAndPassword = "from " + classOfUser.getName() + " user where user.email = :email and user.password = :password";
-        Query query = getCurrentSession().createQuery(getByEmailAndPassword);
-        query.setParameter("email",email);
-        query.setParameter("password",password);
-        List<T> users = query.list();
-        return users.size() == 0 ? false : true;
-    }
+//    @Override
+//    @Transactional
+//    public boolean isExist(String email, String password) {
+//        String getByEmailAndPassword = "from " + classOfUser.getName() + " user where user.email = :email and user.password = :password";
+//        Query query = getCurrentSession().createQuery(getByEmailAndPassword);
+//        query.setParameter("email",email);
+//        query.setParameter("password",password);
+//        List<T> users = query.list();
+//        return users.size() == 0 ? false : true;
+//    }
 
     @Override
     @Transactional

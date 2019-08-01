@@ -1,6 +1,6 @@
 package com.serviceSystem.controller;
 
-import com.serviceSystem.controller.util.CreatingOrderForm;
+import com.serviceSystem.controller.form.CreatingOrderForm;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.OrderDish;
 import com.serviceSystem.entity.RestaurantTable;
@@ -90,7 +90,6 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    @ResponseBody
     public ResponseEntity<List<OrderDto>> getAll(@RequestParam(value = "table", required = false, defaultValue = "all") String id) {
         List<OrderDto> orders;
         if (id.equals("all")) {
@@ -99,32 +98,24 @@ public class OrderController {
             int tableId = Integer.valueOf(id);
             orders = orderMapper.toDtoList(orderService.getByTableId(tableId));
         }
-        return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
+        return new ResponseEntity<List<OrderDto>>(orders, HttpStatus.OK);
     }
 
-    @GetMapping("/orders/{id}")
-    @ResponseBody
-    public ResponseEntity<OrderDto> getOrderInfo(@PathVariable("id") long id) {
+    @GetMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDto> getOrderInfo(@PathVariable("orderId") long id) {
         logger.info("Get info of order " + id);
         Order order = orderService.getById(id);
-        if(order == null){
-            return new ResponseEntity<OrderDto>(HttpStatus.NO_CONTENT);
-        }
         OrderDto orderDto = orderMapper.toDto(order);
         orderDto.setOrderDishDtoList(orderDishMapper.toDtoList(order.getOrderDish()));
-        return new ResponseEntity<OrderDto>(orderDto,HttpStatus.OK);
+        return new ResponseEntity<OrderDto>(orderDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/orders/{order_id}")
-    public ResponseEntity delete(@PathVariable("order_id") long orderId) {
+    @DeleteMapping("/orders/{orderId}")
+    public ResponseEntity delete(@PathVariable("orderId") long orderId) {
         logger.info("Deleting order " + orderId);
-        Order order = orderService.getById(orderId);
-        if(order == null){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }else {
-            orderService.delete(orderId);
-            return new ResponseEntity(HttpStatus.valueOf(204));
-        }
+        orderService.delete(orderId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+
     }
 
 //    @PutMapping("/orders/{order_id}/setWorker")
@@ -148,10 +139,10 @@ public class OrderController {
     public ResponseEntity<List<OrderDto>> getActive(@PathVariable("clientId") long clientId,
                                                     @RequestParam(value = "status", required = false, defaultValue = "") String status) {
         logger.info("Get " + status + " orders of client " + clientId);
-        List<OrderDto> orders = null;
-        if(status.isEmpty()){
-            return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
-        }else{
+        List<OrderDto> orders;
+        if (status.isEmpty()) {
+            return new ResponseEntity<List<OrderDto>>(HttpStatus.OK);
+        } else {
             orders = orderService.getActiveByClientId(clientId).stream().map(
                     order -> {
                         OrderDto dto = orderMapper.toDto(order);
@@ -159,7 +150,7 @@ public class OrderController {
                         return dto;
                     }
             ).collect(Collectors.toList());
-            return new ResponseEntity<List<OrderDto>>(orders,HttpStatus.OK);
+            return new ResponseEntity<List<OrderDto>>(orders, HttpStatus.OK);
         }
     }
 //

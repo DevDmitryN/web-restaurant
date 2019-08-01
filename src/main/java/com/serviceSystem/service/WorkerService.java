@@ -3,6 +3,7 @@ package com.serviceSystem.service;
 import com.serviceSystem.dao.DAOImpl.WorkerDAOImpl;
 import com.serviceSystem.dao.DAOInterface.WorkerDAO;
 import com.serviceSystem.entity.Worker;
+import com.serviceSystem.exception.NoSuchItemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,18 @@ public class WorkerService {
     public List<Worker> getAll(){
         return workerDAO.getAll();
     }
-    public boolean isExist(String email, String password){
-        return workerDAO.isExist(email,password);
-    }
+//    public boolean isExist(String email, String password){
+//        return workerDAO.isExist(email,password);
+//    }
     public Worker getByEmail(String email){
         return workerDAO.getByEmail(email);
     }
     public Worker getById(Integer id){
-        return workerDAO.getById(id);
+        Worker worker = workerDAO.getById(id);
+        if(worker == null){
+            throw new NoSuchItemException("There is no worker with id = " + id);
+        }
+        return worker;
     }
     public boolean isEmailExist(String email){
         return workerDAO.isEmailExist(email);

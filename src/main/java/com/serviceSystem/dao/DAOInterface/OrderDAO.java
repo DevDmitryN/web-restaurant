@@ -5,7 +5,7 @@ import com.serviceSystem.entity.Order;
 import java.util.List;
 
 public interface OrderDAO extends BaseDAO<Order,Long> {
-    void delete(long id);
+    void delete(Order order);
     List<Order> getByTable(int tableId);
     List<Order> getActiveByClientId(long clientId);
     List<Order> getNotTakenWithFreeTable();

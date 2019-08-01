@@ -1,6 +1,6 @@
 package com.serviceSystem.service.validator;
 
-import com.serviceSystem.controller.util.SignUpClientForm;
+import com.serviceSystem.controller.form.SignUpClientForm;
 import com.serviceSystem.entity.dto.ClientDto;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.WorkerService;
@@ -10,20 +10,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class ClientSignUpValidator implements Validator {
+public class ClientSignUpValidator {
     @Autowired
     private ClientService clientService;
     @Autowired
     private WorkerService workerService;
 
-    @Override
-    public boolean supports(Class<?> aClass) {
-        System.out.println(aClass);
-        System.out.println(ClientDto.class.equals(aClass));
-        return ClientDto.class.equals(aClass);
-    }
-
-    @Override
     public void validate(Object o, Errors errors) {
         SignUpClientForm form = (SignUpClientForm) o;
         if (form.getName().length() == 0 || form.getName().length() > 35) {

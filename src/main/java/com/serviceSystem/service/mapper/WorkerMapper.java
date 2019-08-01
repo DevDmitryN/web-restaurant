@@ -6,9 +6,11 @@ import com.serviceSystem.entity.enums.Role;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+@Component
 public class WorkerMapper extends AbstractMapper<Worker, WorkerDto> {
 
     @Autowired

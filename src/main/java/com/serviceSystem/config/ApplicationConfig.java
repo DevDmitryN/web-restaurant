@@ -51,13 +51,11 @@ public class ApplicationConfig {
 
         factoryBean.setHibernateProperties(properties);
         factoryBean.setPackagesToScan("com.serviceSystem.entity");
-        System.out.println(factoryBean);
         return factoryBean;
     }
     @Bean
     public PlatformTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        System.out.println(sessionFactory().getObject());
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
     }

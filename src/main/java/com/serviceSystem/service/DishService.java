@@ -2,6 +2,7 @@ package com.serviceSystem.service;
 
 import com.serviceSystem.dao.DAOInterface.DishDAO;
 import com.serviceSystem.entity.Dish;
+import com.serviceSystem.exception.NoSuchItemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,11 @@ public class DishService {
         return dishDAO.getAll();
     }
     public Dish getById(Integer id){
-        return dishDAO.getById(id);
+        Dish dish = dishDAO.getById(id);
+        if(dish == null){
+            throw new NoSuchItemException("There is no dish with id = " + id);
+        }
+        return dish;
     }
     public void save(Dish dish){
         dishDAO.save(dish);

@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,8 +21,9 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 @EnableWebSecurity
-@ComponentScan(basePackages = {"com.serviceSystem.config.jwt","com.serviceSystem.service"})
+@ComponentScan(basePackages = {"com.serviceSystem.config.jwt","com.serviceSystem.service","com.serviceSystem.controller"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -57,13 +59,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/login").anonymous()
-                .antMatchers("/client/{id}").permitAll()
+                .antMatchers("/user/login").permitAll()
+                //orders
                 .antMatchers(HttpMethod.GET,"/orders").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.GET,"/order/{id}").hasAnyAuthority("CLIENT","WAITER")
+                .antMatchers(HttpMethod.GET,"/orders/{id}").hasAnyAuthority("CLIENT","WAITER")
                 .antMatchers(HttpMethod.DELETE,"/orders/{id}").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/clients/{clientId}/orders").hasAuthority("CLIENT")
-                .antMatchers("/test-client").permitAll()
+                //workers
+                .antMatchers(HttpMethod.GET,"/workers","/workers/{workerId}").hasAuthority("WAITER")
+                //clients
+                .antMatchers(HttpMethod.POST,"/clients").permitAll()
+                .antMatchers(HttpMethod.GET,"/clients/{id}").hasAnyAuthority("CLIENT","WAITER")
+                .antMatchers(HttpMethod.GET,"/clients").hasAuthority("WAITER")
+                //tables
+                .antMatchers(HttpMethod.GET,"/tables","/tables/{tableId}").permitAll()
+                //dishes
+                .antMatchers(HttpMethod.GET,"/menu").permitAll()
+                .antMatchers(HttpMethod.GET,"/dishes","/dishes/{dishId}").hasAuthority("WAITER")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

@@ -1,4 +1,4 @@
-package com.serviceSystem.controller.util;
+package com.serviceSystem.controller.form;
 
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.TableDto;

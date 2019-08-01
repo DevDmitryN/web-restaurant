@@ -4,7 +4,9 @@ import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.dto.DishDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DishMapper extends AbstractMapper<Dish,DishDto> {
 
     @Autowired

@@ -2,6 +2,7 @@ package com.serviceSystem.dao.DAOImpl;
 
 import com.serviceSystem.dao.DAOInterface.OrderDAO;
 import com.serviceSystem.entity.Order;
+import com.serviceSystem.exception.NoSuchItemException;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,7 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
 
     @Override
     @Transactional
-    public void delete(long id) {
-        Order order = getCurrentSession().get(Order.class,id);
+    public void delete(Order order) {
         getCurrentSession().delete(order);
     }
 

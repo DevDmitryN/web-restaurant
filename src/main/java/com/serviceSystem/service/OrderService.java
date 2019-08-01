@@ -5,6 +5,7 @@ import com.serviceSystem.dao.DAOInterface.OrderDishDAO;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Status;
+import com.serviceSystem.exception.NoSuchItemException;
 import com.serviceSystem.exception.OrderAlreadyTakenException;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,15 @@ public class OrderService {
         order.getOrderDish().forEach( orderDish -> orderDishDAO.save(orderDish));
     }
     public void delete(long id){
-        orderDAO.delete(id);
+        orderDAO.delete(getById(id));
     }
 
     @Transactional
     public Order getById(long id){
         Order order = orderDAO.getById(id);
+        if(order == null){
+            throw new NoSuchItemException("There is no order with id = " + id);
+        }
         Hibernate.initialize(order.getOrderDish());
         return order;
     }
@@ -73,7 +77,4 @@ public class OrderService {
         update(order);
     }
 
-//    public List<Order> getNotTakenForTable(int tableId){
-//        return orderDAO.getNotTakenForTable(tableId);
-//    }
 }
