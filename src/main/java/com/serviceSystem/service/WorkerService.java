@@ -49,7 +49,14 @@ public class WorkerService {
         worker.setPassword(encoder.encode(worker.getPassword()));
         workerDAO.update(worker);
     }
+    public Worker getByPhoneNumber(String phoneNumber){
+        return workerDAO.getByPhoneNumber(phoneNumber);
+    }
     public boolean isPhoneNumberExist(String phoneNumber){
         return workerDAO.isPhoneNumberExist(phoneNumber);
+    }
+
+    public List<Worker> getStaff(){
+        return workerDAO.getStaff();
     }
 }

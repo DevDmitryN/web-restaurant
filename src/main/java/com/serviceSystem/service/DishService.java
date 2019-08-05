@@ -3,7 +3,9 @@ package com.serviceSystem.service;
 import com.serviceSystem.dao.DAOInterface.DishDAO;
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.exception.NoSuchItemException;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate5.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +31,14 @@ public class DishService {
     }
     public List<Dish> getWhichAreInMenu(){
         return dishDAO.getWhichAreInMenu();
+    }
+    public void update(Dish dish){
+        try{
+            dishDAO.update(dish);
+        }catch (HibernateOptimisticLockingFailureException e){
+            throw new NoSuchItemException("There is no dish with id = " + dish.getId());
+        }
+
     }
 //    public void delete(Dish dish){
 //        dishDAO.delete(dish);

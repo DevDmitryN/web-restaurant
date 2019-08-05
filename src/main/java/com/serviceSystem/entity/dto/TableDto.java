@@ -1,7 +1,12 @@
 package com.serviceSystem.entity.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class TableDto {
     private int id;
+    @NotNull
+    @Positive(message = "Can't be negative or zero")
     private int capacity;
     private boolean freeStatus;
 

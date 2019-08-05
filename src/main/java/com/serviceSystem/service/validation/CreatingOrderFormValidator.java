@@ -1,6 +1,6 @@
-package com.serviceSystem.service.validator;
+package com.serviceSystem.service.validation;
 
-import com.serviceSystem.controller.form.CreatingOrderForm;
+import com.serviceSystem.entity.dto.form.CreatingOrderForm;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.service.OrderService;
 import com.serviceSystem.service.TableService;

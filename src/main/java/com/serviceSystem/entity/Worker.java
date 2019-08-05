@@ -16,6 +16,10 @@ public class Worker extends User<Integer>{
     @Column
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "isInStaff")
+    private boolean isInStaff = true;
+
     @OneToMany(mappedBy = "worker")
     @JsonIgnore
     private List<Order> orders;
@@ -39,4 +43,11 @@ public class Worker extends User<Integer>{
         this.orders = orders;
     }
 
+    public boolean isInStaff() {
+        return isInStaff;
+    }
+
+    public void setInStaff(boolean inStaff) {
+        isInStaff = inStaff;
+    }
 }

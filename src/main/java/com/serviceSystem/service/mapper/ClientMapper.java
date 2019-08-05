@@ -1,6 +1,6 @@
 package com.serviceSystem.service.mapper;
 
-import com.serviceSystem.controller.form.SignUpClientForm;
+import com.serviceSystem.entity.dto.form.SignUpClientForm;
 import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.dto.ClientDto;
 import org.modelmapper.ModelMapper;

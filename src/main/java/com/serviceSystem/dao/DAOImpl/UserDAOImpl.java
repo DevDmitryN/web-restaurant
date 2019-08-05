@@ -21,7 +21,7 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
         String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
         Query query = getCurrentSession().createQuery(getByEmail);
         query.setParameter("email",email);
-        return (T) query.getSingleResult();
+        return (T) query.uniqueResult();
     }
 
 //    @Override
@@ -38,18 +38,21 @@ public abstract class UserDAOImpl<T extends User,ID extends Number> extends Base
     @Override
     @Transactional
     public boolean isEmailExist(String email) {
-        String getByEmail = "from " + classOfUser.getName() + " user where user.email = :email";
-        Query query = getCurrentSession().createQuery(getByEmail);
-        query.setParameter("email",email);
-        return query.list().size() != 0;
+        return getByEmail(email) != null;
+    }
+
+    @Override
+    @Transactional
+    public T getByPhoneNumber(String phoneNumber) {
+        String hql = "from " + classOfUser.getName() + " u where u.phoneNumber = :phoneNumber";
+        Query query = getCurrentSession().createQuery(hql);
+        query.setParameter("phoneNumber",phoneNumber);
+        return (T) query.uniqueResult();
     }
 
     @Override
     @Transactional
     public boolean isPhoneNumberExist(String phoneNumber) {
-        String getByPhoneNumber = "from " + classOfUser.getName() + " u where u.phoneNumber = :phoneNumber";
-        Query query = getCurrentSession().createQuery(getByPhoneNumber);
-        query.setParameter("phoneNumber",phoneNumber);
-        return query.list().size() != 0;
+        return getByPhoneNumber(phoneNumber) != null;
     }
 }

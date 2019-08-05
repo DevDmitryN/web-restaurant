@@ -33,7 +33,7 @@ public class UserController {
     @Autowired
     private UserDetailsSpringService userDetailsSpringService;
 
-    @PostMapping("/user/login")
+    @PostMapping("/users/login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword()));

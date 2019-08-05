@@ -1,8 +1,11 @@
 package com.serviceSystem.config.jwt;
 
+import com.serviceSystem.controller.ExceptionHandlerController;
 import com.serviceSystem.exception.JwtAuthenticationException;
 import com.serviceSystem.service.UserDetailsSpringService;
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,11 +20,14 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    private Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
     private String secret = "jwt";
     private Long validityInMilliseconds = 3600000L;
 
     @Autowired
     private UserDetailsSpringService userDetailsSpringService;
+    @Autowired
+    private ExceptionHandlerController exceptionHandlerController;
 
     @PostConstruct
     protected void init() {
@@ -69,7 +75,9 @@ public class JwtTokenProvider {
 
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            logger.warn("JWT token is expired or invalid");
+//            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            return false;
         }
     }
 

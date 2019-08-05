@@ -26,10 +26,13 @@ public class UserDetailsSpringService implements UserDetailsService {
     WorkerService workerService;
 
     public User getUserByEmail(String email){
-        if(clientService.isEmailExist(email)){
-            return clientService.getByEmail(email);
-        }else if(workerService.isEmailExist(email)){
-            return workerService.getByEmail(email);
+        User user = clientService.getByEmail(email);
+        if(user != null){
+            return user;
+        }
+        user = workerService.getByEmail(email);
+        if(user != null){
+            return ((Worker) user).isInStaff() ? user : null;
         }
         return null;
     }

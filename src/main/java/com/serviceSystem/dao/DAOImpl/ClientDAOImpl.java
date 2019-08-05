@@ -13,12 +13,19 @@ public class ClientDAOImpl extends UserDAOImpl<Client,Long> implements ClientDAO
         super(Client.class);
     }
 
+
+    @Override
+    @Transactional
+    public Client getByCardNumber(String cardNumber) {
+        String hql = "from com.serviceSystem.entity.Client c where c.cardNumber = :cardNumber";
+        Query query = getCurrentSession().createQuery(hql);
+        query.setParameter("cardNumber",cardNumber);
+        return (Client) query.uniqueResult();
+    }
+
     @Override
     @Transactional
     public boolean isCardNumberExist(String cardNumber) {
-        String getByCardNumber = "from com.serviceSystem.entity.Client c where c.cardNumber = :cardNumber";
-        Query query = getCurrentSession().createQuery(getByCardNumber);
-        query.setParameter("cardNumber",cardNumber);
-        return query.list().size() != 0;
+        return getByCardNumber(cardNumber) != null;
     }
 }

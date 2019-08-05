@@ -59,23 +59,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/login").permitAll()
+                .antMatchers("/users/login").permitAll()
                 //orders
                 .antMatchers(HttpMethod.GET,"/orders").hasAuthority("WAITER")
-                .antMatchers(HttpMethod.GET,"/orders/{id}").hasAnyAuthority("CLIENT","WAITER")
-                .antMatchers(HttpMethod.DELETE,"/orders/{id}").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/orders/{orderId}").hasAnyAuthority("CLIENT","WAITER")
+                .antMatchers(HttpMethod.DELETE,"/orders/{orderId}").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/clients/{clientId}/orders").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.GET,"/orders/creating").hasAuthority("CLIENT")
                 //workers
-                .antMatchers(HttpMethod.GET,"/workers","/workers/{workerId}").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.GET,"/workers/staff","/workers/{workerId}").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.GET,"/workers").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/workers").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/workers/{id}").hasAuthority("ADMIN")
                 //clients
                 .antMatchers(HttpMethod.POST,"/clients").permitAll()
-                .antMatchers(HttpMethod.GET,"/clients/{id}").hasAnyAuthority("CLIENT","WAITER")
+                .antMatchers(HttpMethod.GET,"/clients/{clientId}").hasAnyAuthority("CLIENT","WAITER")
                 .antMatchers(HttpMethod.GET,"/clients").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.PUT,"/clients/{clientId}").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.PATCH,"/clients/{clientId}").hasAuthority("CLIENT")
                 //tables
                 .antMatchers(HttpMethod.GET,"/tables","/tables/{tableId}").permitAll()
+                .antMatchers(HttpMethod.POST,"tables").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/tables/{id}").hasAuthority("ADMIN")
                 //dishes
                 .antMatchers(HttpMethod.GET,"/menu").permitAll()
                 .antMatchers(HttpMethod.GET,"/dishes","/dishes/{dishId}").hasAuthority("WAITER")
+                .antMatchers(HttpMethod.POST,"/dishes").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"dishes/{id}").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));

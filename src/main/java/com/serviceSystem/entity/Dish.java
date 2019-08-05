@@ -21,7 +21,7 @@ public class Dish implements Serializable {
     private String description;
 
     @Column
-    private boolean isInMenu;
+    private boolean isInMenu = true;
 
     @OneToMany(mappedBy = "dish")
     private List<OrderDish> orders;

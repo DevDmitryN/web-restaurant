@@ -46,7 +46,24 @@ public class ClientService {
     public boolean isPhoneNumberExist(String phoneNumber){
         return clientDAO.isPhoneNumberExist(phoneNumber);
     }
+    public Client getByPhoneNumber(String phoneNumber){
+        return clientDAO.getByPhoneNumber(phoneNumber);
+    }
+    public Client getByCardNumber(String cardNumber){
+        return clientDAO.getByCardNumber(cardNumber);
+    }
     public boolean isCardNumberExist(String cardNumber){
         return clientDAO.isCardNumberExist(cardNumber);
     }
+    public void updateExceptPassword(Client updatedClient){
+        Client client = getById(updatedClient.getId());
+        updatedClient.setPassword(client.getPassword());
+        clientDAO.update(updatedClient);
+    }
+    public void updateOnlyPassword(Client updatedClient){
+        Client client = getById(updatedClient.getId());
+        client.setPassword(encoder.encode(updatedClient.getPassword()));
+        clientDAO.update(client);
+    }
+
 }

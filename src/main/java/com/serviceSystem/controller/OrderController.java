@@ -1,14 +1,17 @@
 package com.serviceSystem.controller;
 
-import com.serviceSystem.controller.form.CreatingOrderForm;
+import com.serviceSystem.entity.dto.TableDto;
+import com.serviceSystem.entity.dto.form.CreatingOrderForm;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.OrderDish;
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.OrderDto;
 import com.serviceSystem.service.*;
+import com.serviceSystem.service.mapper.DishMapper;
 import com.serviceSystem.service.mapper.OrderDishMapper;
 import com.serviceSystem.service.mapper.OrderMapper;
+import com.serviceSystem.service.mapper.TableMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,9 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,17 +52,23 @@ public class OrderController {
     private OrderMapper orderMapper;
     @Autowired
     private OrderDishMapper orderDishMapper;
+    @Autowired
+    private TableMapper tableMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
 
-//    @GetMapping("/order/creating")
-//    public String creating(Model model) {
-//        logger.info("Get page for creating order");
-//        CreatingOrderForm creatingOrderForm = new CreatingOrderForm();
-//        creatingOrderForm.setOrderDishDtoList(dishDtoConverter.toDTOList(dishService.getWhichAreInMenu()));
-//        creatingOrderForm.setTables(tableDtoConverter.toDTOList(tableService.getAll()));
-//        model.addAttribute("creatingOrderForm", creatingOrderForm);
-//        return "creatingOrder";
-//    }
+    @GetMapping("/orders/creating")
+    public Map<String,Object> creating() {
+        logger.info("Get page for creating order");
+        Map<String,Object> response = new HashMap<>();
+        List<TableDto> tables = tableMapper.toDtoList(tableService.getAll());
+        response.put("tables",tables);
+        List<DishDto> dishes = dishMapper.toDtoList(dishService.getWhichAreInMenu());
+        response.put("dishes",dishes);
+
+        return response;
+    }
 
 
     @PostMapping("/order/creating")
