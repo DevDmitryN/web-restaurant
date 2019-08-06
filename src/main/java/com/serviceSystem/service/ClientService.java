@@ -55,6 +55,7 @@ public class ClientService {
     public boolean isCardNumberExist(String cardNumber){
         return clientDAO.isCardNumberExist(cardNumber);
     }
+
     public void updateExceptPassword(Client updatedClient){
         Client client = getById(updatedClient.getId());
         updatedClient.setPassword(client.getPassword());

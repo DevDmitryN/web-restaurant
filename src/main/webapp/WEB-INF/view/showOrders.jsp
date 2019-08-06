@@ -59,7 +59,7 @@
                         <th scope="row">${order.id}</th>
                         <td>${order.table.id}</td>
                         <td>${order.status}</td>
-                        <td>${order.bookingTime}</td>
+                        <td>${order.bookingTimeBegin}</td>
                         <td>
                             <form action="/order/${order.id}"  method="get">
                                 <button type="submit" class="btn btn-success">Полная информация</button>

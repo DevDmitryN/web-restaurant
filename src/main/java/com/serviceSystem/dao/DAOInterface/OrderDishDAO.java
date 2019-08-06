@@ -1,7 +1,7 @@
 package com.serviceSystem.dao.DAOInterface;
 
-import com.serviceSystem.entity.OrderDish;
+import com.serviceSystem.entity.DishInOrder;
 
-public interface OrderDishDAO extends BaseDAO<OrderDish, Long> {
+public interface OrderDishDAO extends BaseDAO<DishInOrder, Long> {
 
 }

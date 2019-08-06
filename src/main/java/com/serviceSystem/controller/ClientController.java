@@ -34,7 +34,7 @@ public class ClientController {
         }
         logger.info(signUpClientForm.toString());
         Client client = clientMapper.toEntity(signUpClientForm);
-//        clientService.save(clientMapper.toEntity(signUpClientForm));
+        clientService.save(clientMapper.toEntity(signUpClientForm));
         return new ResponseEntity<>(client,HttpStatus.OK);
     }
 
@@ -53,9 +53,8 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
-        //Validation clientDto
         Client client = clientMapper.toEntity(clientDto);
-//        clientService.updateExceptPassword(client);
+        clientService.updateExceptPassword(client);
         return new ResponseEntity(HttpStatus.OK);
     }
     @PatchMapping("/clients/{clientId}")
@@ -64,11 +63,10 @@ public class ClientController {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
-        //Validation password form
         Client client = new Client();
         client.setId(clientId);
         client.setPassword(updatePasswordForm.getNewPassword());
-//        clientService.updateOnlyPassword(client);
+        clientService.updateOnlyPassword(client);
         return new ResponseEntity(HttpStatus.OK);
     }
 

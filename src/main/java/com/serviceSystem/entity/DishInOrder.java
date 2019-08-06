@@ -1,6 +1,5 @@
 package com.serviceSystem.entity;
 
-import org.hibernate.annotations.Fetch;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -10,7 +9,7 @@ import java.io.Serializable;
 @Component
 @Entity
 @Table(name = "order_dish",schema = "restaurantdb")
-public class OrderDish implements Serializable {
+public class DishInOrder implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,11 +26,11 @@ public class OrderDish implements Serializable {
     @Column
     private int amount;
 
-    public OrderDish() {
+    public DishInOrder() {
 
     }
 
-    public OrderDish(Order order, Dish dish, int amount) {
+    public DishInOrder(Order order, Dish dish, int amount) {
         this.order = order;
         this.dish = dish;
         this.amount = amount;

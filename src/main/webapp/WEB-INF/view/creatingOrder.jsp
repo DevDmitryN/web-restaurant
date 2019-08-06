@@ -25,12 +25,12 @@
                 <h1>Заполнение заказа</h1>
                 <form:form modelAttribute="creatingOrderForm" method="post" action="/order/creating">
                     <div>
-                        <form:errors path="orderDishDtoList" cssClass="error"/><br>
+                        <form:errors path="dishesInOrder" cssClass="error"/><br>
                         <label>Меню:</label>
-                        <c:forEach var="dish" items="${creatingOrderForm.orderDishDtoList}" varStatus="status">
+                        <c:forEach var="dish" items="${creatingOrderForm.dishesInOrder}" varStatus="status">
                             <div>
-                                <input hidden name="orderDishDtoList[${status.index}].id" value="${dish.id}" readonly>
-                                <input type="number" name="orderDishDtoList[${status.index}].amount" value="${dish.amount}" min="0" max="20">
+                                <input hidden name="dishesInOrder[${status.index}].id" value="${dish.id}" readonly>
+                                <input type="number" name="dishesInOrder[${status.index}].amount" value="${dish.amount}" min="0" max="20">
                                 ${dish}
                                 <br>
                             </div>
@@ -44,7 +44,7 @@
                         </form:select>
                     </div>
                     <div class="default-padding-top">
-                        <form:errors path="bookingTime" cssClass="error"/>
+                        <form:errors path="bookingTimeBegin" cssClass="error"/>
                         <p>Укажите время заказа:</p>
                         <label for="hour">Час</label>
                         <form:select path="hour">

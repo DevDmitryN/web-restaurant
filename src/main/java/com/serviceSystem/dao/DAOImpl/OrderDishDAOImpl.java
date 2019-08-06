@@ -1,13 +1,13 @@
 package com.serviceSystem.dao.DAOImpl;
 
 import com.serviceSystem.dao.DAOInterface.OrderDishDAO;
-import com.serviceSystem.entity.OrderDish;
+import com.serviceSystem.entity.DishInOrder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class OrderDishDAOImpl extends BaseDAOImpl<OrderDish,Long> implements OrderDishDAO {
+public class OrderDishDAOImpl extends BaseDAOImpl<DishInOrder,Long> implements OrderDishDAO {
     public OrderDishDAOImpl() {
-        super(OrderDish.class);
+        super(DishInOrder.class);
     }
 
 }

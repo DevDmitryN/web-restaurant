@@ -25,7 +25,7 @@ public class ScheduledService implements Runnable {
         List<Order> orders = orderService.getNotTakenWithFreeTable();
         LocalDateTime now = LocalDateTime.now();
         for (Order order : orders) {
-            LocalDateTime bookingTime = order.getBookingTime().minus(Duration.ofHours(1));
+            LocalDateTime bookingTime = order.getBookingTimeBegin().minus(Duration.ofHours(1));
             Duration duration = Duration.between(bookingTime,now);
             if(duration.toMinutes() <= 60 && duration.toMinutes() > 0){
                 order.getTable().setFreeStatus(false);

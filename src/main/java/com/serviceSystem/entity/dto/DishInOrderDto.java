@@ -1,17 +1,10 @@
 package com.serviceSystem.entity.dto;
 
-public class OrderDishDto {
-    private long orderId;
+public class DishInOrderDto {
+
     private DishDto dish;
     private int amount;
 
-    public long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
-    }
 
     public DishDto getDish() {
         return dish;

@@ -28,9 +28,13 @@ public class OrderService {
     public List<Order> getByTableId(int id){
         return orderDAO.getByTable(id);
     }
+    @Transactional
     public void save(Order order){
         orderDAO.save(order);
-        order.getOrderDish().forEach( orderDish -> orderDishDAO.save(orderDish));
+        order.getDishesInOrder().forEach(orderDish ->{
+            orderDish.setOrder(order);
+            orderDishDAO.save(orderDish);
+        });
     }
     public void delete(long id){
         orderDAO.delete(getById(id));
@@ -42,7 +46,7 @@ public class OrderService {
         if(order == null){
             throw new NoSuchItemException("There is no order with id = " + id);
         }
-        Hibernate.initialize(order.getOrderDish());
+        Hibernate.initialize(order.getDishesInOrder());
         return order;
     }
 
@@ -54,7 +58,7 @@ public class OrderService {
     public List<Order> getActiveByClientId(long clientId){
         List<Order> orders = orderDAO.getActiveByClientId(clientId);
         for (Order order : orders) {
-            Hibernate.initialize(order.getOrderDish());
+            Hibernate.initialize(order.getDishesInOrder());
         }
         return orders;
     }
@@ -75,6 +79,9 @@ public class OrderService {
             order.setStatus(Status.BEING_PERFORMED);
         }
         update(order);
+    }
+    public List<Order> getActiveForTable(int tableId){
+        return orderDAO.getActiveForTable(tableId);
     }
 
 }

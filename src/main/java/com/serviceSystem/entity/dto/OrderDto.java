@@ -1,7 +1,5 @@
 package com.serviceSystem.entity.dto;
 
-import com.serviceSystem.entity.*;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -9,11 +7,12 @@ public class OrderDto {
     private Long id;
     private String status;
     private TableDto table;
-    private List<OrderDishDto> orderDishDtoList;
+    private List<DishInOrderDto> dishesInOrder;
     private ClientDto client;
     private WorkerDto worker;
     private String creationTime;
-    private String bookingTime;
+    private String bookingTimeBegin;
+    private String bookingTimeEnd;
     private BigDecimal totalPrice;
 
     public OrderDto(){
@@ -44,12 +43,12 @@ public class OrderDto {
         this.table = table;
     }
 
-    public List<OrderDishDto> getOrderDishDtoList() {
-        return orderDishDtoList;
+    public List<DishInOrderDto> getDishesInOrder() {
+        return dishesInOrder;
     }
 
-    public void setOrderDishDtoList(List<OrderDishDto> orderDishDtoList) {
-        this.orderDishDtoList = orderDishDtoList;
+    public void setDishesInOrder(List<DishInOrderDto> dishesInOrder) {
+        this.dishesInOrder = dishesInOrder;
     }
 
     public ClientDto getClient() {
@@ -76,12 +75,20 @@ public class OrderDto {
         this.creationTime = creationTime;
     }
 
-    public String getBookingTime() {
-        return bookingTime;
+    public String getBookingTimeBegin() {
+        return bookingTimeBegin;
     }
 
-    public void setBookingTime(String bookingTime) {
-        this.bookingTime = bookingTime;
+    public void setBookingTimeBegin(String bookingTimeBegin) {
+        this.bookingTimeBegin = bookingTimeBegin;
+    }
+
+    public String getBookingTimeEnd() {
+        return bookingTimeEnd;
+    }
+
+    public void setBookingTimeEnd(String bookingTimeEnd) {
+        this.bookingTimeEnd = bookingTimeEnd;
     }
 
     public BigDecimal getTotalPrice() {
@@ -99,11 +106,11 @@ public class OrderDto {
                 "id=" + id +
                 ", status='" + status + '\'' +
                 ", table=" + table +
-                ", orderDishDtoList=" + orderDishDtoList +
+                ", dishesInOrder=" + dishesInOrder +
                 ", client=" + client +
                 ", worker=" + worker +
                 ", creationTime='" + creationTime + '\'' +
-                ", bookingTime='" + bookingTime + '\'' +
+                ", bookingTimeBegin='" + bookingTimeBegin + '\'' +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

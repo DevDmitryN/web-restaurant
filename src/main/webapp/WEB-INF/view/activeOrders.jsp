@@ -27,9 +27,9 @@
                         <p>Сумма: ${order.totalPrice}</p>
                         <p>Статус заказа: ${order.status}</p>
                         <p>Время создания заказа: ${order.creationTime}</p>
-                        <p>Время бронирования: ${order.bookingTime}</p>
+                        <p>Время бронирования: ${order.bookingTimeBegin}</p>
                         <p>Список блюд:</p>
-                        <c:forEach var="dish" items="${order.orderDishDtoList}">
+                        <c:forEach var="dish" items="${order.dishesInOrder}">
                             <p><bold>${dish.name}</bold>; Описание: ${dish.description}; Цена за одну порцию: ${dish.price}; Кол-во: ${dish.amount}</p>
                         </c:forEach>
                         <c:choose>

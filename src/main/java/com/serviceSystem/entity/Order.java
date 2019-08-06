@@ -1,6 +1,5 @@
 package com.serviceSystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.serviceSystem.entity.enums.Status;
 import org.springframework.stereotype.Component;
@@ -9,7 +8,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component
@@ -30,7 +28,7 @@ public class Order {
     private RestaurantTable table;
 
     @OneToMany(mappedBy = "order",fetch = FetchType.LAZY)
-    private List<OrderDish> orderDishes = null;
+    private List<DishInOrder> dishesInOrder = null;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -40,8 +38,10 @@ public class Order {
     private Worker worker;
     @Column(name = "creation_time")
     private LocalDateTime creationTime = LocalDateTime.now();
-    @Column(name = "booking_time")
-    private LocalDateTime bookingTime;
+    @Column(name = "booking_time_begin")
+    private LocalDateTime bookingTimeBegin;
+    @Column(name = "booking_time_end")
+    private LocalDateTime bookingTimeEnd;
 
 
 
@@ -80,12 +80,12 @@ public class Order {
         this.table = table;
     }
 
-    public List<OrderDish> getOrderDish() {
-        return orderDishes;
+    public List<DishInOrder> getDishesInOrder() {
+        return dishesInOrder;
     }
 
-    public void setOrderDish(List<OrderDish> orderDishes) {
-        this.orderDishes = orderDishes;
+    public void setDishesInOrder(List<DishInOrder> orderDishes) {
+        this.dishesInOrder = orderDishes;
         countTotalPrice();
     }
 
@@ -105,7 +105,7 @@ public class Order {
         this.worker = worker;
     }
     private void countTotalPrice(){
-        orderDishes.forEach( a -> totalPrice = totalPrice.add(new BigDecimal(a.getDish().getPrice() * a.getAmount())));
+        dishesInOrder.forEach(a -> totalPrice = totalPrice.add(new BigDecimal(a.getDish().getPrice() * a.getAmount())));
     }
 
     public LocalDateTime getCreationTime() {
@@ -116,14 +116,21 @@ public class Order {
         this.creationTime = creationTime;
     }
 
-    public LocalDateTime getBookingTime() {
-        return bookingTime;
+    public LocalDateTime getBookingTimeBegin() {
+        return bookingTimeBegin;
     }
 
-    public void setBookingTime(LocalDateTime bookingTime) {
-        this.bookingTime = bookingTime;
+    public void setBookingTimeBegin(LocalDateTime bookingTimeBegin) {
+        this.bookingTimeBegin = bookingTimeBegin;
     }
 
+    public LocalDateTime getBookingTimeEnd() {
+        return bookingTimeEnd;
+    }
+
+    public void setBookingTimeEnd(LocalDateTime bookingTimeEnd) {
+        this.bookingTimeEnd = bookingTimeEnd;
+    }
 
     @Override
     public String toString() {
@@ -132,11 +139,11 @@ public class Order {
                 ", totalPrice=" + totalPrice +
                 ", status=" + status +
                 ", table=" + table +
-//                ", orderDishes=" + orderDishes +
+//                ", dishesInOrder=" + dishesInOrder +
                 ", client=" + client +
                 ", worker=" + worker +
                 ", creationTime=" + creationTime +
-                ", bookingTime=" + bookingTime +
+                ", bookingTimeBegin=" + bookingTimeBegin +
                 '}';
     }
 }

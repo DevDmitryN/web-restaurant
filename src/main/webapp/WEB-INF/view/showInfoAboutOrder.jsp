@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <c:forEach items="${order.orderDishDtoList}" var="dish">
+                <c:forEach items="${order.dishesInOrder}" var="dish">
                     <p>${dish}</p>
                     <hr>
                 </c:forEach>
@@ -30,7 +30,7 @@
                 <p>Клиент: ${order.client}</p>
                 <p>Обслуживал: ${order.worker}</p>
                 <p>Время создания: ${order.creationTime}</p>
-                <p>Время бронирования: ${order.bookingTime}</p>
+                <p>Время бронирования: ${order.bookingTimeBegin}</p>
             </div>
         </div>
     </div>

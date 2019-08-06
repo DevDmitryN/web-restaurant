@@ -55,8 +55,8 @@
                         </div>
                         <div class="form-group">
                             <label>Время бронирования:</label>
-                            <label>${order.bookingTime}</label>
-<%--                            <input id="bookingTime" type="time" name="bookingTime" style="width: 10em; text-align: center;">--%>
+                            <label>${order.bookingTimeBegin}</label>
+<%--                            <input id="bookingTimeBegin" type="time" name="bookingTimeBegin" style="width: 10em; text-align: center;">--%>
 <%--                            <small class="form-text text-muted">>Если не надо менять время, оставить без изменений</small>--%>
                         </div>
                         <div class="form-group">

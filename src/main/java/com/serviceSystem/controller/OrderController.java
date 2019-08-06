@@ -1,15 +1,15 @@
 package com.serviceSystem.controller;
 
-import com.serviceSystem.entity.dto.TableDto;
+import com.serviceSystem.entity.Client;
+import com.serviceSystem.entity.dto.TableDtoWithSchedule;
 import com.serviceSystem.entity.dto.form.CreatingOrderForm;
 import com.serviceSystem.entity.Order;
-import com.serviceSystem.entity.OrderDish;
-import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.OrderDto;
+import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.service.*;
 import com.serviceSystem.service.mapper.DishMapper;
-import com.serviceSystem.service.mapper.OrderDishMapper;
+import com.serviceSystem.service.mapper.DishInOrderMapper;
 import com.serviceSystem.service.mapper.OrderMapper;
 import com.serviceSystem.service.mapper.TableMapper;
 import org.slf4j.Logger;
@@ -18,12 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,53 +49,33 @@ public class OrderController {
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
-    private OrderDishMapper orderDishMapper;
-    @Autowired
     private TableMapper tableMapper;
     @Autowired
     private DishMapper dishMapper;
+    @Autowired
+    private DishInOrderMapper dishInOrderMapper;
 
 
     @GetMapping("/orders/creating")
     public Map<String,Object> creating() {
         logger.info("Get page for creating order");
         Map<String,Object> response = new HashMap<>();
-        List<TableDto> tables = tableMapper.toDtoList(tableService.getAll());
+        List<TableDtoWithSchedule> tables = tableMapper.toListOfTableDtoWithSchedule(tableService.getAll());
         response.put("tables",tables);
         List<DishDto> dishes = dishMapper.toDtoList(dishService.getWhichAreInMenu());
         response.put("dishes",dishes);
-
         return response;
     }
 
 
     @PostMapping("/order/creating")
-    public String save(@ModelAttribute("creatingOrderForm") @Valid CreatingOrderForm creatingOrderForm, BindingResult bindingResult
-            , Model model, Principal principalUser) {
-        orderFormValidator.validate(creatingOrderForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            logger.info("Binding result " + bindingResult.getAllErrors());
-
-            return "creatingOrder";
-        }
-        Order order = new Order();
-        List<OrderDish> orderDishes = new ArrayList<>();
-        for (DishDto dishDTO : creatingOrderForm.getDishes()) {
-//            if (dishDTO.getAmount() != 0) {
-//                Dish dish = dishDtoConverter.fromDTO(dishDTO);
-//                orderDishes.add(new OrderDish(order, dish, dishDTO.getAmount()));
-//            }
-        }
-        order.setOrderDish(orderDishes);
-        order.setClient(clientService.getByEmail(principalUser.getName()));
-        RestaurantTable table = new RestaurantTable();
-        table.setId(creatingOrderForm.getTableId());
-        order.setTable(table);
-        order.setCreationTime(LocalDateTime.now());
-        order.setBookingTime(creatingOrderForm.getBookingTimeFromFields());
-        logger.info("Saving order " + order);
+    public ResponseEntity save(@RequestBody OrderDto orderDto, BindingResult bindingResult
+            , Principal principalUser) {
+        Order order = orderMapper.toEntity(orderDto);
+        Client client = clientService.getByEmail(principalUser.getName());
+        order.setClient(client);
         orderService.save(order);
-        return "redirect: /order/creating/success";
+        return new ResponseEntity<>(orderMapper.toDto(order),HttpStatus.OK);
     }
 
     @GetMapping("/orders")
@@ -109,7 +87,7 @@ public class OrderController {
             int tableId = Integer.valueOf(id);
             orders = orderMapper.toDtoList(orderService.getByTableId(tableId));
         }
-        return new ResponseEntity<List<OrderDto>>(orders, HttpStatus.OK);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/orders/{orderId}")
@@ -117,8 +95,8 @@ public class OrderController {
         logger.info("Get info of order " + id);
         Order order = orderService.getById(id);
         OrderDto orderDto = orderMapper.toDto(order);
-        orderDto.setOrderDishDtoList(orderDishMapper.toDtoList(order.getOrderDish()));
-        return new ResponseEntity<OrderDto>(orderDto, HttpStatus.OK);
+        orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
+        return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/orders/{orderId}")
@@ -150,18 +128,17 @@ public class OrderController {
     public ResponseEntity<List<OrderDto>> getActive(@PathVariable("clientId") long clientId,
                                                     @RequestParam(value = "status", required = false, defaultValue = "") String status) {
         logger.info("Get " + status + " orders of client " + clientId);
-        List<OrderDto> orders;
+        List<Order> orders = orderService.getActiveByClientId(clientId);
+
         if (status.isEmpty()) {
-            return new ResponseEntity<List<OrderDto>>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            orders = orderService.getActiveByClientId(clientId).stream().map(
-                    order -> {
-                        OrderDto dto = orderMapper.toDto(order);
-                        dto.setOrderDishDtoList(orderDishMapper.toDtoList(order.getOrderDish()));
-                        return dto;
-                    }
-            ).collect(Collectors.toList());
-            return new ResponseEntity<List<OrderDto>>(orders, HttpStatus.OK);
+            List<OrderDto> orderDtos = orders.stream().map(order -> {
+                OrderDto orderDto = orderMapper.toDto(order);
+                orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
+                return orderDto;
+            }).collect(Collectors.toList());
+            return new ResponseEntity<>(orderDtos, HttpStatus.OK);
         }
     }
 //

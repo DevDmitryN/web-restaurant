@@ -7,6 +7,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -48,6 +49,17 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
         Query query = getCurrentSession().createQuery(GET_NOT_TAKEN_WITH_FREE_TABLE);
         List<Order> orders = query.list();
         return orders;
+    }
+
+    @Override
+    @Transactional
+    public List<Order> getActiveForTable(int tableId) {
+        LocalDateTime now = LocalDateTime.now();
+        String hql = "from com.serviceSystem.entity.Order o where o.bookingTimeEnd >= :now and o.table.id = :tableId";
+        Query query = getCurrentSession().createQuery(hql);
+        query.setParameter("now",now);
+        query.setParameter("tableId",tableId);
+        return (List<Order>) query.list();
     }
 
 //    @Override

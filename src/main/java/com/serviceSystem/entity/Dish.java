@@ -24,7 +24,7 @@ public class Dish implements Serializable {
     private boolean isInMenu = true;
 
     @OneToMany(mappedBy = "dish")
-    private List<OrderDish> orders;
+    private List<DishInOrder> orders;
 
     public Dish(){}
 
@@ -75,11 +75,11 @@ public class Dish implements Serializable {
     }
 
 
-    public List<OrderDish> getOrders() {
+    public List<DishInOrder> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderDish> orders) {
+    public void setOrders(List<DishInOrder> orders) {
         this.orders = orders;
     }
 
