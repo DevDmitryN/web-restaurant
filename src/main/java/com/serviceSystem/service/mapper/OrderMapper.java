@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OrderMapper extends AbstractMapper<Order, OrderDto> {
@@ -48,6 +50,14 @@ public class OrderMapper extends AbstractMapper<Order, OrderDto> {
     }
     public Order toEntity(CreatingOrderForm creatingOrderForm){
         return creatingOrderForm == null ? null : mapper.map(creatingOrderForm,Order.class);
+    }
+    public List<OrderDto> toDtoWithDishesInOrder(List<Order> orders){
+        return orders.stream()
+                .map(order -> {
+                    OrderDto orderDto = toDto(order);
+                    orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
+                    return orderDto;
+                }).collect(Collectors.toList());
     }
     private Converter<Order,OrderDto> toDtoConverter(){
         return mappingContext -> {

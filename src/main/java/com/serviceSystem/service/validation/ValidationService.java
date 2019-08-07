@@ -1,6 +1,7 @@
 package com.serviceSystem.service.validation;
 
 import com.serviceSystem.entity.dto.ClientDto;
+import com.serviceSystem.entity.dto.OrderDto;
 import com.serviceSystem.entity.dto.UserDto;
 import com.serviceSystem.entity.dto.WorkerDto;
 import com.serviceSystem.entity.dto.form.SignUpClientForm;
@@ -37,7 +38,8 @@ public class ValidationService implements org.springframework.validation.Validat
                 ClientDto.class,
                 WorkerDto.class,
                 SignUpClientForm.class,
-                UpdatePasswordForm.class);
+                UpdatePasswordForm.class,
+                OrderDto.class);
         return supportedClasses.contains(clazz);
     }
 

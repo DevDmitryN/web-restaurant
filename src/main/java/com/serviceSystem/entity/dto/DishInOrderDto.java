@@ -1,8 +1,11 @@
 package com.serviceSystem.entity.dto;
 
+import javax.validation.constraints.PositiveOrZero;
+
 public class DishInOrderDto {
 
     private DishDto dish;
+    @PositiveOrZero(message = "Amount of dish id order can't be negative")
     private int amount;
 
 

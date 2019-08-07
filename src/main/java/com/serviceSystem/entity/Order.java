@@ -13,7 +13,6 @@ import java.util.List;
 @Component
 @Entity
 @Table(name = "orders",schema = "restaurantdb")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,9 +67,6 @@ public class Order {
     public void setStatus(Status status) {
         this.status = status;
     }
-//    public void setStatus(String status) {
-//        this.status = Status.valueOf(status);
-//    }
 
     public RestaurantTable getTable() {
         return table;
@@ -132,18 +128,4 @@ public class Order {
         this.bookingTimeEnd = bookingTimeEnd;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", totalPrice=" + totalPrice +
-                ", status=" + status +
-                ", table=" + table +
-//                ", dishesInOrder=" + dishesInOrder +
-                ", client=" + client +
-                ", worker=" + worker +
-                ", creationTime=" + creationTime +
-                ", bookingTimeBegin=" + bookingTimeBegin +
-                '}';
-    }
 }

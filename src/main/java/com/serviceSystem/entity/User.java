@@ -19,9 +19,6 @@ public abstract class User<ID extends Number> {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    public User(){
-        
-    }
 
 
     public void setId(ID id) {
@@ -72,17 +69,6 @@ public abstract class User<ID extends Number> {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {

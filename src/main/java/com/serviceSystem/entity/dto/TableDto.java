@@ -34,11 +34,4 @@ public class TableDto {
         this.freeStatus = freeStatus;
     }
 
-
-    @Override
-    public String toString() {
-        return  "Номер: " + id +
-                ", вместимость: " + capacity +
-                (freeStatus ? " свободен" : " занят");
-    }
 }

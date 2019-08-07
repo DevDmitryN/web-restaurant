@@ -1,17 +1,29 @@
 package com.serviceSystem.entity.dto;
 
+import com.serviceSystem.service.validation.ValidateBookingTime;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+@ValidateBookingTime
 public class OrderDto {
     private Long id;
     private String status;
+    @NotNull
     private TableDto table;
+    @Valid
     private List<DishInOrderDto> dishesInOrder;
     private ClientDto client;
     private WorkerDto worker;
     private String creationTime;
+    @NotNull
+    @NotBlank(message = "this field can't be blank")
     private String bookingTimeBegin;
+    @NotNull
+    @NotBlank(message = "this field can't be blank")
     private String bookingTimeEnd;
     private BigDecimal totalPrice;
 
@@ -99,19 +111,4 @@ public class OrderDto {
         this.totalPrice = totalPrice;
     }
 
-
-    @Override
-    public String toString() {
-        return "OrderDto{" +
-                "id=" + id +
-                ", status='" + status + '\'' +
-                ", table=" + table +
-                ", dishesInOrder=" + dishesInOrder +
-                ", client=" + client +
-                ", worker=" + worker +
-                ", creationTime='" + creationTime + '\'' +
-                ", bookingTimeBegin='" + bookingTimeBegin + '\'' +
-                ", totalPrice=" + totalPrice +
-                '}';
-    }
 }

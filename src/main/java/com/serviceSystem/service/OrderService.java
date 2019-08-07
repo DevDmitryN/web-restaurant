@@ -1,7 +1,8 @@
 package com.serviceSystem.service;
 
 import com.serviceSystem.dao.DAOInterface.OrderDAO;
-import com.serviceSystem.dao.DAOInterface.OrderDishDAO;
+import com.serviceSystem.dao.DAOInterface.DishInOrderDao;
+import com.serviceSystem.entity.DishInOrder;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Status;
@@ -20,7 +21,9 @@ public class OrderService {
     @Autowired
     private OrderDAO orderDAO;
     @Autowired
-    private OrderDishDAO orderDishDAO;
+    private DishInOrderDao dishInOrderDao;
+    @Autowired
+    private BookingService bookingService;
 
     public List<Order> getAll(){
         return orderDAO.getAll();
@@ -31,10 +34,11 @@ public class OrderService {
     @Transactional
     public void save(Order order){
         orderDAO.save(order);
-        order.getDishesInOrder().forEach(orderDish ->{
+        bookingService.save(order);
+        for (DishInOrder orderDish : order.getDishesInOrder()) {
             orderDish.setOrder(order);
-            orderDishDAO.save(orderDish);
-        });
+            dishInOrderDao.save(orderDish);
+        }
     }
     public void delete(long id){
         orderDAO.delete(getById(id));
@@ -84,4 +88,13 @@ public class OrderService {
         return orderDAO.getActiveForTable(tableId);
     }
 
+    public void updateDishesInOrder(Order order){
+        dishInOrderDao.deleteAllByOrderId(order.getId());
+        for (DishInOrder dishInOrder : order.getDishesInOrder()) {
+            dishInOrderDao.save(dishInOrder);
+        }
+    }
+//    public boolean isBookingPeriodValidForTable(LocalDateTime begin, LocalDateTime end,int tableId){
+//        return orderDAO.isBookingPeriodValidForTable(begin,end,tableId);
+//    }
 }

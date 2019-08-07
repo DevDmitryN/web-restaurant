@@ -91,13 +91,5 @@ public class Dish implements Serializable {
         isInMenu = inMenu;
     }
 
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "id=" + id +
-                ", name='" + getName() + '\'' +
-                ", price=" + price +
-                ", description='" + getDescription() + '\'' +
-                '}';
-    }
+
 }

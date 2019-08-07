@@ -67,14 +67,6 @@ public class RestaurantTable implements Serializable{
         this.order = order;
     }
 
-    @Override
-    public String toString() {
-        return "RestaurantTable{" +
-                "id=" + id +
-                ", capacity=" + capacity +
-                ", freeStatus=" + freeStatus +
-                '}';
-    }
     public String getFreeStatusAsString(){
         return freeStatus ? "Не занят" : "Занят";
     }

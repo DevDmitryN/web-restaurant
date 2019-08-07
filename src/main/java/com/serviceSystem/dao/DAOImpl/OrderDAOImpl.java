@@ -64,6 +64,19 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
 
 //    @Override
 //    @Transactional
+//    public boolean isBookingPeriodValidForTable(LocalDateTime begin, LocalDateTime end,int tableId) {
+//        String hql = "from com.serviceSystem.entity.Order o where :begin between o.bookingTimeBegin and o.bookingTimeEnd" +
+//                " or :end between o.bookingTimeBegin and o.bookingTimeEnd and o.table.id = :tableId";
+//        Query query = getCurrentSession().createQuery(hql);
+//        query.setParameter("begin",begin);
+//        query.setParameter("end",end);
+//        query.setParameter("tableId",tableId);
+//        return query.list().size() == 0;
+//    }
+
+
+//    @Override
+//    @Transactional
 //    public List<Order> getNotTakenForTable(int tableId) {
 //        Query query = getCurrentSession().createQuery("from com.serviceSystem.entity.Order o where o.status = 'NOT_TAKEN' and o.table.id = :tableId order by o.bookingTime desc");
 //        query.setParameter("tableId",tableId);

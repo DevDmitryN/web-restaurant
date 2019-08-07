@@ -22,14 +22,6 @@ public class Client extends User<Long> implements Serializable {
     @JsonIgnore
     private List<Order> orders;
 
-    public Client(){
-
-    }
-
-//    public Client(String name, String surname, String password, String email, String phoneNumber, String cardNumber) {
-//        super(name, surname, password, email, phoneNumber);
-//        this.cardNumber = cardNumber;
-//    }
 
     public String getCardNumber() {
         return cardNumber;

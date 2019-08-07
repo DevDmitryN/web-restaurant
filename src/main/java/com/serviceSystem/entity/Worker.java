@@ -24,10 +24,6 @@ public class Worker extends User<Integer>{
     @JsonIgnore
     private List<Order> orders;
 
-    public Worker(){
-
-    }
-
     public Role getRole() {
         return role;
     }
