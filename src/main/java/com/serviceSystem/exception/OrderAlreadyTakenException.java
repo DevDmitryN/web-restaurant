@@ -1,6 +1,6 @@
 package com.serviceSystem.exception;
 
-public class OrderAlreadyTakenException extends Exception {
+public class OrderAlreadyTakenException extends RuntimeException {
     public OrderAlreadyTakenException() {
         super();
     }

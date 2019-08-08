@@ -29,8 +29,8 @@ public class WorkerController {
     @Autowired
     private WorkerMapper workerMapper;
 
-    @GetMapping("/workers/{id}")
-    public ResponseEntity<WorkerDto> getWorker(@PathVariable("id") int id){
+    @GetMapping("/workers/{workerId}")
+    public ResponseEntity<WorkerDto> getWorker(@PathVariable("workerId") int id){
         return new ResponseEntity<>(workerMapper.toDto(workerService.getById(id)),HttpStatus.OK);
     }
 
@@ -50,11 +50,12 @@ public class WorkerController {
     @GetMapping("/workers/staff")
     public ResponseEntity getStaff(){
         List<WorkerDto> workers = workerMapper.toDtoList(workerService.getStaff());
-        return new ResponseEntity<List<WorkerDto>>(workers,HttpStatus.OK);
+        return new ResponseEntity<>(workers,HttpStatus.OK);
     }
 
-    @PutMapping("/workers/{id}")
-    public ResponseEntity update(@RequestBody @Valid WorkerDto workerDto,BindingResult bindingResult){
+    @PutMapping("/workers/{workerId}")
+    public ResponseEntity update(@RequestBody @Valid WorkerDto workerDto,BindingResult bindingResult,
+                                 @PathVariable("workerId") int workerId){
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
@@ -63,9 +64,9 @@ public class WorkerController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PatchMapping("/workers/{id}")
+    @PatchMapping("/workers/{workerId}")
     public ResponseEntity updatePassword(@RequestBody @Valid UpdatePasswordForm updatePasswordForm, BindingResult bindingResult,
-                                         @PathVariable("id") int id){
+                                         @PathVariable("workerId") int id){
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }

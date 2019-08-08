@@ -11,14 +11,23 @@ import javax.validation.ConstraintValidatorContext;
 public class MatchedPasswordsValidator implements ConstraintValidator<MatchedPasswords, UserDto> {
     @Override
     public boolean isValid(UserDto userDto, ConstraintValidatorContext constraintValidatorContext) {
+        String password;
+        String confirmPassword;
         if(userDto instanceof SignUpClientForm){
             SignUpClientForm form = (SignUpClientForm) userDto;
-            return form.getPassword().equals(form.getConfirmPassword());
+            password = form.getPassword();
+            confirmPassword = form.getConfirmPassword();
+        }else{
+            if(userDto instanceof SignUpWorkerForm){
+                SignUpWorkerForm form = (SignUpWorkerForm) userDto;
+                password = form.getPassword();
+                confirmPassword = form.getConfirmPassword();
+            }else{
+                constraintValidatorContext.disableDefaultConstraintViolation();
+                constraintValidatorContext.buildConstraintViolationWithTemplate("Incorrect json").addConstraintViolation();
+                return false;
+            }
         }
-        if(userDto instanceof SignUpWorkerForm){
-            SignUpWorkerForm form = (SignUpWorkerForm) userDto;
-            return form.getPassword().equals(form.getConfirmPassword());
-        }
-        return false;
+        return password.equals(confirmPassword);
     }
 }

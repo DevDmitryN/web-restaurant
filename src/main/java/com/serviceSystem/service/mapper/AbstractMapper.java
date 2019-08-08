@@ -40,7 +40,7 @@ public abstract class AbstractMapper<E,D> {
 
     public List<E> toEntityList(List<D> dtoList){
         if(dtoList == null){
-            return null;
+            return new ArrayList<>();
         }
         if(dtoList.size() == 0){
             return new ArrayList<>();

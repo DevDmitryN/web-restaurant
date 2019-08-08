@@ -19,29 +19,26 @@ public class CorrectUpdatedPasswordValidator implements ConstraintValidator<Corr
     private WorkerService workerService;
     @Autowired
     private BCryptPasswordEncoder encoder;
-    private String message;
 
-    @Override
-    public void initialize(CorrectUpdatedPassword constraintAnnotation) {
-        message = constraintAnnotation.message();
-    }
+
 
     @Override
     public boolean isValid(UpdatePasswordForm updatePasswordForm, ConstraintValidatorContext constraintValidatorContext) {
         User user = clientService.getByEmail(updatePasswordForm.getEmail());
+        if(user == null){
+            user =  workerService.getByEmail(updatePasswordForm.getEmail());
+        }
         if(user != null){
             if(!encoder.matches(updatePasswordForm.getOldPassword(),user.getPassword())){
-                message = "old password doesn't match";
+                constraintValidatorContext.disableDefaultConstraintViolation();
+                constraintValidatorContext.buildConstraintViolationWithTemplate("Incorrect old password").addConstraintViolation();
                 return false;
             }
-            if(updatePasswordForm.getNewPassword().equals(updatePasswordForm.getConfirmNewPassword())){
-
+            if(!updatePasswordForm.getNewPassword().equals(updatePasswordForm.getConfirmNewPassword())){
+                constraintValidatorContext.disableDefaultConstraintViolation();
+                constraintValidatorContext.buildConstraintViolationWithTemplate("New password and confirmation don't match");
+                return false;
             }
-        }
-        user = workerService.getByEmail(updatePasswordForm.getEmail());
-        if(user != null){
-            return encoder.matches(updatePasswordForm.getOldPassword(),user.getPassword())
-                    && updatePasswordForm.getNewPassword().equals(updatePasswordForm.getConfirmNewPassword());
         }
         return false;
     }

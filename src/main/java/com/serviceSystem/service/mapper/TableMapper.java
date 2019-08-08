@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,8 +48,13 @@ public class TableMapper extends AbstractMapper<RestaurantTable, TableDto> {
 
     private void mapSpecificFields(RestaurantTable source, TableDtoWithSchedule destination){
         List<OrderedTime> schedule = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String begin;
+        String end;
         for (Order order : orderService.getActiveForTable(source.getId())) {
-            OrderedTime orderedTime = new OrderedTime(order.getBookingTimeBegin(),order.getBookingTimeEnd());
+            begin = formatter.format(order.getBookingTimeBegin());
+            end = formatter.format(order.getBookingTimeEnd());
+            OrderedTime orderedTime = new OrderedTime(begin,end);
             schedule.add(orderedTime);
         }
         destination.setSchedule(schedule);
@@ -58,10 +64,10 @@ public class TableMapper extends AbstractMapper<RestaurantTable, TableDto> {
         return table == null ? null : mapper.map(table,TableDtoWithSchedule.class);
     }
     public List<TableDtoWithSchedule> toListOfTableDtoWithSchedule(List<RestaurantTable> tables){
-        if (tables == null){
-            return null;
-        }
-        if(tables.size() == 0){
+//        if (tables == null){
+//            return null;
+//        }
+        if(tables == null || tables.size() == 0){
             return new ArrayList<>();
         }
         return tables.stream().map(t -> toDtoWithSchedule(t)).collect(Collectors.toList());

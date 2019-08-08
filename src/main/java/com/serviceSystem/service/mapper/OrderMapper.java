@@ -5,10 +5,13 @@ import com.serviceSystem.entity.dto.OrderDto;
 import com.serviceSystem.entity.dto.form.CreatingOrderForm;
 import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.service.OrderService;
+import org.hibernate.Hibernate;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -51,14 +54,18 @@ public class OrderMapper extends AbstractMapper<Order, OrderDto> {
     public Order toEntity(CreatingOrderForm creatingOrderForm){
         return creatingOrderForm == null ? null : mapper.map(creatingOrderForm,Order.class);
     }
-    public List<OrderDto> toDtoWithDishesInOrder(List<Order> orders){
-        return orders.stream()
-                .map(order -> {
-                    OrderDto orderDto = toDto(order);
-                    orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
-                    return orderDto;
-                }).collect(Collectors.toList());
-    }
+//    public OrderDto toDtoWithDishesInOrder(Order order){
+//        Hibernate.isPropertyInitialized()
+//    }
+
+//    public List<OrderDto> toListDtoWithDishesInOrder(List<Order> orders){
+//        return orders.stream()
+//                .map(order -> {
+//                    OrderDto orderDto = toDto(order);
+//                    orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
+//                    return orderDto;
+//                }).collect(Collectors.toList());
+//    }
     private Converter<Order,OrderDto> toDtoConverter(){
         return mappingContext -> {
             Order source = mappingContext.getSource();
@@ -80,6 +87,9 @@ public class OrderMapper extends AbstractMapper<Order, OrderDto> {
         destination.setCreationTime(source.getCreationTime().format(formatter));
         destination.setBookingTimeBegin(source.getBookingTimeBegin().format(formatter));
         destination.setBookingTimeEnd(source.getBookingTimeEnd().format(formatter));
+        if(Hibernate.isInitialized(source.getDishesInOrder())){
+            destination.setDishesInOrder(dishInOrderMapper.toDtoList(source.getDishesInOrder()));
+        }
     }
     private void mapSpecificFields(OrderDto source, Order destination){
         if(source.getStatus() != null){
@@ -90,6 +100,9 @@ public class OrderMapper extends AbstractMapper<Order, OrderDto> {
         }
         destination.setBookingTimeBegin(LocalDateTime.parse(source.getBookingTimeBegin(),formatter));
         destination.setBookingTimeEnd(LocalDateTime.parse(source.getBookingTimeEnd(),formatter));
-        destination.setDishesInOrder(dishInOrderMapper.toEntityList(source.getDishesInOrder()));
+        if(source.getDishesInOrder() != null){
+            destination.setDishesInOrder(dishInOrderMapper.toEntityList(source.getDishesInOrder()));
+        }
+        
     }
 }

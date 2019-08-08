@@ -29,11 +29,13 @@ public class DishController {
 
     @GetMapping("/menu")
     public ResponseEntity<List<DishDto>> getMenu(){
+        logger.info("Get menu");
         return new ResponseEntity<>(dishMapper.toDtoList(dishService.getWhichAreInMenu()), HttpStatus.OK);
     }
 
     @GetMapping("/dishes/{dishId}")
     public ResponseEntity<DishDto> getById(@PathVariable("dishId") int dishId){
+        logger.info("Get dish " + dishId);
         return new ResponseEntity<>(dishMapper.toDto(dishService.getById(dishId)),HttpStatus.OK);
     }
 
@@ -50,8 +52,9 @@ public class DishController {
         dishService.save(dish);
         return new ResponseEntity(HttpStatus.OK);
     }
-    @PutMapping("/dishes/{id}")
-    public ResponseEntity updateDish(@PathVariable("id") int id, @RequestBody @Valid DishDto dishDto,BindingResult bindingResult){
+    @PutMapping("/dishes/{dishId}")
+    public ResponseEntity updateDish( @RequestBody @Valid DishDto dishDto,BindingResult bindingResult,
+                                      @PathVariable("dishId") int id){
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }

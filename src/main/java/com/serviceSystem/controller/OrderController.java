@@ -4,11 +4,9 @@ import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.dto.DishInOrderDto;
 import com.serviceSystem.entity.dto.TableDtoWithSchedule;
-import com.serviceSystem.entity.dto.form.CreatingOrderForm;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.OrderDto;
-import com.serviceSystem.entity.enums.Status;
 import com.serviceSystem.service.*;
 import com.serviceSystem.service.mapper.DishMapper;
 import com.serviceSystem.service.mapper.DishInOrderMapper;
@@ -26,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +42,6 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private WorkerService workerService;
-    @Qualifier(value = "creatingOrderFormValidator")
-    @Autowired
-    private Validator orderFormValidator;
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
@@ -97,11 +90,12 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDto> getOrderInfo(@PathVariable("orderId") long id) {
+    public ResponseEntity<OrderDto> getOrder(@PathVariable("orderId") long id) {
         logger.info("Get info of order " + id);
         Order order = orderService.getById(id);
         OrderDto orderDto = orderMapper.toDto(order);
-        orderDto.setDishesInOrder(dishInOrderMapper.toDtoList(order.getDishesInOrder()));
+//        OrderDto orderDto = orderMapper.toDto(order);
+//        orderDto.setDishesInOrder(orderMapper.toListDtoWithDishesInOrder(order));
         return new ResponseEntity<>(orderDto, HttpStatus.OK);
     }
 
@@ -112,22 +106,27 @@ public class OrderController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/orders/{orderId}/worker")
+    @PutMapping("/orders/active/{orderId}/worker")
     public ResponseEntity setWorkerForOrder(@PathVariable("orderId") long orderId,Principal principalUser) {
-        Order order = orderService.getById(orderId);
+        Order order = orderService.getActiveById(orderId);
         Worker worker = workerService.getByEmail(principalUser.getName());
-        order.setWorker(worker);
-        orderService.update(order);
+        orderService.changeWorkerForOrder(order,worker);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/orders/{orderId}")
-    public ResponseEntity update(@RequestBody @Valid OrderDto orderDto,BindingResult bindingResult){
+    public ResponseEntity update(@RequestBody @Valid OrderDto orderDto,BindingResult bindingResult,
+                                 @PathVariable("orderId") long orderId){
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
-        Order order = orderMapper.toEntity(orderDto);
-        orderService.update(order);
+        Order updatedOrder = orderMapper.toEntity(orderDto);
+        Order oldOrder = orderService.getActiveById(orderId);
+        oldOrder.setStatus(updatedOrder.getStatus());
+        oldOrder.setTable(updatedOrder.getTable());
+        oldOrder.setBookingTimeBegin(updatedOrder.getBookingTimeBegin());
+        oldOrder.setBookingTimeEnd(updatedOrder.getBookingTimeEnd());
+        orderService.update(oldOrder);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -137,20 +136,20 @@ public class OrderController {
         if(bindingResult.hasErrors()){
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
-        Order order = orderService.getById(orderId);
+        Order order = orderService.getActiveById(orderId);
         order.setDishesInOrder(dishInOrderMapper.toEntityList(dishesInOrder));
         orderService.updateDishesInOrder(order);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/clients/{clientId}/orders")
-    public ResponseEntity<List<OrderDto>> getActive(@PathVariable("clientId") long clientId,
+    public ResponseEntity<List<OrderDto>> getActiveForClient(@PathVariable("clientId") long clientId,
                                                     @RequestParam(value = "status", required = false, defaultValue = "") String status) {
         logger.info("Get " + status + " orders of client " + clientId);
         if (status.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            List<OrderDto> orders = orderMapper.toDtoWithDishesInOrder(orderService.getActiveByClientId(clientId));
+            List<OrderDto> orders = orderMapper.toDtoList(orderService.getActiveOrNotByClientId(clientId,true));
             return new ResponseEntity<>(orders, HttpStatus.OK);
         }
     }

@@ -41,7 +41,8 @@ public class Order {
     private LocalDateTime bookingTimeBegin;
     @Column(name = "booking_time_end")
     private LocalDateTime bookingTimeEnd;
-
+    @Column(name = "isActive")
+    private boolean isActive = true;
 
 
     public Order(){
@@ -128,4 +129,11 @@ public class Order {
         this.bookingTimeEnd = bookingTimeEnd;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }

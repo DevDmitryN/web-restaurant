@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,6 @@ public class ClientController {
             logger.info("Binding result client sign up " + bindingResult);
             return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
         }
-        logger.info(signUpClientForm.toString());
         Client client = clientMapper.toEntity(signUpClientForm);
         clientService.save(clientMapper.toEntity(signUpClientForm));
         return new ResponseEntity<>(client,HttpStatus.OK);
@@ -47,6 +47,7 @@ public class ClientController {
     public ResponseEntity<List<ClientDto>> getClients(){
         return new ResponseEntity<>(clientMapper.toDtoList(clientService.getAll()), HttpStatus.OK);
     }
+
     @PutMapping("/clients/{clientId}")
     public ResponseEntity updateClient(@PathVariable("clientId") long clientId,
                                        @RequestBody @Valid ClientDto clientDto,BindingResult bindingResult){

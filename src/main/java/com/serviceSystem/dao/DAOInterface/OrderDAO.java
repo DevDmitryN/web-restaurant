@@ -8,9 +8,10 @@ import java.util.List;
 public interface OrderDAO extends BaseDAO<Order,Long> {
     void delete(Order order);
     List<Order> getByTable(int tableId);
-    List<Order> getActiveByClientId(long clientId);
-    List<Order> getNotTakenWithFreeTable();
+    List<Order> getActiveOrNotByClientId(long clientId, boolean isActive);
+//    List<Order> getNotTakenWithFreeTable();
     List<Order> getActiveForTable(int tableId);
-//    boolean isBookingPeriodValidForTable(LocalDateTime begin,LocalDateTime end, int tableId);
+    boolean isBookingPeriodValidForTable(LocalDateTime begin,LocalDateTime end, int tableId);
+    Order getActiveById(long id);
 //    List<Order> getNotTakenForTable(int tableId);
 }

@@ -3,28 +3,29 @@ package com.serviceSystem.entity.dto;
 import java.time.LocalDateTime;
 
 public class OrderedTime {
-    private LocalDateTime begin;
-    private LocalDateTime end;
+    private String begin;
+    private String end;
 
     public OrderedTime(){}
-    public OrderedTime(LocalDateTime begin, LocalDateTime end) {
+
+    public OrderedTime(String begin, String end) {
         this.begin = begin;
         this.end = end;
     }
 
-    public LocalDateTime getBegin() {
+    public String getBegin() {
         return begin;
     }
 
-    public void setBegin(LocalDateTime begin) {
+    public void setBegin(String begin) {
         this.begin = begin;
     }
 
-    public LocalDateTime getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 }

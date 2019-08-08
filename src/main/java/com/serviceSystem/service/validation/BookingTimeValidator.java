@@ -1,7 +1,7 @@
 package com.serviceSystem.service.validation;
 
 import com.serviceSystem.entity.dto.OrderDto;
-import com.serviceSystem.service.BookingService;
+import com.serviceSystem.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class BookingTimeValidator implements ConstraintValidator<ValidateBookingTime, OrderDto> {
 
     @Autowired
-    private BookingService bookingService;
+    private OrderService orderService;
 
     @Override
     public boolean isValid(OrderDto orderDto, ConstraintValidatorContext validatorContext) {
@@ -33,7 +33,7 @@ public class BookingTimeValidator implements ConstraintValidator<ValidateBooking
             ).addPropertyNode("bookingTimeEnd").addConstraintViolation();
             return false;
         }
-        if(!bookingService.isBookingPeriodValidForTable(bookingTimeBegin,bookingTimeEnd,orderDto.getTable().getId())){
+        if(!orderService.isBookingPeriodValidForTable(bookingTimeBegin,bookingTimeEnd,orderDto.getTable().getId())){
             validatorContext.buildConstraintViolationWithTemplate(
                     "Table already booked in this period"
             ).addConstraintViolation();

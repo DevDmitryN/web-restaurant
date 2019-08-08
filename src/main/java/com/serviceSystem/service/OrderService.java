@@ -6,6 +6,7 @@ import com.serviceSystem.entity.DishInOrder;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Status;
+import com.serviceSystem.exception.ActiveOrderNotFoundException;
 import com.serviceSystem.exception.NoSuchItemException;
 import com.serviceSystem.exception.OrderAlreadyTakenException;
 import org.hibernate.Hibernate;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,8 +24,6 @@ public class OrderService {
     private OrderDAO orderDAO;
     @Autowired
     private DishInOrderDao dishInOrderDao;
-    @Autowired
-    private BookingService bookingService;
 
     public List<Order> getAll(){
         return orderDAO.getAll();
@@ -34,12 +34,13 @@ public class OrderService {
     @Transactional
     public void save(Order order){
         orderDAO.save(order);
-        bookingService.save(order);
         for (DishInOrder orderDish : order.getDishesInOrder()) {
             orderDish.setOrder(order);
             dishInOrderDao.save(orderDish);
         }
     }
+
+    @Transactional
     public void delete(long id){
         orderDAO.delete(getById(id));
     }
@@ -58,17 +59,16 @@ public class OrderService {
         orderDAO.update(order);
     }
 
-    @Transactional
-    public List<Order> getActiveByClientId(long clientId){
-        List<Order> orders = orderDAO.getActiveByClientId(clientId);
-        for (Order order : orders) {
-            Hibernate.initialize(order.getDishesInOrder());
-        }
+
+    public List<Order> getActiveOrNotByClientId(long clientId, boolean isActive){
+        List<Order> orders = orderDAO.getActiveOrNotByClientId(clientId,isActive);
+//        Hibernate.initialize(orders);
+
         return orders;
     }
-    public List<Order> getNotTakenWithFreeTable(){
-        return orderDAO.getNotTakenWithFreeTable();
-    }
+//    public List<Order> getNotTakenWithFreeTable(){
+//        return orderDAO.getNotTakenWithFreeTable();
+//    }
 
     @Transactional
     public void changeWorkerForOrder(Order order,Worker worker) throws OrderAlreadyTakenException {
@@ -88,13 +88,22 @@ public class OrderService {
         return orderDAO.getActiveForTable(tableId);
     }
 
+    @Transactional
     public void updateDishesInOrder(Order order){
         dishInOrderDao.deleteAllByOrderId(order.getId());
         for (DishInOrder dishInOrder : order.getDishesInOrder()) {
+            dishInOrder.setOrder(order);
             dishInOrderDao.save(dishInOrder);
         }
     }
-//    public boolean isBookingPeriodValidForTable(LocalDateTime begin, LocalDateTime end,int tableId){
-//        return orderDAO.isBookingPeriodValidForTable(begin,end,tableId);
-//    }
+    public boolean isBookingPeriodValidForTable(LocalDateTime begin, LocalDateTime end, int tableId){
+        return orderDAO.isBookingPeriodValidForTable(begin,end,tableId);
+    }
+    public Order getActiveById(long id){
+        Order order = orderDAO.getActiveById(id);
+        if(order == null){
+            throw new ActiveOrderNotFoundException("Order " + id + " isn't active or doesn't exist");
+        }
+        return order;
+    }
 }
