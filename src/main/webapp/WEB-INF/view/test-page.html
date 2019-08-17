@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Test page</h1>
+    <button id="get_client_token_button">Get client token</button>
+    <button id="send_order" onclick="sendOrder()">Send order</button>
+    <button id="get_admin_token_button">Get admin token</button>
+    <button onclick="connect()">Connect</button>
+    <button id="disconnect">Disconnect</button>
+    <span id="is_connected"></span>
+    <p id="notification"></p>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script>
+
+        var clientToken;
+        var adminToken;
+
+        const AUTHORIZATION_HEADER = "Authorization";
+
+        function getClientToken() {
+            let xhttp = new XMLHttpRequest();
+            const url = "http://localhost:8080/api/users/login"
+            xhttp.onreadystatechange = function() {
+                if (this.status === 200) {
+                    console.log(this.status)
+                    console.log('Token for ' + email + this.getResponseHeader("token"));
+                    clientToken = 'Bearer ' + this.getResponseHeader('token');
+                }
+            };
+            xhttp.open("POST", url, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            let email = "boris@britva.com";
+            let password = "1234";
+            let json = '{"email":"' + email +'","password": "' + password + '"}';
+            xhttp.send(json);
+        }
+        $('#get_client_token_button').click(function () {
+            getClientToken();
+            console.log(clientToken);
+        });
+        function sendOrder() {
+            console.log(clientToken);
+            const url = "http://localhost:8080/api/orders/creating";
+            const orderJSON = '{\n' +
+                '\t"table": {\n' +
+                '            "id": 5,\n' +
+                '            "capacity": 12,\n' +
+                '            "freeStatus": true\n' +
+                '        },\n' +
+                '\t "dishesInOrder": [\n' +
+                '            {\n' +
+                '                "dish": {\n' +
+                '                    "id": 4,\n' +
+                '                    "name": "Стейк из свинины",\n' +
+                '                    "description": null,\n' +
+                '                    "price": 25.0\n' +
+                '                },\n' +
+                '                "amount": 2\n' +
+                '            },\n' +
+                '            {\n' +
+                '                "dish": {\n' +
+                '                    "id": 5,\n' +
+                '                    "name": "Коко-кола",\n' +
+                '                    "description": null,\n' +
+                '                    "price": 5.0\n' +
+                '                },\n' +
+                '                "amount": 1\n' +
+                '            }\n' +
+                '        ],\n' +
+                '    "bookingTimeBegin":"08-08-2019 18:00",\n' +
+                '    "bookingTimeEnd":"08-08-2019 18:30"\n' +
+                '    \n' +
+                '}';
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.status === 200) {
+                    console.log(this.status)
+                }
+            };
+            xhttp.open('POST',url,true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            xhttp.setRequestHeader(AUTHORIZATION_HEADER,clientToken);
+            xhttp.send(orderJSON);
+        }
+        function getAdminToken() {
+            let xhttp = new XMLHttpRequest();
+            const url = "http://localhost:8080/api/users/login"
+            xhttp.onreadystatechange = function() {
+                if (this.status === 200) {
+                    console.log(this.status)
+                    console.log('Token for ' + email + this.getResponseHeader("token"));
+                    adminToken = 'Bearer ' + this.getResponseHeader('token');
+                }
+            };
+            xhttp.open("POST", url, true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            let email = 'putin@rf.ru';
+            let password = '1234';
+            let json = '{"email":"' + email +'","password": "' + password + '"}';
+            xhttp.send(json);
+        }
+        $('#get_admin_token_button').click(function () {
+            getAdminToken();
+            console.log(adminToken);
+        });
+
+        let stompClient = null;
+
+        function connect() {
+            console.log(adminToken);
+            let socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({Authorization:clientToken}, function (frame) {
+                console.log('Connected: ' + frame);
+                $('#is_connected').text('true');
+                stompClient.subscribe('/user/topic/notification', function (notification) {
+                    showGreeting(JSON.parse(notification.body).content);
+                });
+            });
+        }
+
+        function showGreeting(message) {
+            // $("#notification").append("<tr><td>" + message + "</td></tr>");
+            console.log(message);
+        }
+        $('#disconnect').click(function () {
+            if(stompClient != null){
+                stompClient.disconnect();
+                $('#is_connected').text('false');
+            }
+        })
+    </script>
+</body>
+</html>

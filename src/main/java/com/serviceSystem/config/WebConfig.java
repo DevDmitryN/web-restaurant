@@ -1,11 +1,18 @@
 package com.serviceSystem.config;
 
 
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import javax.sound.sampled.Port;
 
 @Configuration
 @EnableWebMvc
@@ -22,13 +29,13 @@ public class WebConfig implements WebMvcConfigurer {
     InternalResourceViewResolver viewResolver(){
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
         viewResolver.setPrefix("/WEB-INF/view/");
-        viewResolver.setSuffix(".jsp");
+        viewResolver.setSuffix(".html");
         viewResolver.setRequestContextAttribute("requestContext");
         return viewResolver;
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry){
-        registry.addViewController("/").setViewName("index");
+        registry.addViewController("/").setViewName("test-page");
     }
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer){
@@ -36,4 +43,9 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
+
+//    @Bean
+//    ServletWebServerFactory servletWebServerFactory(){
+//        return new TomcatServletWebServerFactory();
+//    }
 }

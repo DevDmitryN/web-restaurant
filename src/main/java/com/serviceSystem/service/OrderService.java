@@ -3,6 +3,7 @@ package com.serviceSystem.service;
 import com.serviceSystem.dao.DAOInterface.OrderDAO;
 import com.serviceSystem.dao.DAOInterface.DishInOrderDao;
 import com.serviceSystem.entity.DishInOrder;
+import com.serviceSystem.entity.Notification;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.enums.Status;
@@ -10,20 +11,29 @@ import com.serviceSystem.exception.ActiveOrderNotFoundException;
 import com.serviceSystem.exception.NoSuchItemException;
 import com.serviceSystem.exception.OrderAlreadyTakenException;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.converter.SimpleMessageConverter;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
 public class OrderService {
-
+    private Logger logger = LoggerFactory.getLogger(OrderService.class);
     @Autowired
     private OrderDAO orderDAO;
     @Autowired
     private DishInOrderDao dishInOrderDao;
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
+
 
     public List<Order> getAll(){
         return orderDAO.getAll();
@@ -33,11 +43,13 @@ public class OrderService {
     }
     @Transactional
     public void save(Order order){
-        orderDAO.save(order);
-        for (DishInOrder orderDish : order.getDishesInOrder()) {
-            orderDish.setOrder(order);
-            dishInOrderDao.save(orderDish);
-        }
+//        orderDAO.save(order);
+//        for (DishInOrder orderDish : order.getDishesInOrder()) {
+//            orderDish.setOrder(order);
+//            dishInOrderDao.save(orderDish);
+//        }
+        logger.info("New order have come!");
+        messagingTemplate.convertAndSendToUser("boris@britva.com", "/topic/notification",new Notification(LocalTime.now(),"New order"));
     }
 
     @Transactional

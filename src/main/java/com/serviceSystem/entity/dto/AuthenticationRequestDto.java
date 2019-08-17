@@ -4,6 +4,13 @@ public class AuthenticationRequestDto {
     private String email;
     private String password;
 
+    public AuthenticationRequestDto(){}
+
+    public AuthenticationRequestDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }

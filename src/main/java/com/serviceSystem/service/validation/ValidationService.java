@@ -6,6 +6,7 @@ import com.serviceSystem.entity.dto.UserDto;
 import com.serviceSystem.entity.dto.WorkerDto;
 import com.serviceSystem.entity.dto.form.SignUpClientForm;
 import com.serviceSystem.entity.dto.form.UpdatePasswordForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -21,17 +22,15 @@ import java.util.Set;
 @Service
 public class ValidationService implements org.springframework.validation.Validator{
 
-    private Validator validator = getJavaxValidator();
+//    private Validator validator = getJavaxValidator();
 
     // getting javax.validation validator
     // which uses validation annotations
     // in entities classes
-    @Bean
-    public Validator getJavaxValidator() {
-        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        return validatorFactory.usingContext().getValidator();
-    }
 
+
+    @Autowired
+    private Validator javaxValidator;
     @Override
     public boolean supports(Class<?> clazz) {
         List<Class> supportedClasses = Arrays.asList(
@@ -45,7 +44,7 @@ public class ValidationService implements org.springframework.validation.Validat
 
     @Override
     public void validate(Object target, Errors errors) {
-        Set<ConstraintViolation<Object>> violations = validator.validate(target);
+        Set<ConstraintViolation<Object>> violations = javaxValidator.validate(target);
 
         for (ConstraintViolation<Object> constraintViolation : violations) {
             String propertyPath = constraintViolation.getPropertyPath().toString();

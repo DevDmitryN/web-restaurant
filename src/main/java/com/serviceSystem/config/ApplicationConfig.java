@@ -14,6 +14,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Properties;
 
 import static org.hibernate.cfg.AvailableSettings.*;
@@ -21,7 +24,6 @@ import static org.hibernate.cfg.AvailableSettings.C3P0_MAX_STATEMENTS;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@PropertySource("classpath:messages.properties")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.serviceSystem.dao","com.serviceSystem.service"})
 public class ApplicationConfig {
@@ -72,4 +74,10 @@ public class ApplicationConfig {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
+    @Bean
+    public Validator javaxValidator() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        return validatorFactory.usingContext().getValidator();
+    }
+
 }

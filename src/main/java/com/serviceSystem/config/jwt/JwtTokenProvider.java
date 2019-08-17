@@ -48,9 +48,10 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secret)//
                 .compact();
     }
+
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsSpringService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
     }
 
     public String getUsername(String token) {
@@ -59,7 +60,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;

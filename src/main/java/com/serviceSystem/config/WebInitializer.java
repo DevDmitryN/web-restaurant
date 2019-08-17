@@ -7,7 +7,9 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{
                 ApplicationConfig.class,
-                SecurityConfig.class
+                RestSecurityConfig.class,
+                MvcSecurityConfig.class,
+                WebSocketConfig.class
         };
     }
 
@@ -22,5 +24,6 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
 
 }

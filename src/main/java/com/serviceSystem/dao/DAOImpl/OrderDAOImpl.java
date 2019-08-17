@@ -69,8 +69,8 @@ public class OrderDAOImpl extends BaseDAOImpl<Order,Long> implements OrderDAO {
     @Override
     @Transactional
     public boolean isBookingPeriodValidForTable(LocalDateTime begin, LocalDateTime end,int tableId) {
-        String hql = "from com.serviceSystem.entity.Order o where o.isActive = true and :begin between o.bookingTimeBegin and o.bookingTimeEnd" +
-                " or :end between o.bookingTimeBegin and o.bookingTimeEnd and o.table.id = :tableId";
+        String hql = "from com.serviceSystem.entity.Order o where o.isActive = true and ( :begin between o.bookingTimeBegin and o.bookingTimeEnd" +
+                " or :end between o.bookingTimeBegin and o.bookingTimeEnd ) and o.table.id = :tableId";
         Query query = getCurrentSession().createQuery(hql);
         query.setParameter("begin",begin);
         query.setParameter("end",end);

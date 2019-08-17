@@ -6,6 +6,7 @@ import com.serviceSystem.service.UserDetailsSpringService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -17,12 +18,15 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     private Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -34,15 +38,14 @@ public class UserController {
     private UserDetailsSpringService userDetailsSpringService;
 
     @PostMapping("/users/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword()));
             UserDetails user = userDetailsSpringService.loadUserByUsername(requestDto.getEmail());
             String token = jwtTokenProvider.createToken(user);
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", requestDto.getEmail());
-            response.put("token", token);
-            return ResponseEntity.ok(response);
+//            response.addHeader("username", requestDto.getEmail());
+            response.addHeader("token", token);
+            return new ResponseEntity(HttpStatus.OK);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
         }

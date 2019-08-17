@@ -35,7 +35,7 @@ public class BookingTimeValidator implements ConstraintValidator<ValidateBooking
         }
         if(!orderService.isBookingPeriodValidForTable(bookingTimeBegin,bookingTimeEnd,orderDto.getTable().getId())){
             validatorContext.buildConstraintViolationWithTemplate(
-                    "Table already booked in this period"
+                    "Table " + orderDto.getTable().getId() + " already booked in this period"
             ).addConstraintViolation();
             return false;
         }

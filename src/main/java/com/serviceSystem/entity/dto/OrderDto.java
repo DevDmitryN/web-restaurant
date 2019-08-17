@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-@ValidateBookingTime
+//@ValidateBookingTime
 public class OrderDto {
     private Long id;
     private String status;

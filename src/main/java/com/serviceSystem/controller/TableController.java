@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api")
 public class TableController {
 
     @Autowired
@@ -36,6 +37,7 @@ public class TableController {
     public ResponseEntity<TableDto> getTable(@PathVariable("tableId") int tableId){
         return new ResponseEntity<>(tableMapper.toDto(tableService.getById(tableId)),HttpStatus.OK);
     }
+
     @PostMapping("/tables")
     public ResponseEntity addTable(@RequestBody @Valid TableDto tableDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
@@ -45,6 +47,7 @@ public class TableController {
         tableService.save(table);
         return new ResponseEntity(HttpStatus.OK);
     }
+
     @PutMapping("/tables/{tableId}")
     public ResponseEntity updateTable(@RequestBody @Valid TableDto tableDto, BindingResult bindingResult,
                                       @PathVariable("tableId") int tableId){
