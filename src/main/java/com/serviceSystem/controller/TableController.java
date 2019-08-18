@@ -2,6 +2,7 @@ package com.serviceSystem.controller;
 
 import com.serviceSystem.entity.RestaurantTable;
 import com.serviceSystem.entity.dto.TableDto;
+import com.serviceSystem.exception.BindingResultException;
 import com.serviceSystem.exception.NotCorrespondingIdException;
 import com.serviceSystem.service.TableService;
 import com.serviceSystem.service.mapper.TableMapper;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class TableController {
 
     @Autowired
@@ -41,7 +42,7 @@ public class TableController {
     @PostMapping("/tables")
     public ResponseEntity addTable(@RequestBody @Valid TableDto tableDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         RestaurantTable table = tableMapper.toEntity(tableDto);
         tableService.save(table);
@@ -52,7 +53,7 @@ public class TableController {
     public ResponseEntity updateTable(@RequestBody @Valid TableDto tableDto, BindingResult bindingResult,
                                       @PathVariable("tableId") int tableId){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         if(tableId != tableDto.getId()){
             throw new NotCorrespondingIdException("Table id in path doesn't correspond id in json");

@@ -4,6 +4,7 @@ import com.serviceSystem.entity.dto.form.SignUpClientForm;
 import com.serviceSystem.entity.Client;
 import com.serviceSystem.entity.dto.ClientDto;
 import com.serviceSystem.entity.dto.form.UpdatePasswordForm;
+import com.serviceSystem.exception.BindingResultException;
 import com.serviceSystem.service.ClientService;
 import com.serviceSystem.service.mapper.ClientMapper;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class ClientController {
     private Logger logger = LoggerFactory.getLogger(ClientController.class);
     @Autowired
@@ -32,11 +33,11 @@ public class ClientController {
     public ResponseEntity signUpClient(@RequestBody @Valid SignUpClientForm signUpClientForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             logger.info("Binding result client sign up " + bindingResult);
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Client client = clientMapper.toEntity(signUpClientForm);
         clientService.save(clientMapper.toEntity(signUpClientForm));
-        return new ResponseEntity<>(client,HttpStatus.OK);
+        return new ResponseEntity<>(client,HttpStatus.CREATED);
     }
 
     @GetMapping("/clients/{clientId}")
@@ -53,7 +54,7 @@ public class ClientController {
     public ResponseEntity updateClient(@PathVariable("clientId") long clientId,
                                        @RequestBody @Valid ClientDto clientDto,BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Client client = clientMapper.toEntity(clientDto);
         clientService.updateExceptPassword(client);
@@ -63,7 +64,7 @@ public class ClientController {
     public ResponseEntity updatePassword(@PathVariable("clientId") long clientId,
                                          @Valid @RequestBody UpdatePasswordForm updatePasswordForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Client client = new Client();
         client.setId(clientId);

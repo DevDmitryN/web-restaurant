@@ -4,6 +4,7 @@ import com.serviceSystem.entity.Worker;
 import com.serviceSystem.entity.dto.WorkerDto;
 import com.serviceSystem.entity.dto.form.SignUpWorkerForm;
 import com.serviceSystem.entity.dto.form.UpdatePasswordForm;
+import com.serviceSystem.exception.BindingResultException;
 import com.serviceSystem.service.WorkerService;
 import com.serviceSystem.service.mapper.WorkerMapper;
 import org.slf4j.Logger;
@@ -20,7 +21,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class WorkerController {
 
     private Logger logger = LoggerFactory.getLogger(WorkerController.class);
@@ -42,7 +43,7 @@ public class WorkerController {
     @PostMapping("/workers")
     public ResponseEntity addWorker(@RequestBody @Valid SignUpWorkerForm signUpWorkerForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Worker worker = workerMapper.toEntity(signUpWorkerForm);
         workerService.save(worker);
@@ -58,7 +59,7 @@ public class WorkerController {
     public ResponseEntity update(@RequestBody @Valid WorkerDto workerDto,BindingResult bindingResult,
                                  @PathVariable("workerId") int workerId){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Worker worker = workerMapper.toEntity(workerDto);
         workerService.update(worker);
@@ -69,7 +70,7 @@ public class WorkerController {
     public ResponseEntity updatePassword(@RequestBody @Valid UpdatePasswordForm updatePasswordForm, BindingResult bindingResult,
                                          @PathVariable("workerId") int id){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Worker worker = workerService.getById(id);
         worker.setPassword(updatePasswordForm.getNewPassword());

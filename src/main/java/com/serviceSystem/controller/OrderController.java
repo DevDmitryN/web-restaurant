@@ -7,6 +7,7 @@ import com.serviceSystem.entity.dto.TableDtoWithSchedule;
 import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.OrderDto;
+import com.serviceSystem.exception.BindingResultException;
 import com.serviceSystem.service.*;
 import com.serviceSystem.service.mapper.DishMapper;
 import com.serviceSystem.service.mapper.DishInOrderMapper;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class OrderController {
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
     @Autowired
@@ -55,7 +56,7 @@ public class OrderController {
     private DishInOrderMapper dishInOrderMapper;
 
 
-    @GetMapping("/orders/creating")
+    @GetMapping("/orders/creatingForm")
     public Map<String, Object> creating() {
         logger.info("Get page for creating order");
         Map<String, Object> response = new HashMap<>();
@@ -67,11 +68,11 @@ public class OrderController {
     }
 
 
-    @PostMapping("/orders/creating")
+    @PostMapping("/orders")
     public ResponseEntity save(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult
             , Principal principalUser) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Order order = orderMapper.toEntity(orderDto);
         Client client = clientService.getByEmail(principalUser.getName());
@@ -118,7 +119,7 @@ public class OrderController {
     public ResponseEntity update(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult,
                                  @PathVariable("orderId") long orderId) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Order updatedOrder = orderMapper.toEntity(orderDto);
         Order oldOrder = orderService.getActiveById(orderId);
@@ -134,7 +135,7 @@ public class OrderController {
     public ResponseEntity updateDishesInOrder(@RequestBody @Valid List<DishInOrderDto> dishesInOrder, BindingResult bindingResult,
                                               @PathVariable("orderId") long orderId) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors(), HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Order order = orderService.getActiveById(orderId);
         order.setDishesInOrder(dishInOrderMapper.toEntityList(dishesInOrder));

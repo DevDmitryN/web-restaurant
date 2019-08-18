@@ -11,6 +11,7 @@ public class ExceptionWrapper {
         this.httpStatus = httpStatus;
     }
 
+
     public String getMessage() {
         return message;
     }

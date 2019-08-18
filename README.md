@@ -1,45 +1,175 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+##REST API DOCUMENTATION
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+**Authorization**
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+*Request:*
 
----
 
-## Edit a file
+    Access: all
+    GET /api/v1/users/login   
+    {
+    	"email":"putin@rf.ru",
+    	"password":"1234"
+    }
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+*Response:*
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+Success
 
----
+    status: 200
+    
+    Token in headers
 
-## Create a file
+Failed
 
-Next, you’ll add a new file to this repository.
+    {
+        "message": "Invalid username or password",
+        "httpStatus": "BAD_REQUEST"
+    }
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+    
+-
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+**Sign up for client**
 
----
+*Request:*
 
-## Clone a repository
+    Access: all
+    POST /api/v1/clients
+    {	
+    	"name":"json",
+    	"surname":"n",
+    	"email":"postman@email.com",
+    	"password":"1234567",
+    	"confirmPassword":"1234567",
+    	"phoneNumber":"2320001212",
+    	"cardNumber":"QQOQ EEEE TTTT 1234"
+    }
+ 
+*Response:*    
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+Success
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+    status: 201    
+   
+Failed
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+    {
+        "message": "Incorrect phone number; ",
+        "httpStatus": "BAD_REQUEST"
+    }
+    
+-
+**Specified client**
+
+*Request:*
+
+    Access: for all workers and only for this client
+    GET /api/v1/clients/{id}
+    
+*Response:*
+
+Success
+
+    {
+        "id": 9,
+        "name": "Artyom",
+        "surname": "Nadyozhkin",
+        "email": "artyom@gmail.com",
+        "phoneNumber": "297777777",
+        "cardNumber": "1111111111111111"
+    }
+Failed (invalid id)
+
+    {
+        "message": "There is no client with id = 123",
+        "httpStatus": "NOT_FOUND"
+    }
+    
+-
+
+**List of clients**
+
+*Request:*
+
+    Access: only for workers
+    GET /api/v1/clients
+
+*Response:*
+
+Success
+
+    [
+        {
+             "id": 9,
+             "name": "Artyom",
+             "surname": "Nadyozhkin",
+             "email": "artyom@gmail.com",
+             "phoneNumber": "297777777",
+             "cardNumber": "1111111111111111"
+        },
+        ...
+    ]
+    
+-
+
+**Update the client except password**
+
+*Request:*
+
+    Access: only this client
+    PUT /api/v1/clients/{id}
+    {
+        "id": 2,
+        "name": "Борис",
+        "surname": "Бритва",
+        "email": "boris@britva.com",
+        "phoneNumber": "+375447784545",
+        "cardNumber": "BVCX-4444-5555"
+    }
+    
+*Response:*
+    
+Success   
+
+    status: 200
+    
+Failed
+
+    {
+        "message": "Incorrect card number; Incorrect phone number; ",
+        "httpStatus": "BAD_REQUEST"
+    }    
+    
+-
+
+**Update only client's password**
+
+*Request*
+
+    Access: only this client
+    PATCH /api/v1/clients/{id}
+    {
+    	"email":"alex@pushka.ru",
+    	"oldPassword":"12345678",
+    	"newPassword":"4321",
+    	"confirmNewPassword":"4321"
+    }
+    
+*Response:*
+
+Success
+
+    status: 200
+
+Failed
+
+    {
+        "message": "Passwords dont match; ",
+        "httpStatus": "BAD_REQUEST"
+    }
+    
+-
+
+
+        

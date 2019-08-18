@@ -2,6 +2,7 @@ package com.serviceSystem.controller;
 
 import com.serviceSystem.entity.Dish;
 import com.serviceSystem.entity.dto.DishDto;
+import com.serviceSystem.exception.BindingResultException;
 import com.serviceSystem.exception.NotCorrespondingIdException;
 import com.serviceSystem.service.DishService;
 import com.serviceSystem.service.mapper.DishMapper;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class DishController {
 
     private Logger logger = LoggerFactory.getLogger(DishController.class);
@@ -47,7 +48,7 @@ public class DishController {
     @PostMapping("/dishes")
     public ResponseEntity addDish(@RequestBody @Valid DishDto dishDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Dish dish = dishMapper.toEntity(dishDto);
         dishService.save(dish);
@@ -57,7 +58,7 @@ public class DishController {
     public ResponseEntity updateDish( @RequestBody @Valid DishDto dishDto,BindingResult bindingResult,
                                       @PathVariable("dishId") int id){
         if(bindingResult.hasErrors()){
-            return new ResponseEntity<>(bindingResult.getAllErrors(),HttpStatus.BAD_REQUEST);
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         if(id != dishDto.getId()){
             throw new NotCorrespondingIdException("Id in json doesn't correspond id in url");
