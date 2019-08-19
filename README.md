@@ -28,7 +28,7 @@ Failed
     }
 
     
--
+---
 
 **Sign up for client**
 
@@ -59,7 +59,8 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
+
 **Specified client**
 
 *Request:*
@@ -86,7 +87,7 @@ Failed (invalid id)
         "httpStatus": "NOT_FOUND"
     }
     
--
+---
 
 **List of clients**
 
@@ -111,7 +112,7 @@ Success
         ...
     ]
     
--
+---
 
 **Update the client except password**
 
@@ -141,7 +142,7 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }    
     
--
+---
 
 **Update only client's password**
 
@@ -209,7 +210,7 @@ Success
         ]
     }
     
--
+---
         
 **Creat order**
 
@@ -251,7 +252,7 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
 
 **All orders**
 
@@ -292,7 +293,7 @@ Success
             ...
         ]
         
--
+---
 
 **Specific order**
 
@@ -346,7 +347,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }
     
--
+---
 
 **Delete order**
 
@@ -368,7 +369,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }   
     
--
+---
 
 **Set worker for specific order**
 
@@ -396,7 +397,7 @@ or
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
 
 **Update specific order (table, status, bookingTimeBegin, bookingTimeEnd)**
 
@@ -430,7 +431,7 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
 
 **Update dishes in a specific order**
 
@@ -471,7 +472,7 @@ or
         "httpStatus": "BAD_REQUEST"
     }
     
--
+
 
 **Order for specific client**
 
@@ -507,7 +508,7 @@ or
         ...
     ]    
              
--
+---
 
 **All dishes**
 
@@ -536,7 +537,7 @@ or
         ...
     ]
     
--
+
 
 **Specific dish from menu**
 
@@ -564,7 +565,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }        
     
--
+---
 
 **Specific dish**
 
@@ -592,7 +593,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }  
     
--
+---
 
 **Creat dish**
 
@@ -619,7 +620,7 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
 
 **Update specific dish**
 
@@ -666,7 +667,7 @@ Failed
         ...
     ]
     
--
+---
 
 **Specific table**
 
@@ -692,7 +693,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }
     
--
+---
 
 **Create table**
 
@@ -717,7 +718,7 @@ Failed
         "httpStatus": "BAD_REQUEST"
     }
     
--
+---
 
 **Update table**
 
@@ -772,6 +773,8 @@ Failed
         "message": "User with this phone number already exist; User with this email already exist; ",
         "httpStatus": "BAD_REQUEST"
     }
+
+---
     
 **Staff**
 
@@ -795,7 +798,7 @@ Failed
         ...
     ]
 
--
+---
 
 **All workers**
 
@@ -827,6 +830,8 @@ Failed
         },
         ...
     ]
+ 
+--- 
     
 **Specific worker**
 
@@ -856,7 +861,7 @@ Failed
         "httpStatus": "NOT_FOUND"
     }
     
--
+---
 
 **Update worker except password**
 
@@ -886,6 +891,8 @@ Failed
         "message": "Incorrect phone number; ",
         "httpStatus": "BAD_REQUEST"
     }
+    
+---    
     
 **Update password for worker**
 
