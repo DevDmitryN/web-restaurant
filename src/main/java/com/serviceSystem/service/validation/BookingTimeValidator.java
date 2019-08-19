@@ -16,6 +16,16 @@ public class BookingTimeValidator implements ConstraintValidator<ValidateBooking
 
     @Override
     public boolean isValid(OrderDto orderDto, ConstraintValidatorContext validatorContext) {
+        if(orderDto.getBookingTimeBegin() == null || orderDto.getBookingTimeBegin().isEmpty()){
+            validatorContext.buildConstraintViolationWithTemplate("Begin of booking time can't be blank")
+                    .addPropertyNode("bookingTimeBegin").addConstraintViolation();
+            return false;
+        }
+        if(orderDto.getBookingTimeEnd() == null || orderDto.getBookingTimeEnd().isEmpty()){
+            validatorContext.buildConstraintViolationWithTemplate("End of booking time can't be blank")
+                    .addPropertyNode("bookingTimeEnd").addConstraintViolation();
+            return false;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime bookingTimeBegin = LocalDateTime.parse(orderDto.getBookingTimeBegin(),formatter);

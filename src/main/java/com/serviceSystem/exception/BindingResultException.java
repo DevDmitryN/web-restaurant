@@ -15,7 +15,8 @@ public class BindingResultException extends RuntimeException {
 
     }
 
-    public String getMessages() {
+    @Override
+    public String getMessage() {
         return messages.toString();
     }
 }

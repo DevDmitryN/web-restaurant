@@ -16,8 +16,10 @@ public class DishDto {
 
     private String description;
 
-    @Positive(message = "Can't be negative or zero")
+    @Positive(message = "Price can't be negative or zero")
     private float price;
+
+    private boolean isInMenu = true;
 
     public int getId() {
         return id;
@@ -51,19 +53,11 @@ public class DishDto {
         this.price = price;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DishDto dishDto = (DishDto) o;
-        return id == dishDto.id &&
-                Float.compare(dishDto.price, price) == 0 &&
-                Objects.equals(name, dishDto.name) &&
-                Objects.equals(description, dishDto.description);
+    public boolean isInMenu() {
+        return isInMenu;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, price);
+    public void setInMenu(boolean inMenu) {
+        isInMenu = inMenu;
     }
 }

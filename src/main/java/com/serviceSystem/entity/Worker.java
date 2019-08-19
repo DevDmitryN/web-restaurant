@@ -17,7 +17,7 @@ public class Worker extends User<Integer>{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "isInStaff")
+    @Column(name = "is_in_staff")
     private boolean isInStaff = true;
 
     @OneToMany(mappedBy = "worker")

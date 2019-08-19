@@ -6,7 +6,7 @@ import javax.validation.constraints.Positive;
 public class TableDto {
     private int id;
     @NotNull
-    @Positive(message = "Can't be negative or zero")
+    @Positive(message = "Capacity can't be negative or zero")
     private int capacity;
     private boolean freeStatus;
 

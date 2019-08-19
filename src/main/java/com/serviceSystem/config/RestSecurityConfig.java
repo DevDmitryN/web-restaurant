@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +18,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.filter.DelegatingFilterProxy;
 
 @Configuration
 @EnableWebSecurity
@@ -67,14 +62,14 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/api/v1/users/login").permitAll()
                 //orders
-                .antMatchers(HttpMethod.GET,"/api/v1/orders/creating").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.GET,"/api/v1/orders/creatingForm").hasAuthority("CLIENT")
                 .antMatchers(HttpMethod.GET,"/api/v1/orders").hasAuthority("WAITER")
                 .antMatchers(HttpMethod.GET,"/api/v1/orders/{orderId}").access("@securityService.hasAccessToOrder(authentication,#orderId) or hasAuthority('WAITER')")
                 .antMatchers(HttpMethod.DELETE,"/api/v1/orders/{orderId}").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET,"/api/v1/clients/{clientId}/orders").access("@securityService.validClientId(authentication,#clientId) or hasAuthority('WAITER')")
-                .antMatchers(HttpMethod.POST,"/api/v1/orders/creating").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.POST,"/api/v1/orders").hasAuthority("CLIENT")
+                .antMatchers(HttpMethod.PUT,"/api/v1/orders/{orderId}/dishes").access("hasAuthority('CLIENT') and @securityService.hasAccessToOrder(authentication,#orderId)"  )
                 .antMatchers(HttpMethod.PUT,"/api/v1/orders/{orderId}").access("@securityService.hasAccessToOrder(authentication,#orderId) or hasAuthority('WAITER')")
-                .antMatchers(HttpMethod.PUT,"/api/v1/orders/{orderId}/dishes").access("@securityService.hasAccessToOrder(authentication,#orderId)")
                 //workers
                 .antMatchers(HttpMethod.PUT,"/api/v1/orders/active/{orderId}/worker").hasAuthority("WAITER")
                 .antMatchers(HttpMethod.GET,"/api/v1/workers/staff","/api/v1/workers/{workerId}").hasAuthority("WAITER")
@@ -94,6 +89,7 @@ public class RestSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/api/v1/tables/{tableId}").hasAuthority("ADMIN")
                 //dishes
                 .antMatchers(HttpMethod.GET,"/api/v1/menu").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/v1/menu/{dishId}").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/v1/dishes","/api/v1/dishes/{dishId}").hasAuthority("WAITER")
                 .antMatchers(HttpMethod.POST,"/api/v1/dishes").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/api/v1/dishes/{dishId}").hasAuthority("ADMIN")

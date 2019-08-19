@@ -5,6 +5,7 @@ import com.serviceSystem.entity.dto.WorkerDto;
 import com.serviceSystem.entity.dto.form.SignUpWorkerForm;
 import com.serviceSystem.entity.dto.form.UpdatePasswordForm;
 import com.serviceSystem.exception.BindingResultException;
+import com.serviceSystem.exception.NotCorrespondingIdException;
 import com.serviceSystem.service.WorkerService;
 import com.serviceSystem.service.mapper.WorkerMapper;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class WorkerController {
         }
         Worker worker = workerMapper.toEntity(signUpWorkerForm);
         workerService.save(worker);
-        return new ResponseEntity<>(signUpWorkerForm,HttpStatus.OK);
+        return new ResponseEntity<>(signUpWorkerForm,HttpStatus.CREATED);
     }
     @GetMapping("/workers/staff")
     public ResponseEntity getStaff(){
@@ -58,11 +59,14 @@ public class WorkerController {
     @PutMapping("/workers/{workerId}")
     public ResponseEntity update(@RequestBody @Valid WorkerDto workerDto,BindingResult bindingResult,
                                  @PathVariable("workerId") int workerId){
+        if(workerId != workerDto.getId()){
+            throw new NotCorrespondingIdException("Id in json doesn't correspond id in url");
+        }
         if(bindingResult.hasErrors()){
             throw new BindingResultException(bindingResult.getAllErrors());
         }
         Worker worker = workerMapper.toEntity(workerDto);
-        workerService.update(worker);
+        workerService.updateExceptPassword(worker);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -72,10 +76,11 @@ public class WorkerController {
         if(bindingResult.hasErrors()){
             throw new BindingResultException(bindingResult.getAllErrors());
         }
-        Worker worker = workerService.getById(id);
-        worker.setPassword(updatePasswordForm.getNewPassword());
         logger.info("worker id = " + id + ", old password = " + updatePasswordForm.getOldPassword() + ", new = " + updatePasswordForm.getNewPassword());
-        workerService.update(worker);
+        Worker worker = new Worker();
+        worker.setId(id);
+        worker.setPassword(updatePasswordForm.getNewPassword());
+        workerService.updateOnlyPassword(worker);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

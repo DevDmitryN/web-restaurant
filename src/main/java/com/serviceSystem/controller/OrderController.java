@@ -8,6 +8,7 @@ import com.serviceSystem.entity.Order;
 import com.serviceSystem.entity.dto.DishDto;
 import com.serviceSystem.entity.dto.OrderDto;
 import com.serviceSystem.exception.BindingResultException;
+import com.serviceSystem.exception.NotCorrespondingIdException;
 import com.serviceSystem.service.*;
 import com.serviceSystem.service.mapper.DishMapper;
 import com.serviceSystem.service.mapper.DishInOrderMapper;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +81,7 @@ public class OrderController {
         Client client = clientService.getByEmail(principalUser.getName());
         order.setClient(client);
         orderService.save(order);
-        return new ResponseEntity<>(orderMapper.toDto(order), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/orders")
@@ -121,6 +124,9 @@ public class OrderController {
         if (bindingResult.hasErrors()) {
             throw new BindingResultException(bindingResult.getAllErrors());
         }
+        if(orderId != orderDto.getId()){
+            throw new NotCorrespondingIdException("Id in json doesn't correspond id in url");
+        }
         Order updatedOrder = orderMapper.toEntity(orderDto);
         Order oldOrder = orderService.getActiveById(orderId);
         oldOrder.setStatus(updatedOrder.getStatus());
@@ -132,8 +138,15 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderId}/dishes")
-    public ResponseEntity updateDishesInOrder(@RequestBody @Valid List<DishInOrderDto> dishesInOrder, BindingResult bindingResult,
+    public ResponseEntity updateDishesInOrder(@RequestBody List<DishInOrderDto> dishesInOrder, BindingResult bindingResult,
                                               @PathVariable("orderId") long orderId) {
+
+        for (DishInOrderDto dishInOrderDto : dishesInOrder) {
+            if(dishInOrderDto.getAmount() <= 0){
+                List<ObjectError> errors = Arrays.asList(new ObjectError("Invalid amount","Amount dishes in order can't be negative or zero"));
+                throw new BindingResultException(errors);
+            }
+        }
         if (bindingResult.hasErrors()) {
             throw new BindingResultException(bindingResult.getAllErrors());
         }
@@ -145,9 +158,9 @@ public class OrderController {
 
     @GetMapping("/clients/{clientId}/orders")
     public ResponseEntity<List<OrderDto>> getActiveForClient(@PathVariable("clientId") long clientId,
-                                                             @RequestParam(value = "status", required = false, defaultValue = "") String status) {
+                                                             @RequestParam(value = "status", required = false, defaultValue = "all") String status) {
         logger.info("Get " + status + " orders of client " + clientId);
-        if (status.isEmpty()) {
+        if (status.equals("all")) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             List<OrderDto> orders;

@@ -86,7 +86,7 @@ public class OrderService {
     public void changeWorkerForOrder(Order order,Worker worker) throws OrderAlreadyTakenException {
         if(order.getWorker() != null){
             if(!order.getWorker().getEmail().equals(worker.getEmail())){
-                throw new OrderAlreadyTakenException();
+                throw new OrderAlreadyTakenException("Order already taken");
             }
             order.setWorker(null);
             order.setStatus(Status.NOT_TAKEN);

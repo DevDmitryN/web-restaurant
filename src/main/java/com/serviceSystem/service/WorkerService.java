@@ -45,9 +45,15 @@ public class WorkerService {
         worker.setPassword(encoder.encode(worker.getPassword()));
         workerDAO.save(worker);
     }
-    public void update(Worker worker){
-        worker.setPassword(encoder.encode(worker.getPassword()));
-        workerDAO.update(worker);
+    public void updateExceptPassword(Worker updatedWorker){
+        Worker client = getById(updatedWorker.getId());
+        updatedWorker.setPassword(client.getPassword());
+        workerDAO.update(updatedWorker);
+    }
+    public void updateOnlyPassword(Worker updatedWorker){
+        Worker client = getById(updatedWorker.getId());
+        client.setPassword(encoder.encode(updatedWorker.getPassword()));
+        workerDAO.update(client);
     }
     public Worker getByPhoneNumber(String phoneNumber){
         return workerDAO.getByPhoneNumber(phoneNumber);

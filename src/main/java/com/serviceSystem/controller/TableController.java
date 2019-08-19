@@ -46,7 +46,7 @@ public class TableController {
         }
         RestaurantTable table = tableMapper.toEntity(tableDto);
         tableService.save(table);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping("/tables/{tableId}")

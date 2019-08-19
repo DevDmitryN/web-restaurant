@@ -35,6 +35,12 @@ public class DishController {
         return new ResponseEntity<>(dishMapper.toDtoList(dishService.getWhichAreInMenu()), HttpStatus.OK);
     }
 
+    @GetMapping("/menu/{dishId}")
+    public ResponseEntity getByIdFromMenu(@PathVariable("dishId") int dishId){
+        DishDto dishDto = dishMapper.toDto(dishService.getByIdFromMenu(dishId));
+        return new ResponseEntity<>(dishDto, HttpStatus.OK);
+    }
+
     @GetMapping("/dishes/{dishId}")
     public ResponseEntity<DishDto> getById(@PathVariable("dishId") int dishId){
         logger.info("Get dish " + dishId);
@@ -52,16 +58,16 @@ public class DishController {
         }
         Dish dish = dishMapper.toEntity(dishDto);
         dishService.save(dish);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
     @PutMapping("/dishes/{dishId}")
     public ResponseEntity updateDish( @RequestBody @Valid DishDto dishDto,BindingResult bindingResult,
                                       @PathVariable("dishId") int id){
-        if(bindingResult.hasErrors()){
-            throw new BindingResultException(bindingResult.getAllErrors());
-        }
         if(id != dishDto.getId()){
             throw new NotCorrespondingIdException("Id in json doesn't correspond id in url");
+        }
+        if(bindingResult.hasErrors()){
+            throw new BindingResultException(bindingResult.getAllErrors());
         }
         Dish dish = dishMapper.toEntity(dishDto);
         dishService.update(dish);

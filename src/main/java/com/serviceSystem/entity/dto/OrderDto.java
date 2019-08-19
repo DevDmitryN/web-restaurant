@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@ValidateBookingTime
+@ValidateBookingTime
 public class OrderDto {
     private Long id;
     private String status;
@@ -19,11 +19,7 @@ public class OrderDto {
     private ClientDto client;
     private WorkerDto worker;
     private String creationTime;
-    @NotNull
-    @NotBlank(message = "this field can't be blank")
     private String bookingTimeBegin;
-    @NotNull
-    @NotBlank(message = "this field can't be blank")
     private String bookingTimeEnd;
     private BigDecimal totalPrice;
 
@@ -61,6 +57,7 @@ public class OrderDto {
 
     public void setDishesInOrder(List<DishInOrderDto> dishesInOrder) {
         this.dishesInOrder = dishesInOrder;
+        this.dishesInOrder.forEach( d -> totalPrice.add(new BigDecimal(d.getDish().getPrice() * d.getAmount())));
     }
 
     public ClientDto getClient() {

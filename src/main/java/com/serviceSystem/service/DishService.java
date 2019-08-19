@@ -46,6 +46,10 @@ public class DishService {
         }
 
     }
+
+    public Dish getByIdFromMenu(int dishId) {
+        return dishDAO.getByIdFromMenu(dishId);
+    }
 //    public void delete(Dish dish){
 //        dishDAO.delete(dish);
 //    }

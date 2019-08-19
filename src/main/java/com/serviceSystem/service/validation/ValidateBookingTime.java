@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
 public @interface ValidateBookingTime {
-    String message() default "Invalid booking time";
+    String message() default "";
 
     Class<?>[] groups() default {};
 
