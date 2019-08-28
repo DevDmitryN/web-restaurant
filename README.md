@@ -1,3 +1,46 @@
+##WEB-RESTAURANT-SERVICE
+
+***Basic functionality***
+---
+
+For everyone: authorization.
+
+For client:
+1. Sign up
+2. Create order (book table, order dishes, reserve specific time)
+3. Manage created orders (edit, cancel)
+4. Tracking your orders
+5. Edit personal data
+
+For worker:
+
+1. Tracking incoming orders
+2. Manage order status
+3. Manage table status
+
+For admin:
+
+1. same as for worker
+2. Add worker
+3. Edit worker data
+4. Edit dishes
+5. Add table
+
+---
+***Stack***
+---
+
+1. Tomcat (v8.5)
+2. Postgres 
+3. Java( spring v5, spring-security v5, hibernate v5 )
+
+---
+***DB Schema:***
+---
+
+![database structure](db_schema.png "Database structure")
+---
+
 ##REST API DOCUMENTATION
 
 **Authorization**
